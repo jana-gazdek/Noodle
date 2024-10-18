@@ -5,12 +5,12 @@ The goal of Noodle is to digitalize and modernize the school system by efficient
 # Functional requirements
 
 # Technologies
-Documentation: Astah UML, Texmaker
-Frontend:
-Backend:
-Deployment:
-Communication: Whatsapp, Microsoft Teams, 
-Version control: Git, GitHub
+Documentation: Astah UML, Texmaker<br/>
+Frontend:<br/>
+Backend:<br/>
+Deployment:<br/>
+Communication: Whatsapp, Microsoft Teams, <br/>
+Version control: Git, GitHub<br/>
 # Team members
 Juraj Čižić<br/>Jana Gazdek<br/>Siniša Horvatić<br/>Jana Jovanović<br/>Roko Markov<br/>Damjan Popoović<br/>Filip Vuletić-Antić
 
