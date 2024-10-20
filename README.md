@@ -7,7 +7,7 @@ The goal of Noodle is to digitalize and modernize the school system by efficient
 # Technologies
 Documentation: Astah UML, Texmaker<br/>
 Frontend:<br/>
-Backend:<br/>
+Backend: Node.js, Express.js, JWT, Oauth 2.0<br/>
 Deployment:<br/>
 Communication: Whatsapp, Microsoft Teams <br/>
 Version control: Git, GitHub<br/>
