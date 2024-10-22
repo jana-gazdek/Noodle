@@ -5,7 +5,7 @@ The goal of Noodle is to digitalize and modernize the school system by efficient
 # Functional requirements
 1. User management: Users should be able to register within the system, using a username and a password (OAuth2). <br/>
 2. Schedule management: The system shall generate class schedules based on students' programs, teachers availability, room and equipment resources and automatically send out notifications via email. <br/>
-3. Course and curriculum management: The system shall automatically asign courses to students based on their programs and curriculum, which must align with the curriculum information available on Ministry of science and Education's website. Teachers can upload material for each course, available only to the students in the course. The system shall allow teachers to view statistics on the access and download of teaching materials. <br/>
+3. Course and curriculum management: The system shall automatically asign courses to students based on their programs and curriculum, which must align with the curriculum information available on Ministry of science, education and sport's website. Teachers can upload material for each course, available only to the students in the course. The system shall allow teachers to view statistics on the access and download of teaching materials. <br/>
 4. User communication: The system shall enable group messaging within classes, programs or course groups as well as allow private messaging per request. <br/>
 5. Resource management: The system shall track the usage of rooms and equipment required for practical classes in the most optimal way. <br/>
 6. Report and certificate generation: On the request, the system shall generate and send enrollment certificates to students via email as well as generate reports and statistics for adimistrative staff or the principal. <br/>
@@ -13,7 +13,7 @@ The goal of Noodle is to digitalize and modernize the school system by efficient
 8. Fieldwork and interships: The system shall notify students about fieldwork and interships, including location and directions (integrated with GoogleMaps).<br/>
 # Technologies
 Documentation: Astah UML, Texmaker<br/>
-Frontend:<br/>
+Frontend: React <br/>
 Backend: Node.js, Express.js, JWT, Oauth 2.0<br/>
 Deployment: Render <br/>
 Communication: Whatsapp, Microsoft Teams, Discord <br/>
