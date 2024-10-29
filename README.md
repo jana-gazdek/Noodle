@@ -12,7 +12,7 @@ The goal of Noodle is to digitalize and modernize the school system by efficient
 7. Weather forecast display: The application shall display the current weather and forecast for the city where the school is located, on the homepage. <br/>
 8. Fieldwork and interships: The system shall notify students about fieldwork and interships, including location and directions (integrated with GoogleMaps).<br/>
 # Technologies
-Documentation: Astah UML, Texmaker<br/>
+Documentation: Astah UML, Wiki<br/>
 Frontend: React <br/>
 Backend: Node.js, Express.js, JWT, Oauth 2.0<br/>
 Deployment: Render <br/>
