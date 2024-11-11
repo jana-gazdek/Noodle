@@ -11,13 +11,23 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
 
 router.get('/logout', authController.logout);
 
+router.get('/login', authController.verifyOrRefreshAccessToken, (req, res) => {
+  if (req.user) {
+    const user = {
+      user: req.user
+    };
+    res.status(200).json(user);
+  } else {
+    res.status(401).json({ message: 'Unauthorized' });
+  }
+});
+
 router.get('/pocetna', authController.verifyOrRefreshAccessToken, (req, res) => {
   if (req.user) {
     const user = {
-      name: req.user.name.givenName,
-      surname: req.user.name.familyName
+      user: req.user
     };
-    res.json(user);
+    res.status(200).json(user);
   } else {
     res.status(401).json({ message: 'Unauthorized' });
   }
