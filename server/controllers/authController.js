@@ -13,7 +13,6 @@ const login = (req, res) => {
 const logout = (req, res) => {
   res.clearCookie('accessToken');
   res.clearCookie('refreshToken');
-  res.redirect('http://localhost:3001');
 };
 
 const verifyOrRefreshAccessToken = async (req, res, next) => {
@@ -34,7 +33,7 @@ const verifyOrRefreshAccessToken = async (req, res, next) => {
       });
 
       accessToken = response.data.access_token;
-      res.cookie('accessToken', accessToken, { httpOnly: true, maxAge: 15 * 60 * 1000 });
+      res.cookie('accessToken', accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
       req.user = response.data.user;
     } catch (error) {
       return res.status(401).json({ error: 'Unauthorized'});

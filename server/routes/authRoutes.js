@@ -7,15 +7,13 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
                                                         accessType: 'offline', 
                                                         prompt:'consent' }));
 
-router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }), authController.login);
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), authController.login);
 
 router.get('/logout', authController.logout);
 
 router.get('/login', authController.verifyOrRefreshAccessToken, (req, res) => {
   if (req.user) {
-    const user = {
-      user: req.user
-    };
+    const user = req.user;
     res.status(200).json(user);
   } else {
     res.status(401).json({ message: 'Unauthorized' });
@@ -24,9 +22,7 @@ router.get('/login', authController.verifyOrRefreshAccessToken, (req, res) => {
 
 router.get('/pocetna', authController.verifyOrRefreshAccessToken, (req, res) => {
   if (req.user) {
-    const user = {
-      user: req.user
-    };
+    const user = req.user;
     res.status(200).json(user);
   } else {
     res.status(401).json({ message: 'Unauthorized' });
