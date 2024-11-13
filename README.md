@@ -18,7 +18,7 @@ Deployment: Render <br/>
 Komunikacija: WhatsApp, Microsoft Teams, Discord <br/>
 Version control: Git, GitHub<br/>
 # Članovi tima
-J Č <br/>
+Juraj Čižić <br/>
 Jana Gazdek <br/>
 S H <br/>
 J J <br/>
