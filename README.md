@@ -20,7 +20,7 @@ Version control: Git, GitHub<br/>
 # Članovi tima
 Juraj Čižić <br/>
 Jana Gazdek <br/>
-S H <br/>
+Siniša Horvatić <br/>
 J J <br/>
 D P <br/>
 R M <br/>
