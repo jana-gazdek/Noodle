@@ -36,7 +36,7 @@ router.get('/pocetna', authController.verifyOrRefreshAccessToken, async (req, re
         }
       });
       const weatherData = {
-        temperature: weatherResponse.data.main.temp,
+        temperature: Math.round(weatherResponse.data.main.temp),
         description: weatherResponse.data.weather[0].description,
         icon: weatherResponse.data.weather[0].icon,
         city: weatherResponse.data.name,
