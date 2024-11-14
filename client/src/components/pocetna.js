@@ -23,8 +23,10 @@ function Pocetna({ handleLogout }) {
     <div className="pocetna-container">
       {user && (
         <>
-          <h1>Bok, {user.name.givenName} {user.name.familyName}!</h1>
-          <p>Prijava uspješna.</p>
+          <div className="user-container">
+            <h1>Bok, {user.name.givenName} {user.name.familyName}!</h1>
+            <p>Prijava uspješna.</p>
+          </div>
 
           {weather ? (
             <div className="weather-container" >
