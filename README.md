@@ -23,6 +23,6 @@ Jana Gazdek <br/>
 Siniša Horvatić <br/>
 Jana Jovanović <br/>
 Roko Markov <br/>
-D P <br/>
+Damjan Popović <br/>
 Filip Vuletić-Antić <br/>
 
