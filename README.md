@@ -21,8 +21,8 @@ Version control: Git, GitHub<br/>
 Juraj Čižić <br/>
 Jana Gazdek <br/>
 Siniša Horvatić <br/>
-J J <br/>
-D P <br/>
+Jana Jovanović <br/>
 R M <br/>
+D P <br/>
 Filip Vuletić-Antić <br/>
 
