@@ -1,0 +1,19 @@
+body {
+    margin: 0;
+    font-family: 'Inter', 'Roboto', sans-serif;
+    background-color: #c1c8e4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.pocetna-container {
+    display: flex;
+    width: 90vw;
+    background-color: #c1c8e4; 
+    position: relative;
+    margin: auto;
+    justify-content: space-between;
+    align-items: center;
+}
