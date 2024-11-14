@@ -47,9 +47,8 @@ router.get('/pocetna', authController.verifyOrRefreshAccessToken, async (req, re
       res.status(200).json({ user, weather: weatherData });
     } catch (error) {
       console.error('Error fetching weather data:', error);
+      res.status(200).json({user, weather: null});
     }
-
-    res.status(200).json({user, weather: null});
   } else {
     res.status(401).json({ message: 'Unauthorized' });
   }
