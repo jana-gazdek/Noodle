@@ -1,8 +1,8 @@
 const axios = require('axios');
 
 const setCookies = (res, accessToken, refreshToken) => {
-  res.cookie('accessToken', accessToken, { httpOnly: true, maxAge: 3600 * 1000 }); // 1 hour
-  res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 7 * 24 * 3600 * 1000 }); // 1 week
+  res.cookie('accessToken', accessToken, { sameSite: 'None', secure: true, maxAge: 3600 * 1000 }); // 1 hour
+  res.cookie('refreshToken', refreshToken, { sameSite: 'None', secure: true, maxAge: 7 * 24 * 3600 * 1000 }); // 1 week
 };
 
 const login = (req, res) => {
