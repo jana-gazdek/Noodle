@@ -23,7 +23,8 @@ function App() {
           setIsAuthenticated(false);
         }
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('Error:', error.message);
         setIsAuthenticated(false);
       });
   }, []);
