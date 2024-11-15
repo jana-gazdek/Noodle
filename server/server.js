@@ -19,6 +19,10 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   secure: true,
+  cookie: {
+    sameSite: 'None',
+    secure: true
+  }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
