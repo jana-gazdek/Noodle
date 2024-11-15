@@ -7,7 +7,10 @@ const setCookies = (res, accessToken, refreshToken) => {
 
 const login = (req, res) => {
   setCookies(res, req.user.accessToken, req.user.refreshToken);
-  res.redirect('https://noodle-frontend.onrender.com/pocetna');
+  setTimeout(() => {
+    res.redirect('https://noodle-frontend.onrender.com/pocetna');
+  }, 500); // 500 ms delay
+};
 };
 
 const logout = (req, res) => {
