@@ -15,7 +15,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3000/auth/pocetna', { withCredentials: true })
+      .get('https://noodle-x652.onrender.com/auth/pocetna', { withCredentials: true })
       .then(response => {
         if (response.status === 200) {
           setIsAuthenticated(true);
@@ -29,7 +29,7 @@ function App() {
   }, []);
 
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:3000/auth/google';
+    window.location.href = 'https://noodle-x652.onrender.com/auth/google';
   };
 
   if (isAuthenticated === null) {
