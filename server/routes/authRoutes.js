@@ -17,7 +17,7 @@ router.get('/login', authController.verifyOrRefreshAccessToken, (req, res) => {
     const user = req.user;
     res.status(200).json(user);
   } else {
-    res.status(401).json({ message: 'Unauthorized' });
+    res.status(401).json({ message: 'Unauthorized na login' });
   }
 });
 
@@ -50,7 +50,7 @@ router.get('/pocetna', authController.verifyOrRefreshAccessToken, async (req, re
       res.status(200).json({user, weather: null});
     }
   } else {
-    res.status(401).json({ message: 'Unauthorized' });
+    res.status(401).json({ message: 'Unauthorized na pocetnu' });
   }
 });
 
