@@ -21,7 +21,7 @@ const verifyOrRefreshAccessToken = async (req, res, next) => {
 
   if (!accessToken) {
     if (!refreshToken) {
-      return res.status(401).json({ error: 'Unauthorized'});
+      return res.status(401).json({ error: 'Unauthorized na refreshu'});
     }
 
     try {
@@ -36,7 +36,7 @@ const verifyOrRefreshAccessToken = async (req, res, next) => {
       res.cookie('accessToken', accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
       req.user = response.data.user;
     } catch (error) {
-      return res.status(401).json({ error: 'Unauthorized'});
+      return res.status(401).json({ error: 'Unauthorized na requestu za access'});
     }
   }
   req.accessToken = accessToken;
