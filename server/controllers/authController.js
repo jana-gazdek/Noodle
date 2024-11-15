@@ -7,7 +7,7 @@ const setCookies = (res, accessToken, refreshToken) => {
 
 const login = (req, res) => {
   setCookies(res, req.user.accessToken, req.user.refreshToken);
-  res.redirect('http://localhost:3001/pocetna');
+  res.redirect('https://noodle-frontend.onrender.com/pocetna');
 };
 
 const logout = (req, res) => {
