@@ -14,7 +14,8 @@ function Pocetna({ handleLogout }) {
         setUser(response.data.user);
         setWeather(response.data.weather);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('Error:', error.message);
         window.location.href = '/login';
       });
   }, []);
