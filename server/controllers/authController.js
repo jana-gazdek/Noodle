@@ -11,7 +11,7 @@ const login = (req, res) => {
     res.redirect('https://noodle-frontend.onrender.com/pocetna');
   }, 500); // 500 ms delay
 };
-};
+
 
 const logout = (req, res) => {
   res.clearCookie('accessToken');
