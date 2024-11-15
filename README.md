@@ -22,7 +22,7 @@ Juraj Čižić <br/>
 Jana Gazdek <br/>
 Siniša Horvatić <br/>
 Jana Jovanović <br/>
-R M <br/>
-D P <br/>
+Roko Markov <br/>
+Damjan Popović <br/>
 Filip Vuletić-Antić <br/>
 
