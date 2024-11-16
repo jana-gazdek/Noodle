@@ -10,10 +10,11 @@ require('./config/passportConfig');
 dotenv.config();
 
 const app = express();
+app.use(cookieParser());
 const port = process.env.PORT || 3000;
 
 app.use(cors({ origin: 'https://noodle-frontend.onrender.com', credentials: true }));
-app.use(cookieParser());
+
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
