@@ -22,8 +22,9 @@ router.get('/login', authController.verifyOrRefreshAccessToken, (req, res) => {
 });
 
 router.get('/pocetna', authController.verifyOrRefreshAccessToken, async (req, res) => {
-  console.log('request:', req);
-  console.log('response:', res);
+  console.log('request:', req.cookies);
+  console.log('response:', res.cookies);
+  console.log('request data:', req.data, req.user)
   if (req.user) {
     const user = req.user;
 
