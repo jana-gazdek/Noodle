@@ -22,9 +22,6 @@ router.get('/login', authController.verifyOrRefreshAccessToken, (req, res) => {
 });
 
 router.get('/pocetna', authController.verifyOrRefreshAccessToken, async (req, res) => {
-  console.log('request:', req.cookies);
-  console.log('response:', res.cookies);
-  console.log('request data:', req.data, req.user)
   if (req.user) {
     const user = req.user;
 
@@ -45,8 +42,7 @@ router.get('/pocetna', authController.verifyOrRefreshAccessToken, async (req, re
         city: weatherResponse.data.name,
         country: weatherResponse.data.sys.country
       };
-
-      console.log(user, weatherData)
+      
       res.status(200).json({ user, weather: weatherData });
     } catch (error) {
       console.error('Error fetching weather data:', error);
