@@ -6,7 +6,7 @@ const setCookies = (res, accessToken, refreshToken) => {
 };
 
 const login = (req, res) => {
-  console.log(req.user.accessToken, req.user.refreshToken, req.user.name);
+  console.log(req.user);
   setCookies(res, req.user.accessToken, req.user.refreshToken);
   res.redirect('https://noodle-frontend.onrender.com/pocetna');
 };
