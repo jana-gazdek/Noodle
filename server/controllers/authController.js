@@ -20,7 +20,7 @@ const logout = (req, res) => {
 const verifyOrRefreshAccessToken = async (req, res, next) => {
   console.log('Middleware reached!');
   console.log('Request Headers:', req.headers);
-  cconsole.log('user:', req.user);
+  console.log('user:', req.user);
   console.log('Cookies in request:', req.cookies);
   console.log('Access Token:', req.cookies.accessToken);
   console.log('Refresh Token:', req.cookies.refreshToken);
