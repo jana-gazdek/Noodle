@@ -29,11 +29,6 @@ app.use(passport.session());
 
 app.use('/auth', authRoutes);
 
-app.get('/set-test-cookie', (req, res) => {
-    res.cookie('simpleCookie', 'This is a simple test cookie', { maxAge: 3600000 });
-    res.send('Simple test cookie set!');
-});
-
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
