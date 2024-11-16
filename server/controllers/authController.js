@@ -17,8 +17,8 @@ const logout = (req, res) => {
 };
 
 const verifyOrRefreshAccessToken = async (req, res, next) => {
-  console.log('Verify req:', req);
-  console.log('Verify res:', res);
+  console.log('Verify req:', req.data);
+  console.log('Verify res:', res.data);
   let accessToken = req.cookies.accessToken;
   const refreshToken = req.cookies.refreshToken;
 
