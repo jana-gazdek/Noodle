@@ -47,6 +47,20 @@ const verifyOrRefreshAccessToken = async (req, res, next) => {
     } catch (error) {
       return res.status(401).json({ error: 'Unauthorized na requestu za access'});
     }
+  }else{
+    try{
+      const userResponse = await axios.get(
+      'https://www.googleapis.com/oauth2/v3/userinfo',
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    req.user = userResponse.data;
+    }catch(error){
+      return res.status(401).json({error: 'Invalid or expired accessToken'});
+    }
   }
   req.accessToken = accessToken;
   next();
