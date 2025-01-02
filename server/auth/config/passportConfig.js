@@ -29,12 +29,15 @@ passport.use(new GoogleStrategy({
       });
       await user.save();
     }else{
-      user.refreshToken = refreshToken;
-      user.accessToken = accessToken;
-      await user.save();
+      const needsUpdate = user.refreshToken !== refreshToken || user.accessToken !== accessToken;
+      if (needsUpdate) {
+        user.refreshToken = refreshToken;
+        user.accessToken = accessToken;
+        await user.save();
+      }
     }
 
-    done(null, {id: user.id, accessToken, refreshToken});
+    done(null, user);
   } catch (err) {
     done(err);
   }

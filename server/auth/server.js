@@ -27,7 +27,7 @@ app.use(cookieParser());
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   store: MongoStore.create({
     mongoUrl: process.env.MONGO_URI,
     collectionName: 'sessions',
@@ -35,7 +35,8 @@ app.use(session({
   cookie:{
     maxAge: 7*24*60*60*1000,
     httpOnly: true,
-    secure: false
+    secure: false,
+    //sameSite: 'none'
   }
 }));
 app.use(passport.initialize());

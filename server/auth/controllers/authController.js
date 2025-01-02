@@ -1,4 +1,5 @@
 const axios = require('axios');
+const User = require('../models/User');
 
 const setCookies = (res, accessToken, refreshToken) => {
   res.cookie('accessToken', accessToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 3600 * 1000 }); // 1 hour
@@ -11,8 +12,17 @@ const login = (req, res, accessToken, refreshToken) => {
 };
 
 const logout = (req, res) => {
-  res.clearCookie('accessToken');
-  res.clearCookie('refreshToken');
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Error destroying session:', err);
+      return res.status(500).json({ error: 'Failed to log out' });
+      }
+    })
+
+  res.clearCookie('connect.sid', { httpOnly: true, secure: false });
+  res.clearCookie('accessToken', { httpOnly: true, sameSite: 'None', secure: true });
+  res.clearCookie('refreshToken', { httpOnly: true, sameSite: 'None', secure: true });
+  res.redirect('http://localhost:3001/login')
 };
 
 const verifyOrRefreshAccessToken = async (req, res, next) => {
@@ -50,6 +60,13 @@ const verifyOrRefreshAccessToken = async (req, res, next) => {
 
       accessToken = response.data.access_token;
       setCookies(res, accessToken, refreshToken);
+
+      const userId = req.user ? req.user.id : null;
+      if (userId) {
+        await User.findByIdAndUpdate(userId, {
+          accessToken: accessToken,
+        });
+      }
 
       const userResponse = await axios.get(
         'https://www.googleapis.com/oauth2/v3/userinfo',
