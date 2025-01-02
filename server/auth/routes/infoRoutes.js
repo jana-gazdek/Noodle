@@ -128,7 +128,7 @@ router.post('/deny-request', async (req, res) => {
   const { _id } = req.body;
 
   if (!_id) {
-    return res.status(400).json({ error: 'User ID (_id) is required' });
+    return res.status(400).json({ error: 'User ID is required' });
   }
 
   try {
@@ -144,5 +144,62 @@ router.post('/deny-request', async (req, res) => {
     res.status(500).json({ error: 'Failed to deny request' });
   }
 });
+
+router.post('/get-user-info', async(req, res) => {
+    const { OIB } = req.body;
+
+	if(!OIB){
+		return res.status(400).json({ error: 'User OIB is required' });
+	}
+
+	try{
+		const user = await Student.findOne({ OIB });
+
+		if (!user) {
+		  return res.status(404).json({ error: 'User not found' });
+		}
+
+		res.json(user);
+	} catch(err){
+		console.error('Error finding student:', err);
+    	res.status(500).json({ error: 'Failed to retrieve student' });
+	}
+})
+
+router.post('/update-user-info', async (req, res) => {
+    const { _id, name, surname, email, OIB, address, dateOfBirth, dateTimeOfRequest, primarySchool, role } = req.body;
+
+	if(!_id){
+		return res.status(400).json({ error: 'User ID is required'});
+	  }
+
+	try{
+		const updatedUser = await Student.findByIdAndUpdate(
+		  _id,
+		  {
+			name,
+			surname,
+			email,
+			OIB,
+			address,
+			dateOfBirth,
+			dateTimeOfRequest,
+			primarySchool,
+			role
+		  },
+		  { new: true }
+		);
+
+		if(!updatedUser){
+			return res.status(404).json({error: 'User not found'});
+		}
+
+		  res.json({ message: 'User information updated successfully', updatedUser });
+
+	}catch(err){
+    console.error('Error updating user info:', err);
+    res.status(500).json({ error: 'Failed to update user information' });
+	}
+})
 
 module.exports = router;
