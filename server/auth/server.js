@@ -5,6 +5,8 @@ const passport = require('passport');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/authRoutes');
+const scheduleRoutes = require('./routes/scheduleRoutes');
+const infoRoutes = require('./routes/infoRoutes');
 const MongoStore = require('connect-mongo');
 require('./config/passportConfig');
 
@@ -12,6 +14,8 @@ dotenv.config();
 
 const app = express();
 const port = 3000;
+
+app.use(express.json());
 
 app.use(cors({ origin: 'http://localhost:3001', credentials: true }));
 app.use(cookieParser());
@@ -42,7 +46,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/info', infoRoutes);
 app.use('/auth', authRoutes);
+app.use('/schedule', scheduleRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
