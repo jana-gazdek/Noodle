@@ -30,7 +30,7 @@ router.get('/login', authController.verifyOrRefreshAccessToken, (req, res) => {
   }
 });
 
-router.get('/pocetna', authController.verifyOrRefreshAccessToken, async (req, res) => {
+router.get('/pocetna', /*authController.verifyOrRefreshAccessToken,*/ async (req, res) => {
   if (req.user) {
     const user = req.user;
 

@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true },
     refreshToken: { type: String, default:'' },
     accessToken: { type: String, default:'' },
-    role: { type: String, default: 'user' }
+    role: { type: String, default: 'unverified' }
 })
 
 const User = mongoose.model('User', userSchema);

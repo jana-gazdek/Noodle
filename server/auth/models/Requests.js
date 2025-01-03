@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const requestSchema = new mongoose.Schema({
+  _id: { type: String, required: true },
   name: { type: String, required: true },
   surname: { type: String, required: true },
   email: { type: String, required: true },
@@ -9,7 +10,7 @@ const requestSchema = new mongoose.Schema({
   dateOfBirth: { type: Date, required: true },
   dateTimeOfRequest: { type: Date, required: true },
   primarySchool: { type: String, required: true },
-  role: { type: String, default: 'user'}
+  role: { type: String, default: 'pending'}
 });
 
 module.exports = mongoose.model('Request', requestSchema);

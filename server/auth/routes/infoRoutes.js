@@ -2,9 +2,15 @@ const express = require('express');
 const router = express.Router();
 const Request = require('../models/Requests');
 const Student = require('../models/Student');
+const User = require('../models/User');
 
 router.post('/submit-request', async (req, res) => {
   console.log('Request received at backend:', req.body);
+
+  if (!req.body || !req.body.googleId) {
+    return res.status(401).json({ error: 'User is not authenticated' });
+  }
+
   const {
     name,
     surname,
@@ -19,6 +25,7 @@ router.post('/submit-request', async (req, res) => {
 
   try {
     const newRequest = new Request({
+      _id: req.body.googleId,
       name,
       surname,
       email,
@@ -27,10 +34,12 @@ router.post('/submit-request', async (req, res) => {
       dateOfBirth,
       dateTimeOfRequest,
       primarySchool,
-      role
+      role: 'pending'
     });
 
     await newRequest.save();
+
+    await User.findOneAndUpdate({ googleId: req.body.googleId }, { role: 'pending' }, {new: true});
 
     res.json({
       message: 'Data saved successfully',
@@ -101,7 +110,10 @@ router.post('/confirm-request', async (req, res) => {
       return res.status(404).json({ error: 'Request not found' });
     }
 
+    const role = request.role === 'pending' ? 'student' : request.role;
+
     const student = new Student({
+      _id: request.id,
       name: request.name,
       surname: request.surname,
       email: request.email,
@@ -110,10 +122,12 @@ router.post('/confirm-request', async (req, res) => {
       dateOfBirth: request.dateOfBirth,
       dateTimeOfRequest: request.dateTimeOfRequest,
       primarySchool: request.primarySchool,
-      role: request.role
+      role
     });
 
     await student.save();
+
+    await User.findOneAndUpdate({ googleId: _id }, { role }, { new: true })
 
     await Request.findByIdAndDelete(_id);
 
@@ -137,6 +151,7 @@ router.post('/deny-request', async (req, res) => {
     if (!request) {
       return res.status(404).json({ error: 'Request not found' });
     }
+    await User.findOneAndUpdate({ googleId: _id }, { role: 'denied' }, { new: true});
 
     res.json({ message: 'Request denied' });
   } catch (err) {
