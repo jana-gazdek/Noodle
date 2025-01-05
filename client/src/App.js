@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
+import { 
+  createBrowserRouter, 
+  RouterProvider, 
   Navigate
 } from 'react-router-dom';
 import Pocetna from './components/pocetna';
@@ -36,31 +35,25 @@ function App() {
     return null;
   }
 
-  return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route
-            path="/login"
-            element={
-              isAuthenticated ? <Navigate to="/auth/pocetna" /> : <Login handleGoogleLogin={handleGoogleLogin} />
-            }
-          />
-          
-          <Route
-            path="/auth/pocetna"
-            element={
-              isAuthenticated ? <Pocetna /> : <Navigate to="/login" />
-            }
-          />
+  const router = createBrowserRouter([
+    {
+      path: '/login',
+      element: isAuthenticated ? <Navigate to="/auth/pocetna" /> : <Login handleGoogleLogin={handleGoogleLogin} />,
+    },
+    {
+      path: '/auth/pocetna',
+      element: isAuthenticated ? <Pocetna /> : <Navigate to="/login" />,
+    },
+    {
+      path: '*',
+      element: <Navigate to="/login" />,
+    },
+  ]);
 
-          <Route
-            path="*"
-            element={<Navigate to="/login" />}
-          />
-        </Routes>
-      </div>
-    </Router>
+  return (
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
   );
 }
 
