@@ -1,0 +1,144 @@
+CREATE TABLE ŠKOLA
+(
+  školaID INT NOT NULL,
+  PRIMARY KEY (školaID)
+);
+
+CREATE TABLE KORISNIK
+(
+  OIB VARCHAR(11) NOT NULL,
+  spol VARCHAR(1) NOT NULL CHECK (spol IN ('M', 'F')),
+  ime VARCHAR(25) NOT NULL,
+  prezime VARCHAR(25) NOT NULL,
+  datumrod DATE NOT NULL,
+  adresa VARCHAR NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  zaporka VARCHAR(50) NOT NULL,
+  školaID INT NOT NULL,
+  PRIMARY KEY (OIB),
+  FOREIGN KEY (školaID) REFERENCES ŠKOLA(školaID)
+);
+
+CREATE TABLE PROSTORIJA
+(
+  kapacitet VARCHAR(6) NOT NULL,
+  oznaka VARCHAR(20) NOT NULL,
+  tipProstorije VARCHAR NOT NULL CHECK (tipProstorije IN ('dvorana', 'učionica')),
+  školaID INT NOT NULL,
+  PRIMARY KEY (oznaka),
+  FOREIGN KEY (školaID) REFERENCES ŠKOLA(školaID)
+);
+
+CREATE TABLE PREDMET
+(
+  predmetID INT NOT NULL,
+  imePredmet VARCHAR(30) NOT NULL,
+  brojSatova VARCHAR(1) NOT NULL,
+  brojLab VARCHAR(1) NOT NULL,
+  smjer VARCHAR(30) NOT NULL,
+  školaID INT NOT NULL,
+  PRIMARY KEY (predmetID),
+  FOREIGN KEY (školaID) REFERENCES ŠKOLA(školaID)
+);
+
+CREATE TABLE GOST
+(
+  gostID INT NOT NULL,
+  datumPristupa DATE NOT NULL,
+  OIB VARCHAR(11) NOT NULL,
+  PRIMARY KEY (gostID),
+  FOREIGN KEY (OIB) REFERENCES KORISNIK(OIB)
+);
+
+CREATE TABLE DJELATNIK
+(
+  djelatnikID INT NOT NULL,
+  mobBroj VARCHAR(12) NOT NULL,
+  razred VARCHAR(4) NOT NULL,
+  status VARCHAR NOT NULL CHECK (status IN ('admin', 'profesor', 'satničar')),
+  OIB VARCHAR(11) NOT NULL,
+  PRIMARY KEY (djelatnikID),
+  FOREIGN KEY (OIB) REFERENCES KORISNIK(OIB)
+);
+
+
+CREATE TABLE UČENIK
+(
+  učenikID INT NOT NULL,
+  razred VARCHAR(4) NOT NULL,
+  škGod VARCHAR(11) NOT NULL,
+  smjer VARCHAR(30) NOT NULL, 
+  OIB VARCHAR(11) NOT NULL,
+  PRIMARY KEY (učenikID),
+  FOREIGN KEY (OIB) REFERENCES KORISNIK(OIB)
+);
+
+CREATE TABLE IZOSTANAK
+(
+  izostanakDatum DATE NOT NULL,
+  izostanakStatus VARCHAR NOT NULL CHECK (izostanakStatus IN ('Opravdano', 'Neopravdano', 'Na čekanju')),
+  izostanakOPIS VARCHAR(255),
+  učenikID INT NOT NULL,
+  PRIMARY KEY (izostanakDatum),
+  FOREIGN KEY (učenikID) REFERENCES UČENIK(učenikID)
+);
+
+CREATE TABLE RASPORED
+(
+  datum DATE NOT NULL,
+  razred VARCHAR(4) NOT NULL,
+  oznaka VARCHAR(20) NOT NULL,
+  imePredmet VARCHAR(30) NOT NULL,
+  školaID INT NOT NULL,
+  PRIMARY KEY (datum),
+  FOREIGN KEY (školaID) REFERENCES ŠKOLA(školaID)
+);
+
+CREATE TABLE predaje
+(
+  predmetID INT NOT NULL,
+  djelatnikID INT NOT NULL,
+  PRIMARY KEY (predmetID, djelatnikID),
+  FOREIGN KEY (predmetID) REFERENCES PREDMET(predmetID),
+  FOREIGN KEY (djelatnikID) REFERENCES DJELATNIK(djelatnikID)
+);
+
+CREATE TABLE REPOZITORIJ
+(
+  repID INT NOT NULL,
+  metaData VARCHAR(255),
+  imeRep VARCHAR(30) NOT NULL,
+  školaID INT NOT NULL,
+  unutar_repID INT,
+  PRIMARY KEY (repID),
+  FOREIGN KEY (školaID) REFERENCES ŠKOLA(školaID),
+  FOREIGN KEY (unutar_repID) REFERENCES REPOZITORIJ(repID)
+);
+
+CREATE TABLE LINK
+(
+  brojPregleda VARCHAR NOT NULL,
+  autor VARCHAR NOT NULL,
+  datumObjave DATE NOT NULL,
+  linkTekst VARCHAR NOT NULL,
+  repID INT NOT NULL,
+  PRIMARY KEY (linkTekst),
+  FOREIGN KEY (repID) REFERENCES REPOZITORIJ(repID)
+);
+
+CREATE TABLE DATOTEKA
+(
+  veličina VARCHAR NOT NULL,
+  linkTekst VARCHAR NOT NULL,
+  PRIMARY KEY (linkTekst),
+  FOREIGN KEY (linkTekst) REFERENCES LINK(linkTekst)
+);
+
+CREATE TABLE OBAVIJEST
+(
+  tekst VARCHAR NOT NULL,
+  naslov VARCHAR NOT NULL,
+  linkTekst VARCHAR NOT NULL,
+  PRIMARY KEY (linkTekst),
+  FOREIGN KEY (linkTekst) REFERENCES LINK(linkTekst)
+);
