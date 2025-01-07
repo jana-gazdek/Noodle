@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Chat from "./chat.js";
 import "../styles/pocetna/pocetna.css";
 import "../styles/pocetna/weather.css";
 
@@ -46,62 +47,67 @@ function Pocetna({ handleLogout }) {
           </div>
         ) : (
           <>
-            <div className="user-container">
-              <h1>
-                Bok, {user.name} {user.surname}!
-              </h1>
-              <p>Prijava uspješna.</p>
+            <div className="chat-container">
+              <Chat user={user} />
             </div>
+            <div>
+              <div className="user-container">
+                <h1>
+                  Bok, {user.name} {user.surname}!
+                </h1>
+                <p>Prijava uspješna.</p>
+              </div>
 
-            {user.role === "admin" ? (
-              <div>
+              {user.role === "admin" ? (
                 <div>
-                  <button
-                    className="admin-gumb"
-                    onClick={handleAdminButtonClick}
-                  >
-                    ADMIN GUMB
-                  </button>
+                  <div>
+                    <button
+                      className="admin-gumb"
+                      onClick={handleAdminButtonClick}
+                    >
+                      ADMIN GUMB
+                    </button>
+                  </div>
+                  <div>
+                    <form onSubmit={handleSearchSubmit}>
+                      <input
+                        type="text"
+                        placeholder="Enter OIB"
+                        value={oib}
+                        onChange={(e) => setOib(e.target.value)}
+                        required
+                      />
+                      <button type="submit">Search</button>
+                    </form>
+                  </div>
                 </div>
-                <div>
-                  <form onSubmit={handleSearchSubmit}>
-                    <input
-                      type="text"
-                      placeholder="Enter OIB"
-                      value={oib}
-                      onChange={(e) => setOib(e.target.value)}
-                      required
-                    />
-                    <button type="submit">Search</button>
-                  </form>
-                </div>
-              </div>
-            ) : (
-              <div></div>
-            )}
+              ) : (
+                <div></div>
+              )}
 
-            {weather ? (
-              <div className="weather-container">
-                <div className="weather-city">
-                  <h2>{weather.city}</h2>
-                  <p>{weather.country}</p>
+              {weather ? (
+                <div className="weather-container">
+                  <div className="weather-city">
+                    <h2>{weather.city}</h2>
+                    <p>{weather.country}</p>
+                  </div>
+                  <div className="weather-icon">
+                    <img
+                      src={`http://openweathermap.org/img/wn/${weather.icon}@2x.png`}
+                      alt={weather.description}
+                    ></img>
+                  </div>
+                  <div className="weather-temp">
+                    <h2>{weather.temperature}°C</h2>
+                    <p>{weather.description}</p>
+                  </div>
                 </div>
-                <div className="weather-icon">
-                  <img
-                    src={`http://openweathermap.org/img/wn/${weather.icon}@2x.png`}
-                    alt={weather.description}
-                  ></img>
+              ) : (
+                <div className="weather-container">
+                  <p>Greška: podatci o vremenu su nedostupni.</p>
                 </div>
-                <div className="weather-temp">
-                  <h2>{weather.temperature}°C</h2>
-                  <p>{weather.description}</p>
-                </div>
-              </div>
-            ) : (
-              <div className="weather-container">
-                <p>Greška: podatci o vremenu su nedostupni.</p>
-              </div>
-            )}
+              )}
+            </div>
           </>
         ))}
     </div>
