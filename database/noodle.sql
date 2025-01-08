@@ -4,7 +4,7 @@ CREATE TABLE ŠKOLA
   PRIMARY KEY (školaID)
 );
 
-CREATE TABLE KORISNIK
+CREATE TABLE KORISNIK --ispuna REQUEST-a
 (
   OIB VARCHAR(11) NOT NULL,
   spol VARCHAR(1) NOT NULL CHECK (spol IN ('M', 'F')),
@@ -41,10 +41,10 @@ CREATE TABLE PREDMET
   FOREIGN KEY (školaID) REFERENCES ŠKOLA(školaID)
 );
 
-CREATE TABLE GOST
+CREATE TABLE GOST --korisnik na čekanju
 (
   gostID INT NOT NULL,
-  datumPristupa DATE NOT NULL,
+  datumPristupa TIMESTAMP NOT NULL,
   OIB VARCHAR(11) NOT NULL,
   PRIMARY KEY (gostID),
   FOREIGN KEY (OIB) REFERENCES KORISNIK(OIB)
@@ -67,7 +67,7 @@ CREATE TABLE UČENIK
   učenikID INT NOT NULL,
   razred VARCHAR(4) NOT NULL,
   škGod VARCHAR(11) NOT NULL,
-  smjer VARCHAR(30) NOT NULL, 
+  smjer VARCHAR(30) NOT NULL,
   OIB VARCHAR(11) NOT NULL,
   PRIMARY KEY (učenikID),
   FOREIGN KEY (OIB) REFERENCES KORISNIK(OIB)
@@ -75,22 +75,24 @@ CREATE TABLE UČENIK
 
 CREATE TABLE IZOSTANAK
 (
-  izostanakDatum DATE NOT NULL,
+  izostanakID INT NOT NULL
+  izostanakDatum TIMESTAMP NOT NULL,
   izostanakStatus VARCHAR NOT NULL CHECK (izostanakStatus IN ('Opravdano', 'Neopravdano', 'Na čekanju')),
   izostanakOPIS VARCHAR(255),
   učenikID INT NOT NULL,
-  PRIMARY KEY (izostanakDatum),
+  PRIMARY KEY (izostanakID),
   FOREIGN KEY (učenikID) REFERENCES UČENIK(učenikID)
 );
 
 CREATE TABLE RASPORED
 (
-  datum DATE NOT NULL,
+  terminID INT NOT NULL,
+  datum TIMESTAMP NOT NULL,
   razred VARCHAR(4) NOT NULL,
   oznaka VARCHAR(20) NOT NULL,
   imePredmet VARCHAR(30) NOT NULL,
   školaID INT NOT NULL,
-  PRIMARY KEY (datum),
+  PRIMARY KEY (terminID),
   FOREIGN KEY (školaID) REFERENCES ŠKOLA(školaID)
 );
 
@@ -119,7 +121,7 @@ CREATE TABLE LINK
 (
   brojPregleda VARCHAR NOT NULL,
   autor VARCHAR NOT NULL,
-  datumObjave DATE NOT NULL,
+  datumObjave TIMESTAMP NOT NULL,
   linkTekst VARCHAR NOT NULL,
   repID INT NOT NULL,
   PRIMARY KEY (linkTekst),
