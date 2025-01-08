@@ -75,7 +75,7 @@ CREATE TABLE UČENIK
 
 CREATE TABLE IZOSTANAK
 (
-  izostanakID INT NOT NULL
+  izostanakID INT NOT NULL,
   izostanakDatum TIMESTAMP NOT NULL,
   izostanakStatus VARCHAR NOT NULL CHECK (izostanakStatus IN ('Opravdano', 'Neopravdano', 'Na čekanju')),
   izostanakOPIS VARCHAR(255),
