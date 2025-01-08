@@ -6,7 +6,7 @@ function Login({ handleGoogleLogin }) {
     <div className="login-container">
       <div className="login-section">
         <h1>Prijavi se</h1>
-        <form>
+        <form className="prijava">
           <label>
             <input type="email" className="input-field" placeholder="e-mail" />
           </label>
@@ -17,10 +17,11 @@ function Login({ handleGoogleLogin }) {
               placeholder="zaporka"
             />
           </label>
-          <button type="submit" className="login-button">
-            Prijava
-          </button>
         </form>
+        <button type="submit" className="login-button">
+          Prijava
+        </button>
+
         <div className="separator"></div>
         <button onClick={handleGoogleLogin} className="google-login-button">
           Continue with Google
