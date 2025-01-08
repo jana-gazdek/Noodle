@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import dayjs from "dayjs";
 import axios from "axios";
+import "../styles/requests.css";
 import { useNavigate } from "react-router-dom";
 
 function Requests() {
@@ -83,105 +85,150 @@ function Requests() {
     }
   };
 
+  function getDate(dateObject) {
+    const formattedDate = dayjs(dateObject).format("DD.MM.YYYY");
+
+    return formattedDate;
+  }
+
   if (error) {
     return <div>{error}</div>;
   }
 
   return (
-    <div>
-      <div>
-        <button className="back-button" onClick={handleBackButtonClick}>
-          Nazad
-        </button>
+    <div className="list">
+      <div className="heder">
+        <h1>Zahtjevi</h1>
+        <div>
+          <button className="back-button" onClick={handleBackButtonClick}>
+            Nazad
+          </button>
+        </div>
       </div>
-      <h1>Zahtjevi</h1>
       {requests.length > 0 ? (
-        <ul>
+        <ul className="requests">
           {requests.map((request) => (
             <li key={request._id}>
               {editingRequestId === request._id ? (
                 <>
-                  <strong>Ime:</strong>
-                  <input
-                    name="name"
-                    value={updatedRequest.name}
-                    onChange={handleChange}
-                  />{" "}
-                  <br />
-                  <strong>Prezime:</strong>
-                  <input
-                    name="surname"
-                    value={updatedRequest.surname}
-                    onChange={handleChange}
-                  />{" "}
-                  <br />
-                  <strong>Email:</strong>
-                  <input
-                    name="email"
-                    value={updatedRequest.email}
-                    onChange={handleChange}
-                  />{" "}
-                  <br />
-                  <strong>OIB:</strong>
-                  <input
-                    name="OIB"
-                    value={updatedRequest.OIB}
-                    onChange={handleChange}
-                  />{" "}
-                  <br />
-                  <strong>Adresa:</strong>
-                  <input
-                    name="address"
-                    value={updatedRequest.address}
-                    onChange={handleChange}
-                  />{" "}
-                  <br />
-                  <strong>Datum rođenja:</strong>
-                  <input
-                    name="dateOfBirth"
-                    value={updatedRequest.dateOfBirth}
-                    onChange={handleChange}
-                  />{" "}
-                  <br />
-                  <strong>Osnovna škola:</strong>
-                  <input
-                    name="primarySchool"
-                    value={updatedRequest.primarySchool}
-                    onChange={handleChange}
-                  />{" "}
-                  <br />
-                  <strong>Uloga:</strong>
-                  <select
-                    name="role"
-                    value={updatedRequest.role}
-                    onChange={handleChange}
-                  >
-                    <option value="student">Učenik</option>
-                    <option value="admin">Admin</option>
-                    <option value="profesor">Profesor</option>
-                  </select>{" "}
-                  <br />
-                  <button onClick={handleSave}>Spremi promjene</button>
-                  <button onClick={() => setEditingRequestId(null)}>
-                    Odustani
-                  </button>
+                  <div className="redak">
+                    <strong>Ime:</strong>
+                    <input
+                      name="name"
+                      value={updatedRequest.name}
+                      onChange={handleChange}
+                    />{" "}
+                    <br />
+                  </div>
+                  <div className="redak">
+                    <strong>Prezime:</strong>
+                    <input
+                      name="surname"
+                      value={updatedRequest.surname}
+                      onChange={handleChange}
+                    />{" "}
+                    <br />
+                  </div>
+                  <div className="redak">
+                    <strong>Email:</strong>
+                    <input
+                      name="email"
+                      value={updatedRequest.email}
+                      onChange={handleChange}
+                    />{" "}
+                    <br />
+                  </div>
+                  <div className="redak">
+                    <strong>OIB:</strong>
+                    <input
+                      name="OIB"
+                      value={updatedRequest.OIB}
+                      onChange={handleChange}
+                    />{" "}
+                    <br />
+                  </div>
+                  <div className="redak">
+                    <strong>Adresa:</strong>
+                    <input
+                      name="address"
+                      value={updatedRequest.address}
+                      onChange={handleChange}
+                    />{" "}
+                    <br />
+                  </div>
+                  <div className="redak">
+                    <strong>Datum rođenja:</strong>
+                    <input
+                      type="date"
+                      name="dateOfBirth"
+                      value={getDate(request.dateOfBirth)}
+                      onChange={handleChange}
+                    />{" "}
+                    <br />
+                  </div>
+                  <div className="redak">
+                    <strong>Osnovna škola:</strong>
+                    <input
+                      name="primarySchool"
+                      value={updatedRequest.primarySchool}
+                      onChange={handleChange}
+                    />{" "}
+                    <br />
+                  </div>
+                  <div className="redak">
+                    <strong>Uloga:</strong>
+                    <select
+                      name="role"
+                      value={updatedRequest.role}
+                      onChange={handleChange}
+                    >
+                      <option value="student">Učenik</option>
+                      <option value="admin">Satničar</option>
+                      <option value="profesor">Profesor</option>
+                    </select>{" "}
+                    <br />
+                  </div>
+                  <div className="redak">
+                    <button className="req-button" onClick={handleSave}>
+                      Spremi
+                    </button>
+                    <button
+                      className="req-button"
+                      onClick={() => setEditingRequestId(null)}
+                    >
+                      Odustani
+                    </button>
+                  </div>
                 </>
               ) : (
                 <>
-                  <strong>Name:</strong> {request.name} <br />
-                  <strong>Surname:</strong> {request.surname} <br />
+                  <strong>Ime:</strong> {request.name} <br />
+                  <strong>Prezime:</strong> {request.surname} <br />
                   <strong>Email:</strong> {request.email} <br />
                   <strong>OIB:</strong> {request.OIB} <br />
-                  <strong>Address:</strong> {request.address} <br />
-                  <strong>Date of Birth:</strong> {request.dateOfBirth} <br />
-                  <strong>Primary School:</strong> {request.primarySchool}{" "}
+                  <strong>Adresa:</strong> {request.address} <br />
+                  <strong>Datum rođenja:</strong> {getDate(request.dateOfBirth)}{" "}
                   <br />
-                  <strong>Status:</strong> {request.role} <br />
-                  <button onClick={() => handleEdit(request)}>Uredi</button>
-                  <button onClick={() => handleConfirm(request._id)}>
+                  <strong>Osnovna škola:</strong> {request.primarySchool} <br />
+                  <strong>Uloga:</strong> {request.role} <br />
+                  <button
+                    className="req-button"
+                    onClick={() => handleEdit(request)}
+                  >
+                    Uredi
+                  </button>
+                  <button
+                    className="req-button"
+                    onClick={() => handleConfirm(request._id)}
+                  >
                     Prihvati
                   </button>
-                  <button onClick={() => handleDeny(request._id)}>Odbij</button>
+                  <button
+                    className="req-button"
+                    onClick={() => handleDeny(request._id)}
+                  >
+                    Odbij
+                  </button>
                   <hr />
                 </>
               )}
@@ -189,7 +236,7 @@ function Requests() {
           ))}
         </ul>
       ) : (
-        <p>Trenutno nema zahtjeva.</p>
+        <h2>Trenutno nema zahtjeva.</h2>
       )}
     </div>
   );

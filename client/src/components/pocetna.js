@@ -39,11 +39,16 @@ function Pocetna({ handleLogout }) {
       {user &&
         (user.role === "pending" ? (
           <div>
-            <p>Niste još prihvaćeni.</p>
+            <div className="user-container">
+              <h1>
+                Bok, {user.name} {user.surname}!
+              </h1>
+            </div>
+            <h1 className="info-text">Niste još prihvaćeni.</h1>
           </div>
         ) : user.role === "denied" ? (
           <div>
-            <p>Niste prihvaćeni!</p>
+            <h1 className="info-text">Niste prihvaćeni!</h1>
           </div>
         ) : (
           <>
