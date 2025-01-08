@@ -1,8 +1,14 @@
 const express = require('express');
+const app = express();
 const router = express.Router();
 const Request = require('../models/Requests');
 const Student = require('../models/Student');
 const User = require('../models/User');
+const client = require('../../../database/connection.js');
+
+app.listen(3004, ()=>{}) 
+
+client.connect();
 
 router.post('/submit-request', async (req, res) => {
   console.log('Request received at backend:', req.body);
@@ -36,6 +42,15 @@ router.post('/submit-request', async (req, res) => {
       primarySchool,
       role: 'pending'
     });
+
+    let insertQuery = `insert into KORISNIK(OIB, spol, ime, prezime, datumrod, adresa, email, školaID) 
+    values(${newRequest.OIB}, 'M', ${newRequest.OIB}, ${newRequest.name}, ${newRequest.surname}, 
+    ${newRequest.dateOfBirth}, ${newRequest.address}, ${newRequest.email}, ${newRequest.primarySchool})`
+    client.query(insertQuery, (err, result)=>{
+    if (!err) {
+    res.send('Insertion was successful')
+    } else { console.log(err.message) }}) 
+    client.end;
 
     await newRequest.save();
 

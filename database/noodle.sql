@@ -43,7 +43,7 @@ CREATE TABLE PREDMET
 
 CREATE TABLE GOST --korisnik na čekanju
 (
-  gostID INT NOT NULL,
+  gostID VARCHAR NOT NULL,
   datumPristupa TIMESTAMP NOT NULL,
   OIB VARCHAR(11) NOT NULL,
   PRIMARY KEY (gostID),
@@ -52,7 +52,7 @@ CREATE TABLE GOST --korisnik na čekanju
 
 CREATE TABLE DJELATNIK
 (
-  djelatnikID INT NOT NULL,
+  djelatnikID VARCHAR NOT NULL,
   mobBroj VARCHAR(12) NOT NULL,
   razred VARCHAR(4) NOT NULL,
   status VARCHAR NOT NULL CHECK (status IN ('admin', 'profesor', 'satničar')),
@@ -64,7 +64,7 @@ CREATE TABLE DJELATNIK
 
 CREATE TABLE UČENIK
 (
-  učenikID INT NOT NULL,
+  učenikID VARCHAR NOT NULL,
   razred VARCHAR(4) NOT NULL,
   škGod VARCHAR(11) NOT NULL,
   smjer VARCHAR(30) NOT NULL,

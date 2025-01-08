@@ -5,6 +5,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
     height: 100vh;
 }
 
@@ -15,5 +16,7 @@ body {
     position: relative;
     margin: auto;
     justify-content: space-between;
+    align-items: center;
+    justify-content: center;
     align-items: center;
 }
