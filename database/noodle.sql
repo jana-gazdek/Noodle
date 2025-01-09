@@ -4,7 +4,7 @@ CREATE TABLE ŠKOLA
   PRIMARY KEY (školaID)
 );
 
-CREATE TABLE KORISNIK --ispuna REQUEST-a
+CREATE TABLE KORISNIK
 (
   OIB VARCHAR(11) NOT NULL,
   spol VARCHAR(1) NOT NULL CHECK (spol IN ('M', 'F')),
@@ -41,7 +41,7 @@ CREATE TABLE PREDMET
   FOREIGN KEY (školaID) REFERENCES ŠKOLA(školaID)
 );
 
-CREATE TABLE GOST --korisnik na čekanju
+CREATE TABLE GOST
 (
   gostID VARCHAR NOT NULL,
   datumPristupa TIMESTAMP NOT NULL,
@@ -61,7 +61,6 @@ CREATE TABLE DJELATNIK
   FOREIGN KEY (OIB) REFERENCES KORISNIK(OIB)
 );
 
-
 CREATE TABLE UČENIK
 (
   učenikID VARCHAR NOT NULL,
@@ -79,7 +78,7 @@ CREATE TABLE IZOSTANAK
   izostanakDatum TIMESTAMP NOT NULL,
   izostanakStatus VARCHAR NOT NULL CHECK (izostanakStatus IN ('Opravdano', 'Neopravdano', 'Na čekanju')),
   izostanakOPIS VARCHAR(255),
-  učenikID INT NOT NULL,
+  učenikID VARCHAR NOT NULL,
   PRIMARY KEY (izostanakID),
   FOREIGN KEY (učenikID) REFERENCES UČENIK(učenikID)
 );
@@ -99,7 +98,7 @@ CREATE TABLE RASPORED
 CREATE TABLE predaje
 (
   predmetID INT NOT NULL,
-  djelatnikID INT NOT NULL,
+  djelatnikID VARCHAR NOT NULL,
   PRIMARY KEY (predmetID, djelatnikID),
   FOREIGN KEY (predmetID) REFERENCES PREDMET(predmetID),
   FOREIGN KEY (djelatnikID) REFERENCES DJELATNIK(djelatnikID)

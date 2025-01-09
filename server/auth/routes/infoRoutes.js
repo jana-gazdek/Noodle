@@ -1,13 +1,10 @@
 const express = require('express');
-const app = express();
+const dayjs = require('dayjs');
 const router = express.Router();
 const Request = require('../models/Requests');
 const Student = require('../models/Student');
 const User = require('../models/User');
 const client = require('../../../database/connection.js');
-
-app.listen(3004, ()=>{}) 
-
 client.connect();
 
 router.post('/submit-request', async (req, res) => {
@@ -37,20 +34,25 @@ router.post('/submit-request', async (req, res) => {
       email,
       OIB,
       address,
-      dateOfBirth,
+      dateOfBirth : dayjs(dateOfBirth).format("YYYY-MM-DD"),
       dateTimeOfRequest,
       primarySchool,
       role: 'pending'
     });
 
-    let insertQuery = `insert into KORISNIK(OIB, spol, ime, prezime, datumrod, adresa, email, školaID) 
-    values(${newRequest.OIB}, 'M', ${newRequest.OIB}, ${newRequest.name}, ${newRequest.surname}, 
-    ${newRequest.dateOfBirth}, ${newRequest.address}, ${newRequest.email}, ${newRequest.primarySchool})`
-    client.query(insertQuery, (err, result)=>{
-    if (!err) {
-    res.send('Insertion was successful')
-    } else { console.log(err.message) }}) 
-    client.end;
+    const insertQueryKorisnik = `insert into KORISNIK(OIB, spol, ime, prezime, datumrod, adresa, email, zaporka, školaID) 
+    values($1, $2, $3, $4, $5, $6, $7, $8, $9)`;
+
+    const insertQueryGost = `insert into GOST(gostID, datumPristupa, OIB) values ($1, CURRENT_TIMESTAMP, $2)`;
+
+    const valuesKorisnik = [newRequest.OIB, 'M', newRequest.name, newRequest.surname, newRequest.dateOfBirth, 
+      newRequest.address, newRequest.email, 'passU', newRequest.primarySchool];
+
+    const valuesGost = [newRequest._id, newRequest.OIB];
+
+    await client.query(insertQueryKorisnik, valuesKorisnik);
+
+    await client.query(insertQueryGost, valuesGost);
 
     await newRequest.save();
 
