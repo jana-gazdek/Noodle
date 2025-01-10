@@ -1,0 +1,62 @@
+.infoform_profile p{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 0px;
+}
+
+.infoform_profile {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.infoform_profile strong {
+    width: 30%;
+
+}
+.infoform_profile input {
+    width: 70%;
+    height: 3rem;
+    border-radius: 25px;
+    border: none;
+    background-color: #D9D9D9;
+    padding: 0 1rem;
+    font-size: 1rem;
+  }
+  .infoform_profile select {
+    width: 70%;
+    height: 3rem;
+    border-radius: 25px;
+    border: none;
+    background-color: #D9D9D9;
+    padding: 0 1rem;
+    font-size: 1rem;
+  }
+  
+  .infoform_profile button {
+    width: 50%;
+    height: 3rem;
+    background-color: #8860D0;
+    color: #ffffff;
+    border-radius: 25px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .infoform_profile button:hover {
+    background-color: #5e3fbf;
+  }
+
+  .buttons{
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+

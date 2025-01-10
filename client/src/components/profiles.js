@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import dayjs from "dayjs";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "../styles/profiles.css";
 
 function Profile() {
   const { id } = useParams();
@@ -25,7 +27,6 @@ function Profile() {
         setUser(response.data);
       })
       .catch((error) => {
-        console.error("Greska:", error);
         setError("Korisnik nije pronađen.");
       });
   }, [id]);
@@ -46,17 +47,26 @@ function Profile() {
       });
   };
 
-  if (error) return <p>{error}</p>;
+  function getDate(dateObject) {
+    const formattedDate = dayjs(dateObject).format("YYYY-MM-DD");
 
-  return (
-    <div>
+    return formattedDate;
+  }
+
+  if (error)
+    return (
       <div>
+        <h2>{error}</h2>
         <button className="back-button" onClick={handleBackButtonClick}>
           Nazad
         </button>
       </div>
+    );
+
+  return (
+    <div className="form">
       <h1>Profil sa OIB-om: {id}</h1>
-      <form onSubmit={handleUpdate}>
+      <form className="infoform_profile" onSubmit={handleUpdate}>
         <p>
           <strong>Ime:</strong>
           <input
@@ -93,7 +103,8 @@ function Profile() {
           <strong>Datum rođenja:</strong>
           <input
             type="date"
-            value={user.dateOfBirth}
+            value={getDate(user.dateOfBirth)}
+            placeholder={getDate(user.dateOfBirth)}
             onChange={(e) => setUser({ ...user, dateOfBirth: e.target.value })}
           />
         </p>
@@ -116,17 +127,23 @@ function Profile() {
           />
         </p>
         <p>
-          <strong>Role:</strong>
+          <strong>Uloga:</strong>
           <select
             value={user.role}
             onChange={(e) => setUser({ ...user, role: e.target.value })}
           >
-            <option value="admin">Admin</option>
             <option value="student">Učenik</option>
+            <option value="admin">Profesor</option>
+            <option value="admin">Satničar</option>
             <option value="denied">Odbijen</option>
           </select>
         </p>
-        <button type="submit">Spremi promjene</button>
+        <div className="buttons">
+          <button type="submit">Spremi</button>
+          <button className="back-button" onClick={handleBackButtonClick}>
+            Nazad
+          </button>
+        </div>
       </form>
     </div>
   );

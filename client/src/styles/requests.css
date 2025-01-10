@@ -27,6 +27,12 @@ body {
     cursor: pointer;
     margin-top: 1vh;
     margin-bottom: 1vh;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+
+.req-button:hover {
+    background-color: #5e3fbf;
   }
   
 .back-button {
@@ -38,6 +44,12 @@ body {
     width: 8vh;
     font-size: 1rem;
     cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #5e3fbf;
 }
 
 .redak {
@@ -105,11 +117,13 @@ body {
     margin: 0.5vh 0;
     border: 1px solid #ccc;
     border-radius: 25px;
+    padding-left: 0.8vh;
   }
   
   li button {
     margin-right: 5px;
     margin-left: 5px;
+    transition: background-color 0.3s ease;
   }
   
   hr {

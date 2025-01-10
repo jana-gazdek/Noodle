@@ -18,7 +18,6 @@ function Requests() {
         setRequests(response.data);
       })
       .catch((error) => {
-        console.error("Greska:", error);
         setError("Greska kod ucitavanja zahtjeva");
       });
   }, []);
@@ -30,14 +29,6 @@ function Requests() {
   const handleEdit = (request) => {
     setEditingRequestId(request._id);
     setUpdatedRequest({ ...request });
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUpdatedRequest((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
   };
 
   const handleSave = async () => {
@@ -52,7 +43,6 @@ function Requests() {
       setEditingRequestId(null);
       alert("Uspjesna promjena zahtjeva.");
     } catch (error) {
-      console.error("Greska:", error);
       alert("Greska kod promjene zahtjeva.");
     }
   };
@@ -69,7 +59,6 @@ function Requests() {
       setRequests(removeRequestById(requests, id));
       alert("Uspjesno prihvacen zahtjev.");
     } catch (error) {
-      console.error("Greska:", error);
       alert("Greska pri prihvacanju.");
     }
   };
@@ -80,13 +69,18 @@ function Requests() {
       setRequests(removeRequestById(requests, id));
       alert("Uspjesno odbijen zahtjev.");
     } catch (error) {
-      console.error("Greska:", error);
       alert("Greska pri odbijanju.");
     }
   };
 
   function getDate(dateObject) {
     const formattedDate = dayjs(dateObject).format("DD.MM.YYYY");
+
+    return formattedDate;
+  }
+
+  function getDateEdit(dateObject) {
+    const formattedDate = dayjs(dateObject).format("YYYY-MM-DD");
 
     return formattedDate;
   }
@@ -116,7 +110,12 @@ function Requests() {
                     <input
                       name="name"
                       value={updatedRequest.name}
-                      onChange={handleChange}
+                      onChange={(e) =>
+                        setUpdatedRequest({
+                          ...updatedRequest,
+                          name: e.target.value,
+                        })
+                      }
                     />{" "}
                     <br />
                   </div>
@@ -125,7 +124,12 @@ function Requests() {
                     <input
                       name="surname"
                       value={updatedRequest.surname}
-                      onChange={handleChange}
+                      onChange={(e) =>
+                        setUpdatedRequest({
+                          ...updatedRequest,
+                          surname: e.target.value,
+                        })
+                      }
                     />{" "}
                     <br />
                   </div>
@@ -134,7 +138,12 @@ function Requests() {
                     <input
                       name="email"
                       value={updatedRequest.email}
-                      onChange={handleChange}
+                      onChange={(e) =>
+                        setUpdatedRequest({
+                          ...updatedRequest,
+                          email: e.target.value,
+                        })
+                      }
                     />{" "}
                     <br />
                   </div>
@@ -143,7 +152,12 @@ function Requests() {
                     <input
                       name="OIB"
                       value={updatedRequest.OIB}
-                      onChange={handleChange}
+                      onChange={(e) =>
+                        setUpdatedRequest({
+                          ...updatedRequest,
+                          OIB: e.target.value,
+                        })
+                      }
                     />{" "}
                     <br />
                   </div>
@@ -152,7 +166,12 @@ function Requests() {
                     <input
                       name="address"
                       value={updatedRequest.address}
-                      onChange={handleChange}
+                      onChange={(e) =>
+                        setUpdatedRequest({
+                          ...updatedRequest,
+                          address: e.target.value,
+                        })
+                      }
                     />{" "}
                     <br />
                   </div>
@@ -161,8 +180,14 @@ function Requests() {
                     <input
                       type="date"
                       name="dateOfBirth"
-                      value={getDate(request.dateOfBirth)}
-                      onChange={handleChange}
+                      value={getDateEdit(updatedRequest.dateOfBirth)}
+                      placeholder={getDateEdit(request.dateOfBirth)}
+                      onChange={(e) =>
+                        setUpdatedRequest({
+                          ...updatedRequest,
+                          dateOfBirth: e.target.value,
+                        })
+                      }
                     />{" "}
                     <br />
                   </div>
@@ -171,7 +196,12 @@ function Requests() {
                     <input
                       name="primarySchool"
                       value={updatedRequest.primarySchool}
-                      onChange={handleChange}
+                      onChange={(e) =>
+                        setUpdatedRequest({
+                          ...updatedRequest,
+                          primarySchool: e.target.value,
+                        })
+                      }
                     />{" "}
                     <br />
                   </div>
@@ -180,7 +210,12 @@ function Requests() {
                     <select
                       name="role"
                       value={updatedRequest.role}
-                      onChange={handleChange}
+                      onChange={(e) =>
+                        setUpdatedRequest({
+                          ...updatedRequest,
+                          role: e.target.value,
+                        })
+                      }
                     >
                       <option value="student">Učenik</option>
                       <option value="admin">Satničar</option>

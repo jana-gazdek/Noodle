@@ -39,7 +39,6 @@ function InfoForm({ user }) {
       alert("Zahtjev uspješno poslan!");
       navigate("/auth/pocetna");
     } catch (error) {
-      console.error("Greska:", error);
       alert("Zahtjev nije poslan. Pokušajte ponovo.");
     }
   };
