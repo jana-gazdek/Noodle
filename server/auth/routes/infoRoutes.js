@@ -127,9 +127,20 @@ router.post('/confirm-request', async (req, res) => {
       return res.status(404).json({ error: 'Request not found' });
     }
 
+    const deleteGost = `delete from gost where gostid = $1`;
+    const valuesDeleteGost = [request._id];
+    //const insertQueryRole = `insert into $1(gostID, datumPristupa, OIB) values ($1, CURRENT_TIMESTAMP, $2)`;
+    const insertQueryUčenik = `insert into UČENIK (učenikID, razred, škGod, smjer, OIB) VALUES($1, $2, $3, $4, $5)`;
+
     const role = request.role === 'pending' ? 'student' : request.role;
 
-    const student = new Student({
+    if (role == 'student'||'pending'){
+      const valuesUčenik = [request._id, '4b', '2023./2024.', 'računarstvo', request.OIB];
+      await client.query(deleteGost, valuesDeleteGost);
+      await client.query(insertQueryUčenik, valuesUčenik);
+    }
+
+      const student = new Student({
       _id: request.id,
       name: request.name,
       surname: request.surname,
@@ -148,7 +159,7 @@ router.post('/confirm-request', async (req, res) => {
 
     await Request.findByIdAndDelete(_id);
 
-    res.json({ message: 'Request confirmed and transferred to Students collection', student });
+    res.json({ message: 'Request confirmed and transferred to Students collection', student});
   } catch (err) {
     console.error('Error confirming request:', err);
     res.status(500).json({ error: 'Failed to confirm request' });
@@ -215,7 +226,7 @@ router.post('/update-user-info', async (req, res) => {
 			OIB,
 			address,
 			dateOfBirth,
-			dateTimeOfRequest,
+      dateTimeOfRequest,
 			primarySchool,
 			role
 		  },
