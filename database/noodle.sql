@@ -54,7 +54,7 @@ CREATE TABLE DJELATNIK
 (
   djelatnikID VARCHAR NOT NULL,
   mobBroj VARCHAR(12) NOT NULL,
-  razred VARCHAR(4) NOT NULL,
+  razred VARCHAR(50) NOT NULL,
   status VARCHAR NOT NULL CHECK (status IN ('admin', 'profesor', 'satničar')),
   OIB VARCHAR(11) NOT NULL,
   PRIMARY KEY (djelatnikID),

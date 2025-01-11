@@ -129,15 +129,20 @@ router.post('/confirm-request', async (req, res) => {
 
     const deleteGost = `delete from gost where gostid = $1`;
     const valuesDeleteGost = [request._id];
-    //const insertQueryRole = `insert into $1(gostID, datumPristupa, OIB) values ($1, CURRENT_TIMESTAMP, $2)`;
+    const insertQueryDjelatnik = `insert into DJELATNIK (djelatnikID, mobbroj, razred, status, oib) values ($1, $2, $3, $4, $5)`;
     const insertQueryUčenik = `insert into UČENIK (učenikID, razred, škGod, smjer, OIB) VALUES($1, $2, $3, $4, $5)`;
 
     const role = request.role === 'pending' ? 'student' : request.role;
 
-    if (role == 'student'||'pending'){
+    if (role === 'student'){
       const valuesUčenik = [request._id, '4b', '2023./2024.', 'računarstvo', request.OIB];
       await client.query(deleteGost, valuesDeleteGost);
       await client.query(insertQueryUčenik, valuesUčenik);
+    }
+    else{
+      const valuesDjelatnik = [request._id, '0000000000', 'NONE', role, request.OIB];
+      await client.query(deleteGost, valuesDeleteGost);
+      await client.query(insertQueryDjelatnik, valuesDjelatnik);
     }
 
       const student = new Student({
@@ -176,10 +181,17 @@ router.post('/deny-request', async (req, res) => {
   try {
     const request = await Request.findByIdAndDelete(_id);
 
+    const deleteGost = `delete from gost where gostID = $1`;
+    const valuesDeleteGost = [request._id];
+    const deleteKorisnik = `delete from korisnik where oib = $1`;
+    const valuesDeleteKorisnik = [request.OIB];  
+
     if (!request) {
       return res.status(404).json({ error: 'Request not found' });
     }
     await User.findOneAndUpdate({ googleId: _id }, { role: 'denied' }, { new: true});
+    await client.query(deleteGost, valuesDeleteGost);
+    await client.query(deleteKorisnik, valuesDeleteKorisnik);
 
     res.json({ message: 'Request denied' });
   } catch (err) {
@@ -214,7 +226,7 @@ router.post('/update-user-info', async (req, res) => {
 
 	if(!_id){
 		return res.status(400).json({ error: 'User ID is required'});
-	  }
+	}
 
 	try{
 		const updatedUser = await Student.findByIdAndUpdate(
@@ -226,7 +238,7 @@ router.post('/update-user-info', async (req, res) => {
 			OIB,
 			address,
 			dateOfBirth,
-      dateTimeOfRequest,
+      dateTimeOfRequest : dayjs(dateOfBirth).format("YYYY-MM-DD"),
 			primarySchool,
 			role
 		  },
@@ -236,6 +248,10 @@ router.post('/update-user-info', async (req, res) => {
 		if(!updatedUser){
 			return res.status(404).json({error: 'User not found'});
 		}
+
+    const updateUserInfo = 'update KORISNIK set oib = $1, spol = $2, ime = $3, prezime = $4, datumRod = $5, adresa = $6, email = $7, zaporka = $8, školaID = $9 where oib = $1';
+    const updateUserInfoValues = [updatedUser.OIB, 'M', updatedUser.name, updatedUser.surname, updatedUser.dateOfBirth, updatedUser.address, updatedUser.email, 'passU',updatedUser.primarySchool];
+    await client.query(updateUserInfo, updateUserInfoValues);
 
 		  res.json({ message: 'User information updated successfully', updatedUser });
 

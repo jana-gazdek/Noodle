@@ -97,6 +97,7 @@ function Profile() {
             type="text"
             value={user.OIB}
             onChange={(e) => setUser({ ...user, OIB: e.target.value })}
+            disabled
           />
         </p>
         <p>
@@ -130,11 +131,12 @@ function Profile() {
           <strong>Uloga:</strong>
           <select
             value={user.role}
+            placeholder={user.role}
             onChange={(e) => setUser({ ...user, role: e.target.value })}
           >
             <option value="student">Učenik</option>
-            <option value="admin">Profesor</option>
-            <option value="admin">Satničar</option>
+            <option value="profesor">Profesor</option>
+            <option value="satnicar">Satničar</option>
             <option value="denied">Odbijen</option>
           </select>
         </p>
