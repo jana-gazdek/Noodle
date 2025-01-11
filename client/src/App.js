@@ -9,6 +9,7 @@ import Login from "./components/login";
 import InfoForm from "./components/infoform";
 import Requests from "./components/requests";
 import Profile from "./components/profiles";
+import Repository from "./components/repository";
 import axios from "axios";
 import "./styles/App.css";
 
@@ -79,6 +80,10 @@ function App() {
     {
       path: "/auth/pocetna",
       element: isAuthenticated ? <Pocetna /> : <Navigate to="/login" />,
+    },
+    {
+      path: "/auth/repository",
+      element: isAuthenticated ? <Repository /> : <Navigate to="/login" />,
     },
     {
       path: "*",

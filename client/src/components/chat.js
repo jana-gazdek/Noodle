@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
-import "../styles/pocetna/chat.css";
+import chatStyles from "../styles/pocetna/chat.css";
 
 const stringToColor = (string) => {
   //odreduje nasumicnu boju za svakog user-a prema username-u, uzima u obzir vrijednost svakog char-a u stringu
@@ -57,7 +57,7 @@ const Chat = ({
   if (!user) return <div>Loading...</div>;
 
   return (
-    <div id="chat-container">
+    <div className="chat-container">
       <div id="messages">
         {messages.map((msg, index) => {
           const isUserMessage = msg.username === `${user.name} ${user.surname}`;

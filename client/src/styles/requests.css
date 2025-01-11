@@ -66,6 +66,11 @@ body {
     height: 90vh;
     margin-top: 1vh;
     padding: 0;
+    display: flex;
+    list-style: none;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .redak strong {
@@ -86,20 +91,12 @@ body {
     font-size: 2rem;
   }
 
-  h2 {
+  .nema {
     margin-top: 3vh;
   }
+
   
-  ul {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  li {
+.requests-li {
     background-color: white;
     margin: 20px;
     margin-bottom: 20px;
@@ -110,7 +107,17 @@ body {
     height: fit-content;
   }
   
-  li input, li select {
+.requests-li input { 
+    background-color: #D9D9D9;
+    width: 90%;
+    padding: 0.5vh;
+    margin: 0.5vh 0;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    padding-left: 0.8vh;
+  }
+
+  .requests-li select {
     background-color: #D9D9D9;
     width: 90%;
     padding: 0.5vh;
@@ -120,7 +127,7 @@ body {
     padding-left: 0.8vh;
   }
   
-  li button {
+  .requests-li button {
     margin-right: 5px;
     margin-left: 5px;
     transition: background-color 0.3s ease;

@@ -34,6 +34,10 @@ function Pocetna({ handleLogout }) {
     }
   };
 
+  const handleRepositoryButtonClick = () => {
+    navigate("/auth/repository");
+  };
+
   return (
     <div className="pocetna-container">
       {user &&
@@ -112,6 +116,12 @@ function Pocetna({ handleLogout }) {
                   <p>Greška: podatci o vremenu su nedostupni.</p>
                 </div>
               )}
+              <button
+                className="repository-gumb"
+                onClick={handleRepositoryButtonClick}
+              >
+                REPOZITORIJ
+              </button>
             </div>
           </>
         ))}

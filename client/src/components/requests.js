@@ -102,7 +102,7 @@ function Requests() {
       {requests.length > 0 ? (
         <ul className="requests">
           {requests.map((request) => (
-            <li key={request._id}>
+            <li className="requests-li" key={request._id}>
               {editingRequestId === request._id ? (
                 <>
                   <div className="redak">
@@ -271,7 +271,7 @@ function Requests() {
           ))}
         </ul>
       ) : (
-        <h2>Trenutno nema zahtjeva.</h2>
+        <h2 className="nema">Trenutno nema zahtjeva.</h2>
       )}
     </div>
   );
