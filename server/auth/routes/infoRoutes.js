@@ -129,7 +129,7 @@ router.post('/confirm-request', async (req, res) => {
 
     const deleteGost = `delete from gost where gostid = $1`;
     const valuesDeleteGost = [request._id];
-    const insertQueryDjelatnik = `insert into DJELATNIK (djelatnikID, mobbroj, razred, status, oib) values ($1, $2, $3, $4, $5)`;
+    const insertQueryDjelatnik = `insert into DJELATNIK (djelatnikID, mobbroj, razred, razrednik, status, oib) values ($1, $2, $3, $4, $5, $6)`;
     const insertQueryUčenik = `insert into UČENIK (učenikID, razred, škGod, smjer, OIB) VALUES($1, $2, $3, $4, $5)`;
 
     const role = request.role === 'pending' ? 'student' : request.role;
@@ -140,7 +140,7 @@ router.post('/confirm-request', async (req, res) => {
       await client.query(insertQueryUčenik, valuesUčenik);
     }
     else{
-      const valuesDjelatnik = [request._id, '0000000000', 'NONE', role, request.OIB];
+      const valuesDjelatnik = [request._id, '0000000000', 'NONE', 'NONE', role, request.OIB];
       await client.query(deleteGost, valuesDeleteGost);
       await client.query(insertQueryDjelatnik, valuesDjelatnik);
     }
