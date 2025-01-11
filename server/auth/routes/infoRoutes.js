@@ -2,7 +2,7 @@ const express = require('express');
 const dayjs = require('dayjs');
 const router = express.Router();
 const Request = require('../models/Requests');
-const Student = require('../models/Student');
+const ConfirmedUser = require('../models/ConfirmedUser');
 const User = require('../models/User');
 const client = require('../../../database/connection.js');
 client.connect();
@@ -129,23 +129,22 @@ router.post('/confirm-request', async (req, res) => {
 
     const deleteGost = `delete from gost where gostid = $1`;
     const valuesDeleteGost = [request._id];
-    const insertQueryDjelatnik = `insert into DJELATNIK (djelatnikID, mobbroj, razred, razrednik, status, oib) values ($1, $2, $3, $4, $5, $6)`;
+    const insertQueryDjelatnik = `insert into DJELATNIK (djelatnikID, mobBroj, razred, razrednik, status, OIB) values ($1, $2, $3, $4, $5, $6)`;
     const insertQueryUčenik = `insert into UČENIK (učenikID, razred, škGod, smjer, OIB) VALUES($1, $2, $3, $4, $5)`;
 
-    const role = request.role === 'pending' ? 'student' : request.role;
+    const role = request.role === 'pending' ? 'učenik' : request.role;
 
-    if (role === 'student'){
+    if (role === 'učenik') {
       const valuesUčenik = [request._id, '4b', '2023./2024.', 'računarstvo', request.OIB];
       await client.query(deleteGost, valuesDeleteGost);
       await client.query(insertQueryUčenik, valuesUčenik);
-    }
-    else{
+    } else {
       const valuesDjelatnik = [request._id, '0000000000', 'NONE', 'NONE', role, request.OIB];
       await client.query(deleteGost, valuesDeleteGost);
       await client.query(insertQueryDjelatnik, valuesDjelatnik);
     }
 
-      const student = new Student({
+      const confirmedUser = new ConfirmedUser({
       _id: request.id,
       name: request.name,
       surname: request.surname,
@@ -158,13 +157,13 @@ router.post('/confirm-request', async (req, res) => {
       role
     });
 
-    await student.save();
+    await confirmedUser.save();
 
     await User.findOneAndUpdate({ googleId: _id }, { role }, { new: true })
 
     await Request.findByIdAndDelete(_id);
 
-    res.json({ message: 'Request confirmed and transferred to Students collection', student});
+    res.json({ message: 'Request confirmed and transferred to Students collection', confirmedUser});
   } catch (err) {
     console.error('Error confirming request:', err);
     res.status(500).json({ error: 'Failed to confirm request' });
@@ -181,9 +180,9 @@ router.post('/deny-request', async (req, res) => {
   try {
     const request = await Request.findByIdAndDelete(_id);
 
-    const deleteGost = `delete from gost where gostID = $1`;
+    const deleteGost = `delete from GOST where gostID = $1`;
     const valuesDeleteGost = [request._id];
-    const deleteKorisnik = `delete from korisnik where oib = $1`;
+    const deleteKorisnik = `delete from KORISNIK where OIB = $1`;
     const valuesDeleteKorisnik = [request.OIB];  
 
     if (!request) {
@@ -208,7 +207,7 @@ router.post('/get-user-info', async(req, res) => {
 	}
 
 	try{
-		const user = await Student.findOne({ OIB });
+		const user = await ConfirmedUser.findOne({ OIB });
 
 		if (!user) {
 		  return res.status(404).json({ error: 'User not found' });
@@ -229,7 +228,7 @@ router.post('/update-user-info', async (req, res) => {
 	}
 
 	try{
-		const updatedUser = await Student.findByIdAndUpdate(
+		const updatedUser = await ConfirmedUser.findByIdAndUpdate(
 		  _id,
 		  {
 			name,
@@ -237,8 +236,8 @@ router.post('/update-user-info', async (req, res) => {
 			email,
 			OIB,
 			address,
-			dateOfBirth,
-      dateTimeOfRequest : dayjs(dateOfBirth).format("YYYY-MM-DD"),
+			dateOfBirth : dayjs(dateOfBirth).format("YYYY-MM-DD"),
+      dateTimeOfRequest,
 			primarySchool,
 			role
 		  },
@@ -249,9 +248,13 @@ router.post('/update-user-info', async (req, res) => {
 			return res.status(404).json({error: 'User not found'});
 		}
 
-    const updateUserInfo = 'update KORISNIK set oib = $1, spol = $2, ime = $3, prezime = $4, datumRod = $5, adresa = $6, email = $7, zaporka = $8, školaID = $9 where oib = $1';
+    const updateUserInfo = 'update KORISNIK set OIB = $1, spol = $2, ime = $3, prezime = $4, datumRod = $5, adresa = $6, email = $7, zaporka = $8, školaID = $9 where OIB = $1';
     const updateUserInfoValues = [updatedUser.OIB, 'M', updatedUser.name, updatedUser.surname, updatedUser.dateOfBirth, updatedUser.address, updatedUser.email, 'passU',updatedUser.primarySchool];
     await client.query(updateUserInfo, updateUserInfoValues);
+
+    await updatedUser.save();
+
+    await User.findOneAndUpdate({ googleId: _id }, { role }, { new: true })
 
 		  res.json({ message: 'User information updated successfully', updatedUser });
 

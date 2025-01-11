@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const Student = require('../models/Student');
+const ConfirmedUser = require('../models/ConfirmedUser');
 
 const sendEmailNotification = async (schedule) => {
   const results = {
@@ -8,7 +8,7 @@ const sendEmailNotification = async (schedule) => {
   }
 
   try {
-    const students = await Student.find();
+    const students = await ConfirmedUser.find(/*ConfirmedUser.role = 'učenik'*/);
 
     if (!students || students.length === 0) {
       console.log('No students found, no emails sent.');

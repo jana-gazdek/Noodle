@@ -15,7 +15,7 @@ function Profile() {
     dateOfBirth: "",
     address: "",
     primarySchool: "",
-    role: "student",
+    role: "učenik",
   });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -134,9 +134,9 @@ function Profile() {
             placeholder={user.role}
             onChange={(e) => setUser({ ...user, role: e.target.value })}
           >
-            <option value="student">Učenik</option>
+            <option value="učenik">Učenik</option>
             <option value="profesor">Profesor</option>
-            <option value="satnicar">Satničar</option>
+            <option value="satničar">Satničar</option>
             <option value="denied">Odbijen</option>
           </select>
         </p>

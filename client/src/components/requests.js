@@ -217,8 +217,8 @@ function Requests() {
                         })
                       }
                     >
-                      <option value="student">Učenik</option>
-                      <option value="admin">Satničar</option>
+                      <option value="učenik">Učenik</option>
+                      <option value="satničar">Satničar</option>
                       <option value="profesor">Profesor</option>
                     </select>{" "}
                     <br />

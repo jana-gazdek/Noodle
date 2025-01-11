@@ -10,7 +10,7 @@ CREATE TABLE KORISNIK
   spol VARCHAR(1) NOT NULL CHECK (spol IN ('M', 'F')),
   ime VARCHAR(25) NOT NULL,
   prezime VARCHAR(25) NOT NULL,
-  datumrod DATE NOT NULL,
+  datumRod DATE NOT NULL,
   adresa VARCHAR NOT NULL,
   email VARCHAR(255) NOT NULL,
   zaporka VARCHAR(50) NOT NULL,

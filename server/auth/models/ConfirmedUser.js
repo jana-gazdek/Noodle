@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const studentSchema = new mongoose.Schema({
+const confirmedUserSchema = new mongoose.Schema({
   _id: { type: String, required: true },
   name: { type: String, required: true },
   surname: { type: String, required: true },
@@ -13,4 +13,4 @@ const studentSchema = new mongoose.Schema({
   role: { type: String, default: 'student' }
 });
 
-module.exports = mongoose.model('Student', studentSchema);
+module.exports = mongoose.model('ConfirmedUser', confirmedUserSchema);
