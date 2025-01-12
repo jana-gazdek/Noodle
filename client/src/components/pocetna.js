@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Chat from "./chat.js";
+import Map from "./map.js";
 import "../styles/pocetna/pocetna.css";
 import "../styles/pocetna/weather.css";
 
@@ -58,6 +59,9 @@ function Pocetna({ handleLogout }) {
           <>
             <div className="chat-container">
               <Chat user={user} />
+            </div>
+            <div className="map-container">
+              <Map />
             </div>
             <div>
               <div className="user-container">

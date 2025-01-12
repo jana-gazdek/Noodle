@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import io from "socket.io-client";
-import chatStyles from "../styles/pocetna/chat.css";
+import "../styles/pocetna/chat.css";
 
 const stringToColor = (string) => {
   //odreduje nasumicnu boju za svakog user-a prema username-u, uzima u obzir vrijednost svakog char-a u stringu
@@ -18,6 +18,7 @@ const Chat = ({
 }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const messagesRef = useRef(null);
 
   useEffect(() => {
     if (!user) return;
@@ -39,6 +40,12 @@ const Chat = ({
     };
   }, [user, group, serverUrl]);
 
+  useEffect(() => {
+    if (messagesRef.current) {
+      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   const sendMessage = () => {
     if (message.trim()) {
       const socket = io(serverUrl);
@@ -58,7 +65,7 @@ const Chat = ({
 
   return (
     <div className="chat-container">
-      <div id="messages">
+      <div id="messages" ref={messagesRef}>
         {messages.map((msg, index) => {
           const isUserMessage = msg.username === `${user.name} ${user.surname}`;
           return (

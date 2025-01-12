@@ -10,6 +10,7 @@ import InfoForm from "./components/infoform";
 import Requests from "./components/requests";
 import Profile from "./components/profiles";
 import Repository from "./components/repository";
+import Unauthorized from "./components/unauthorized";
 import axios from "axios";
 import "./styles/App.css";
 
@@ -65,7 +66,7 @@ function App() {
         isAuthenticated && user.role === "admin" ? (
           <Requests />
         ) : (
-          <Navigate to="/auth/pocetna" />
+          <Unauthorized />
         ),
     },
     {
@@ -74,16 +75,16 @@ function App() {
         isAuthenticated && user.role === "admin" ? (
           <Profile />
         ) : (
-          <Navigate to="/auth/pocetna" />
+          <Unauthorized />
         ),
     },
     {
       path: "/auth/pocetna",
-      element: isAuthenticated ? <Pocetna /> : <Navigate to="/login" />,
+      element: isAuthenticated ? <Pocetna /> : <Unauthorized />,
     },
     {
       path: "/auth/repository",
-      element: isAuthenticated ? <Repository /> : <Navigate to="/login" />,
+      element: isAuthenticated ? <Repository /> : <Unauthorized />,
     },
     {
       path: "*",

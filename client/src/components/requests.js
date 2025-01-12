@@ -245,7 +245,8 @@ function Requests() {
                   <strong>Datum rođenja:</strong> {getDate(request.dateOfBirth)}{" "}
                   <br />
                   <strong>Osnovna škola:</strong> {request.primarySchool} <br />
-                  <strong>Uloga:</strong> {request.role} <br />
+                  <strong>Uloga:</strong>{" "}
+                  {request.role === "pending" ? "učenik" : request.role} <br />
                   <button
                     className="req-button"
                     onClick={() => handleEdit(request)}
