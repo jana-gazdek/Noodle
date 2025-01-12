@@ -106,10 +106,9 @@ app.get("/download/:id", async (req, res) => {
   const fileId = req.params.id;
 
   try {
-    const fileUpdateDownloads = await drive.files.get({ fileId });
     const fileMetadata = await drive.files.get({
       fileId,
-      fields: "name, mimeType",
+      fields: "name, mimeType, id",
     });
 
     const fileName = fileMetadata.data.name;
@@ -121,7 +120,7 @@ app.get("/download/:id", async (req, res) => {
     );
 
     const updateDownloads = `update LINK set brojPregleda = (CAST(brojPregleda AS INT) + 1)::VARCHAR where linkTekst = $1`;
-    const updateDownloadsValue = ['https://drive.google.com/file/d/'+fileUpdateDownloads.data.id+'/view'];
+    const updateDownloadsValue = ['https://drive.google.com/file/d/'+fileMetadata.data.id+'/view'];
 
     await client.query(updateDownloads, updateDownloadsValue);
 
@@ -142,8 +141,10 @@ app.delete("/delete/:id", async (req, res) => {
   const fileId = req.params.id;
 
   try {
-    const deleteFile = await drive.files.get({ fileId });
-    
+    const deleteFile = await drive.files.get({
+      fileId,
+      fields: "id",
+    });
     const deleteDatoteka = `delete from DATOTEKA where linkTekst = $1`;
     const deleteLink = `delete from LINK where linkTekst = $1`;
     const valuesDeleteDatotekaAndLink = ['https://drive.google.com/file/d/'+deleteFile.data.id+'/view'];

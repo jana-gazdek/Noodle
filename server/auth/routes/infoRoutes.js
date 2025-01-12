@@ -4,8 +4,21 @@ const router = express.Router();
 const Request = require('../models/Requests');
 const ConfirmedUser = require('../models/ConfirmedUser');
 const User = require('../models/User');
+const path = require("path");
+const { google } = require("googleapis");
 const client = require('../../../database/connection.js');
 client.connect();
+
+const serviceAccountKey = require("../../objavaMaterijala/service-account-key.json");
+
+const driveAuth = new google.auth.GoogleAuth({
+  keyFile: "../objavaMaterijala/service-account-key.json",
+  scopes: ["https://www.googleapis.com/auth/drive"],
+});
+
+const drive = google.drive({ version: "v3", auth: driveAuth });
+
+const GOOGLE_DRIVE_FOLDER_ID = "1I9H0ooP32aYfxf30jwJscSvHoMGa70FK";
 
 router.post('/submit-request', async (req, res) => {
   console.log('Request received at backend:', req.body);
@@ -114,7 +127,7 @@ router.post('/change-info-request', async(req, res) => {
 });
 
 router.post('/confirm-request', async (req, res) => {
-  const { _id } = req.body;
+  const { _id, email } = req.body;
 
   if (!_id) {
     return res.status(400).json({ error: 'User ID is required' });
@@ -142,6 +155,16 @@ router.post('/confirm-request', async (req, res) => {
       const valuesDjelatnik = [request._id, '0000000000', 'NONE', 'NONE', role, request.OIB];
       await client.query(deleteGost, valuesDeleteGost);
       await client.query(insertQueryDjelatnik, valuesDjelatnik);
+
+      await drive.permissions.create({
+        fileId: GOOGLE_DRIVE_FOLDER_ID,
+        requestBody: {
+            role: 'writer',
+            type: 'user',
+            emailAddress: request.email,
+        },
+    });
+    
     }
 
       const confirmedUser = new ConfirmedUser({
