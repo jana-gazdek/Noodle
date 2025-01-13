@@ -283,7 +283,14 @@ router.post('/get-user-info', async(req, res) => {
           if (rows.length === 0) {
               return res.status(404).json({ message: 'Nije pronađen student' });
           }
-          return res.json(rows);
+
+          const rowWithId = {
+            ...rows[0],
+            _id: user._id,
+            role: user.role
+          };
+          return res.json(rowWithId);
+
       } else if (['profesor', 'satničar', 'admin'].includes(user.role)) {
           const { rows } = await client.query(`
               SELECT 
@@ -310,7 +317,14 @@ router.post('/get-user-info', async(req, res) => {
           if (rows.length === 0) {
               return res.status(404).json({ message: 'Nije pronađen djelatnik' });
           }
-          return res.json(rows);
+
+          const rowWithId = {
+            ...rows[0],
+            _id: user._id,
+            role: user.role
+          };
+          return res.json(rowWithId);
+
       } else {
           return res.status(404).json({ error: 'Korisnik nije pronađen' });
       }
@@ -322,7 +336,14 @@ router.post('/get-user-info', async(req, res) => {
 
 
 router.post('/update-user-info', async (req, res) => {
-  const { _id, name, surname, email, OIB, spol, address, dateOfBirth, dateTimeOfRequest, primarySchool, role } = req.body;
+  const { _id, OIB, ime, prezime, datumRod, adresa, email, spol, role } = req.body;
+  let djelatnikid, mobbroj, razred, razrednik, učenikid, škgod, smjer;
+
+  if ('djelatnikid' in req.body) {
+    ({ djelatnikid, mobbroj, razred, razrednik } = req.body);
+  } else {
+    ({ učenikid, razred, škgod, smjer } = req.body);
+  }
 
 	if(!_id){
 		return res.status(400).json({ error: 'User ID is required'});
@@ -332,15 +353,13 @@ router.post('/update-user-info', async (req, res) => {
 		const updatedUser = await ConfirmedUser.findByIdAndUpdate(
 		  _id,
 		  {
-			name,
-			surname,
+			name: ime,
+			surname: prezime,
 			email,
 			OIB,
       spol,
-			address,
-			dateOfBirth : dayjs(dateOfBirth).format("YYYY-MM-DD"),
-      dateTimeOfRequest,
-			primarySchool,
+			address: adresa,
+			dateOfBirth : dayjs(datumRod).format("YYYY-MM-DD"),
 			role
 		  },
 		  { new: true }
@@ -350,10 +369,8 @@ router.post('/update-user-info', async (req, res) => {
 			return res.status(404).json({error: 'User not found'});
 		}
 
-    const result = await client.query(`SELECT status FROM djelatnik WHERE OIB = $1`, [updatedUser.OIB]);
-
     if (updatedUser.role === 'denied') {
-      if (result.rows.length === 0) {
+      if (učenikid) {
         await client.query(`delete from UČENIK where OIB = $1`, [updatedUser.OIB]);
       } else {
         await client.query(`delete from DJELATNIK where OIB = $1`, [updatedUser.OIB]);
@@ -363,22 +380,20 @@ router.post('/update-user-info', async (req, res) => {
       const updateUserInfo = `update KORISNIK set OIB = $1, spol = $2, ime = $3, prezime = $4, datumRod = $5, adresa = $6, email = $7, školaID = $8 where OIB = $1`;
       const updateUserInfoValues = [updatedUser.OIB, updatedUser.spol, updatedUser.name, updatedUser.surname, updatedUser.dateOfBirth, updatedUser.address, updatedUser.email, updatedUser.primarySchool];
       await client.query(updateUserInfo, updateUserInfoValues);
-      /*if (result.rows.length === 0) {
-        const updateUčenikInfo
-        const updateUčenikInfoValues
-        await client.query(updateUčenikInfo, updateUčenikInfoValues);
-      } else {
-        const updateDjelatnikInfo
-        const updateDjelatnikInfoValues
-        await client.query(updateDjelatnikInfo, updateDjelatnikInfoValues);
-      }*/
+      if(učenikid){
+        const updateUčenikInfo = `update UČENIK set razred = $1, škgod = $2, smjer = $3 where učenikid = $4`;
+        await client.query(updateUčenikInfo, [razred, škgod, smjer, učenikid]);
+      }else{
+        const updateDjelatnikInfo = `update DJELATNIK set mobbroj = $1, razred = $2, razrednik = $3, status = $4 where djelatnikid = $5`;
+        await client.query(updateDjelatnikInfo, [mobbroj, razred, razrednik, updatedUser.role, djelatnikid]);
+      }
     }
 
     await updatedUser.save();
 
-    await User.findOneAndUpdate({ googleId: _id }, { role }, { new: true })
+    await User.findOneAndUpdate({ googleId: _id }, { name: ime, surname: prezime, email, role }, { new: true });
 
-		  res.json({ message: 'User information updated successfully', updatedUser });
+		res.json({ message: 'User information updated successfully', updatedUser });
 
 	}catch(err){
     console.error('Error updating user info:', err);
@@ -389,7 +404,7 @@ router.post('/update-user-info', async (req, res) => {
 router.post('/upis-prostorije', async(req, res) => {
   const { kapacitet, oznaka, tip } = req.body;
 
-  console.log(kapacitet, oznaka, tip)
+  console.log(kapacitet, oznaka, tip);
 
   if (!kapacitet || !oznaka || !tip) {
     return res.status(400).json({ error: 'Sva polja moraju biti ispunjena!'});
