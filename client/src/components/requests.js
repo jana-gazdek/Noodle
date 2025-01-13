@@ -162,6 +162,23 @@ function Requests() {
                     <br />
                   </div>
                   <div className="redak">
+                    <strong>Spol:</strong>
+                    <select
+                      name="spol"
+                      value={updatedRequest.role}
+                      onChange={(e) =>
+                        setUpdatedRequest({
+                          ...updatedRequest,
+                          spol: e.target.value,
+                        })
+                      }
+                    >
+                      <option value="M">Muško</option>
+                      <option value="F">Žensko</option>
+                    </select>{" "}
+                    <br />
+                  </div>
+                  <div className="redak">
                     <strong>Adresa:</strong>
                     <input
                       name="address"
@@ -241,6 +258,7 @@ function Requests() {
                   <strong>Prezime:</strong> {request.surname} <br />
                   <strong>Email:</strong> {request.email} <br />
                   <strong>OIB:</strong> {request.OIB} <br />
+                  <strong>Spol:</strong> {request.spol} <br />
                   <strong>Adresa:</strong> {request.address} <br />
                   <strong>Datum rođenja:</strong> {getDate(request.dateOfBirth)}{" "}
                   <br />

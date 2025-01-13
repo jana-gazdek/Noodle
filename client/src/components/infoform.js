@@ -8,7 +8,9 @@ function InfoForm({ user }) {
     name: user?.name || "",
     surname: user?.surname || "",
     email: user?.email || "",
+    pass: user?.pass || "",
     OIB: "",
+    spol: "",
     address: "",
     dateOfBirth: "",
     primarySchool: "",
@@ -27,7 +29,9 @@ function InfoForm({ user }) {
           name: formData.name,
           surname: formData.surname,
           email: formData.email,
+          pass: formData.pass,
           OIB: formData.OIB,
+          spol: formData.spol,
           address: formData.address,
           dateOfBirth: formData.dateOfBirth,
           primarySchool: formData.primarySchool,
@@ -49,7 +53,9 @@ function InfoForm({ user }) {
       name: formData.name,
       surname: formData.surname,
       email: formData.email,
+      pass: formData.pass,
       OIB: formData.OIB,
+      spol: formData.spol,
       address: formData.address,
       dateOfBirth: formData.dateOfBirth,
       primarySchool: formData.primarySchool,
@@ -85,12 +91,30 @@ function InfoForm({ user }) {
           required
         />
         <input
+          type="password"
+          name="pass"
+          value={formData.pass}
+          onChange={handleChange}
+          placeholder="Password"
+          required
+        />
+        <input
           name="OIB"
           value={formData.OIB}
           onChange={handleChange}
           placeholder="OIB"
           required
         />
+        <select
+          name="spol"
+          value={formData.spol}
+          onChange={handleChange}
+          required
+        >
+            <option value="">Odaberi spol</option>
+            <option value="M">Muško</option>
+            <option value="F">Žensko</option>
+        </select>
         <input
           name="address"
           value={formData.address}

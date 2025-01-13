@@ -12,6 +12,7 @@ function Profile() {
     surname: "",
     email: "",
     OIB: "",
+    spol: "",
     dateOfBirth: "",
     address: "",
     primarySchool: "",
@@ -99,6 +100,17 @@ function Profile() {
             onChange={(e) => setUser({ ...user, OIB: e.target.value })}
             disabled
           />
+        </p>
+        <p>
+          <strong>Spol:</strong>
+          <select
+            value={user.spol}
+            placeholder={user.spol}
+            onChange={(e) => setUser({ ...user, spol: e.target.value })}
+          >
+            <option value="M">Muško</option>
+            <option value="F">Žensko</option>
+          </select>
         </p>
         <p>
           <strong>Datum rođenja:</strong>

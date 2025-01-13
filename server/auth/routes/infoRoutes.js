@@ -5,7 +5,6 @@ const Request = require('../models/Requests');
 const hash = require('../controllers/hashPass.js')
 const ConfirmedUser = require('../models/ConfirmedUser');
 const User = require('../models/User');
-const path = require("path");
 const { google } = require("googleapis");
 const client = require('../../../database/connection.js');
 client.connect();
@@ -59,7 +58,7 @@ router.post('/submit-request', async (req, res) => {
 
   const hashedPass = await hash.hashPassword(pass);
 
-  console.log(hashedPass)
+  //console.log(hashedPass)
 
   try {
     const newRequest = new Request({

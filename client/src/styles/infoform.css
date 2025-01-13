@@ -61,6 +61,16 @@ body {
   transition: background-color 0.3s ease;
 }
 
+.infoform select {
+  width: 98%;
+  height: 3rem;
+  border-radius: 25px;
+  border: none;
+  background-color: #D9D9D9;
+  padding: 0 1rem;
+  font-size: 1rem;
+}
+
 .infoform button:hover {
   background-color: #5e3fbf;
 }
