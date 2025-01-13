@@ -306,7 +306,7 @@ router.post('/update-user-info', async (req, res) => {
       }
       await client.query(`delete from KORISNIK where OIB = $1`, [updatedUser.OIB]);
     } else {
-      const updateUserInfo = `update KORISNIK set OIB = $1, spol = $2, ime = $3, prezime = $4, datumRod = $5, adresa = $6, email = $7, školaID = $9 where OIB = $1`;
+      const updateUserInfo = `update KORISNIK set OIB = $1, spol = $2, ime = $3, prezime = $4, datumRod = $5, adresa = $6, email = $7, školaID = $8 where OIB = $1`;
       const updateUserInfoValues = [updatedUser.OIB, 'M', updatedUser.name, updatedUser.surname, updatedUser.dateOfBirth, updatedUser.address, updatedUser.email, updatedUser.primarySchool];
       await client.query(updateUserInfo, updateUserInfoValues);
       /*if (result.rows.length === 0) {
