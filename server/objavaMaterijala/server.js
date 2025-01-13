@@ -23,11 +23,11 @@ const GOOGLE_DRIVE_FOLDER_ID = "1I9H0ooP32aYfxf30jwJscSvHoMGa70FK";
 
 //const ConfirmedUser = require('../auth/models/ConfirmedUser');
 //const User = require('../models/User');
-const client = require('../../database/connection.js');
+const client = require("../../database/connection.js");
 client.connect();
 
 /* 
-    //glavni repozitorij, treba runnat jednom prije korištenja (na Renderu će bit automatski)
+    //glavni repozitorij, treba runnat jednom prije korištenja (na Renderu će bit automatski) 
     const insertQueryRep = `insert into REPOZITORIJ(repID, imeRep, školaID) 
     values ($1, $2, $3)`;
     const valuesRep = [GOOGLE_DRIVE_FOLDER_ID, 'Noodle', 1];
@@ -69,13 +69,18 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     const insertQueryLink = `insert into LINK(brojPregleda, autor, datumObjave, linkTekst, repID) 
     values ($1, $2, date_trunc('second', CURRENT_TIMESTAMP), $3, $4)`;
     const insertQueryDatoteka = `insert into DATOTEKA(veličina, linkTekst) values ($1, $2)`;
-    const fileLink = 'https://drive.google.com/file/d/'+response.data.id+'/view';
+    const fileLink =
+      'https://drive.google.com/file/d/' + response.data.id + '/view';
 
-    const valuesLink = ['0', 'jurica cizic'/*user.name + " " + user.surname*/, 
-      fileLink, GOOGLE_DRIVE_FOLDER_ID];
+    const valuesLink = [
+      '0',
+      'jurica cizic' /*user.name + " " + user.surname*/,
+      fileLink,
+      GOOGLE_DRIVE_FOLDER_ID,
+    ];
     const fileSize = formatFileSize(response.data.size);
     const valuesDatoteka = [fileSize, fileLink];
-    
+
     await client.query(insertQueryLink, valuesLink);
     await client.query(insertQueryDatoteka, valuesDatoteka);
 
@@ -120,7 +125,9 @@ app.get("/download/:id", async (req, res) => {
     );
 
     const updateDownloads = `update LINK set brojPregleda = (CAST(brojPregleda AS INT) + 1)::VARCHAR where linkTekst = $1`;
-    const updateDownloadsValue = ['https://drive.google.com/file/d/'+fileMetadata.data.id+'/view'];
+    const updateDownloadsValue = [
+      'https://drive.google.com/file/d/' + fileMetadata.data.id + '/view',
+    ];
 
     await client.query(updateDownloads, updateDownloadsValue);
 
@@ -147,7 +154,9 @@ app.delete("/delete/:id", async (req, res) => {
     });
     const deleteDatoteka = `delete from DATOTEKA where linkTekst = $1`;
     const deleteLink = `delete from LINK where linkTekst = $1`;
-    const valuesDeleteDatotekaAndLink = ['https://drive.google.com/file/d/'+deleteFile.data.id+'/view'];
+    const valuesDeleteDatotekaAndLink = [
+      'https://drive.google.com/file/d/' + deleteFile.data.id + '/view',
+    ];
 
     await client.query(deleteDatoteka, valuesDeleteDatotekaAndLink);
     await client.query(deleteLink, valuesDeleteDatotekaAndLink);

@@ -80,11 +80,21 @@ function App() {
     },
     {
       path: "/auth/pocetna",
-      element: isAuthenticated ? <Pocetna /> : <Unauthorized />,
+      element:
+        isAuthenticated && user.role !== "unverified" ? (
+          <Pocetna />
+        ) : (
+          <Unauthorized />
+        ),
     },
     {
       path: "/auth/repository",
-      element: isAuthenticated ? <Repository /> : <Unauthorized />,
+      element:
+        isAuthenticated && user.role !== "unverified" ? (
+          <Repository />
+        ) : (
+          <Unauthorized />
+        ),
     },
     {
       path: "*",
