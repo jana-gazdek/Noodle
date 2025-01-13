@@ -2,6 +2,7 @@ const express = require('express');
 const dayjs = require('dayjs');
 const router = express.Router();
 const Request = require('../models/Requests');
+const hash = require('../controllers/hashPass.js')
 const ConfirmedUser = require('../models/ConfirmedUser');
 const User = require('../models/User');
 const path = require("path");
@@ -28,6 +29,13 @@ function schoolYear(){
   return `${sYear}./${sYear + 1}.`;
 }
 
+// router.post('/test-hash', async(req, res) =>{
+//   const {pass, hashPass} = req.body
+//   console.log(pass, hashPass)
+//   const result = await hash.checkPassword(pass, hashPass)
+//   res.json(result)
+// })
+
 router.post('/submit-request', async (req, res) => {
   console.log('Request received at backend:', req.body);
 
@@ -38,14 +46,20 @@ router.post('/submit-request', async (req, res) => {
   const {
     name,
     surname,
+    pass,
     email,
     OIB,
+    spol,
     address,
     dateOfBirth,
     dateTimeOfRequest,
     primarySchool,
     role
   } = req.body;
+
+  const hashedPass = await hash.hashPassword(pass);
+
+  console.log(hashedPass)
 
   try {
     const newRequest = new Request({
@@ -54,6 +68,7 @@ router.post('/submit-request', async (req, res) => {
       surname,
       email,
       OIB,
+      spol,
       address,
       dateOfBirth : dayjs(dateOfBirth).format("YYYY-MM-DD"),
       dateTimeOfRequest,
@@ -66,8 +81,8 @@ router.post('/submit-request', async (req, res) => {
 
     const insertQueryGost = `insert into GOST(gostID, datumPristupa, OIB) values ($1, CURRENT_TIMESTAMP, $2)`;
 
-    const valuesKorisnik = [newRequest.OIB, 'M', newRequest.name, newRequest.surname, newRequest.dateOfBirth, 
-      newRequest.address, newRequest.email, 'passU', newRequest.primarySchool];
+    const valuesKorisnik = [newRequest.OIB, newRequest.spol, newRequest.name, newRequest.surname, newRequest.dateOfBirth, 
+      newRequest.address, newRequest.email, hashedPass, newRequest.primarySchool];
 
     const valuesGost = [newRequest._id, newRequest.OIB];
 
@@ -100,7 +115,7 @@ router.get('/get-requests', async(req, res) => {
 });
 
 router.post('/change-info-request', async(req, res) => {
-  const { _id, name, surname, email, OIB, address, dateOfBirth, dateTimeOfRequest, primarySchool, role } = req.body;
+  const { _id, name, surname, email, OIB, spol, address, dateOfBirth, dateTimeOfRequest, primarySchool, role } = req.body;
   
   if(!_id){
     return res.status(400).json({ error: 'User ID is required'});
@@ -114,6 +129,7 @@ router.post('/change-info-request', async(req, res) => {
         surname,
         email,
         OIB,
+        spol,
         address,
         dateOfBirth,
         dateTimeOfRequest,

@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const sendEmailNotification = require('../utils/emailNotification');
+const sendEmailNotificationSchedule = require('../utils/emailNotificationSchedule');
 
 router.post('/notify-all-students', async (req, res) => {
   try {
-    const results = await sendEmailNotification();
+    const results = await sendEmailNotificationSchedule();
     res.json({
       message: 'Email notifications completed',
       successes: results.successes,

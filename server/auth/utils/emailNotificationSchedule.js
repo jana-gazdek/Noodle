@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const ConfirmedUser = require('../models/ConfirmedUser');
 
-const sendEmailNotification = async (schedule) => {
+const sendEmailNotificationSchedule = async (schedule) => {
   const results = {
     successes: [],
     failures: []
@@ -46,4 +46,4 @@ const sendEmailNotification = async (schedule) => {
   return results;
 };
 
-module.exports = sendEmailNotification;
+module.exports = sendEmailNotificationSchedule;
