@@ -268,7 +268,7 @@ router.post('/get-user-info', async(req, res) => {
 })
 
 router.post('/update-user-info', async (req, res) => {
-    const { _id, name, surname, email, OIB, address, dateOfBirth, dateTimeOfRequest, primarySchool, role } = req.body;
+  const { _id, name, surname, email, OIB, address, dateOfBirth, dateTimeOfRequest, primarySchool, role } = req.body;
 
 	if(!_id){
 		return res.status(400).json({ error: 'User ID is required'});
@@ -331,5 +331,59 @@ router.post('/update-user-info', async (req, res) => {
     res.status(500).json({ error: 'Failed to update user information' });
 	}
 })
+
+router.post('/upis-prostorije', async(req, res) => {
+  const { kapacitet, oznaka, tip, skolaID } = req.body;
+
+  if (!kapacitet || !oznaka || !tip) {
+    return res.status(400).json({ error: 'Sva polja moraju biti ispunjena!'});
+  }
+
+  try {
+    const result = await client.query('SELECT * FROM PROSTORIJA WHERE oznaka = $1', [oznaka]);
+    if (result.rows.length > 0) {
+      const updateQuery = `
+        UPDATE PROSTORIJA
+        SET kapacitet = $1, tipProstorije = $2, školaID = $3
+        WHERE oznaka = $4
+      `;
+      await client.query(updateQuery, [kapacitet, tip, skolaID, oznaka]);
+      res.json({ message: 'Prostorija je uređena.' });
+    } else {
+      const insertQuery = `
+        INSERT INTO PROSTORIJA (kapacitet, oznaka, tipProstorije, školaID)
+        VALUES ($1, $2, $3, $4)
+      `;
+      await client.query(insertQuery, [kapacitet, oznaka, tip, skolaID]);
+      res.json({ message: 'Prostorija uspješno dodana.' });
+    }
+  } catch (error) {
+    console.log('Neuspješan upis:', error);
+    res.status(500).json({ error: 'Greška pri upisu u bazu' });
+  }
+});
+
+router.post('/brisanje-prostorije', async (req, res) => {
+  const { oznaka } = req.body;
+
+  if (!oznaka) {
+      return res.status(400).json({ error: 'Oznaka prostorije je obavezna za brisanje!' });
+  }
+
+  try {
+      const findQuery = await client.query('SELECT * FROM PROSTORIJA WHERE oznaka = $1', [oznaka]);
+      if (findQuery.rows.length === 0) {
+          return res.status(404).json({ message: 'Prostorija s danom oznakom ne postoji.' });
+      }
+
+      const deleteQuery = 'DELETE FROM PROSTORIJA WHERE oznaka = $1';
+      await client.query(deleteQuery, [oznaka]);
+      res.json({ message: 'Prostorija uspješno obrisana.' });
+  } catch (error) {
+      console.error('Greška pri brisanju prostorije:', error);
+      res.status(500).json({ error: 'Došlo je do pogreške pri brisanju prostorije.' });
+  }
+});
+
 
 module.exports = router;
