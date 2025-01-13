@@ -23,7 +23,7 @@ function Requests() {
   }, []);
 
   const handleBackButtonClick = () => {
-    navigate("/auth/pocetna");
+    navigate("/info/admin-menu");
   };
 
   const handleEdit = (request) => {

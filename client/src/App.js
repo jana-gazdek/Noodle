@@ -7,9 +7,11 @@ import {
 import Pocetna from "./components/pocetna";
 import Login from "./components/login";
 import InfoForm from "./components/infoform";
+import Adminmenu from "./components/admin_menu";
 import Requests from "./components/requests";
 import Profile from "./components/profiles";
 import Repository from "./components/repository";
+import Prostorije from "./components/prostorije";
 import Unauthorized from "./components/unauthorized";
 import axios from "axios";
 import "./styles/App.css";
@@ -61,7 +63,16 @@ function App() {
         ),
     },
     {
-      path: "/info/requests",
+      path: "/info/admin-menu",
+      element:
+        isAuthenticated && user.role === "admin" ? (
+          <Adminmenu />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "/info/admin-menu/requests",
       element:
         isAuthenticated && user.role === "admin" ? (
           <Requests />
@@ -70,10 +81,19 @@ function App() {
         ),
     },
     {
-      path: "info/profile/:id",
+      path: "info/admin-menu/profile/:id",
       element:
         isAuthenticated && user.role === "admin" ? (
           <Profile />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "info/admin-menu/prostorije",
+      element:
+        isAuthenticated && user.role === "admin" ? (
+          <Prostorije />
         ) : (
           <Unauthorized />
         ),

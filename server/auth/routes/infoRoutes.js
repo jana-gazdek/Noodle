@@ -333,7 +333,9 @@ router.post('/update-user-info', async (req, res) => {
 })
 
 router.post('/upis-prostorije', async(req, res) => {
-  const { kapacitet, oznaka, tip, skolaID } = req.body;
+  const { kapacitet, oznaka, tip } = req.body;
+
+  console.log(kapacitet, oznaka, tip)
 
   if (!kapacitet || !oznaka || !tip) {
     return res.status(400).json({ error: 'Sva polja moraju biti ispunjena!'});
@@ -344,17 +346,17 @@ router.post('/upis-prostorije', async(req, res) => {
     if (result.rows.length > 0) {
       const updateQuery = `
         UPDATE PROSTORIJA
-        SET kapacitet = $1, tipProstorije = $2, školaID = $3
-        WHERE oznaka = $4
+        SET kapacitet = $1, tipProstorije = $2
+        WHERE oznaka = $3
       `;
-      await client.query(updateQuery, [kapacitet, tip, skolaID, oznaka]);
+      await client.query(updateQuery, [kapacitet, tip, oznaka]);
       res.json({ message: 'Prostorija je uređena.' });
     } else {
       const insertQuery = `
         INSERT INTO PROSTORIJA (kapacitet, oznaka, tipProstorije, školaID)
-        VALUES ($1, $2, $3, $4)
+        VALUES ($1, $2, $3, 1)
       `;
-      await client.query(insertQuery, [kapacitet, oznaka, tip, skolaID]);
+      await client.query(insertQuery, [kapacitet, oznaka, tip]);
       res.json({ message: 'Prostorija uspješno dodana.' });
     }
   } catch (error) {

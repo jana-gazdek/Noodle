@@ -1,6 +1,7 @@
 CREATE TABLE ŠKOLA
 (
   školaID INT NOT NULL,
+  imeŠkole VARCHAR(255) NOT NULL, 
   PRIMARY KEY (školaID)
 );
 
@@ -72,17 +73,6 @@ CREATE TABLE UČENIK
   OIB VARCHAR(11) NOT NULL,
   PRIMARY KEY (učenikID),
   FOREIGN KEY (OIB) REFERENCES KORISNIK(OIB)
-);
-
-CREATE TABLE IZOSTANAK
-(
-  izostanakID INT NOT NULL,
-  izostanakDatum TIMESTAMP NOT NULL,
-  izostanakStatus VARCHAR NOT NULL CHECK (izostanakStatus IN ('Opravdano', 'Neopravdano', 'Na čekanju')),
-  izostanakOPIS VARCHAR(255),
-  učenikID VARCHAR NOT NULL,
-  PRIMARY KEY (izostanakID),
-  FOREIGN KEY (učenikID) REFERENCES UČENIK(učenikID)
 );
 
 CREATE TABLE RASPORED

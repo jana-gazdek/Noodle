@@ -33,7 +33,7 @@ function Profile() {
   }, [id]);
 
   const handleBackButtonClick = () => {
-    navigate("/auth/pocetna");
+    navigate("/info/admin-menu");
   };
 
   const handleUpdate = (e) => {
@@ -64,103 +64,105 @@ function Profile() {
       </div>
     );
 
-  return (
-    <div className="form">
-      <h1>Profil sa OIB-om: {id}</h1>
-      <form className="infoform_profile" onSubmit={handleUpdate}>
-        <p>
-          <strong>Ime:</strong>
-          <input
-            type="text"
-            value={user.name}
-            onChange={(e) => setUser({ ...user, name: e.target.value })}
-          />
-        </p>
-        <p>
-          <strong>Prezime:</strong>
-          <input
-            type="text"
-            value={user.surname}
-            onChange={(e) => setUser({ ...user, surname: e.target.value })}
-          />
-        </p>
-        <p>
-          <strong>Email:</strong>
-          <input
-            type="email"
-            value={user.email}
-            onChange={(e) => setUser({ ...user, email: e.target.value })}
-          />
-        </p>
-        <p>
-          <strong>OIB:</strong>
-          <input
-            type="text"
-            value={user.OIB}
-            onChange={(e) => setUser({ ...user, OIB: e.target.value })}
-            disabled
-          />
-        </p>
-        <p>
-          <strong>Spol:</strong>
-          <select
-            value={user.spol}
-            placeholder={user.spol}
-            onChange={(e) => setUser({ ...user, spol: e.target.value })}
-          >
-            <option value="M">Muško</option>
-            <option value="F">Žensko</option>
-          </select>
-        </p>
-        <p>
-          <strong>Datum rođenja:</strong>
-          <input
-            type="date"
-            value={getDate(user.dateOfBirth)}
-            placeholder={getDate(user.dateOfBirth)}
-            onChange={(e) => setUser({ ...user, dateOfBirth: e.target.value })}
-          />
-        </p>
-        <p>
-          <strong>Adresa:</strong>
-          <input
-            type="text"
-            value={user.address}
-            onChange={(e) => setUser({ ...user, address: e.target.value })}
-          />
-        </p>
-        <p>
-          <strong>Osnovna škola:</strong>
-          <input
-            type="text"
-            value={user.primarySchool}
-            onChange={(e) =>
-              setUser({ ...user, primarySchool: e.target.value })
-            }
-          />
-        </p>
-        <p>
-          <strong>Uloga:</strong>
-          <select
-            value={user.role}
-            placeholder={user.role}
-            onChange={(e) => setUser({ ...user, role: e.target.value })}
-          >
-            <option value="učenik">Učenik</option>
-            <option value="profesor">Profesor</option>
-            <option value="satničar">Satničar</option>
-            <option value="denied">Odbijen</option>
-          </select>
-        </p>
-        <div className="buttons">
-          <button type="submit">Spremi</button>
-          <button className="back-button" onClick={handleBackButtonClick}>
-            Nazad
-          </button>
+    return (
+      user.name !== "" ? (
+        <div className="form">
+          <h1>Profil sa OIB-om: {id}</h1>
+          <form className="infoform_profile" onSubmit={handleUpdate}>
+            <p>
+              <strong>Ime:</strong>
+              <input
+                type="text"
+                value={user.name}
+                onChange={(e) => setUser({ ...user, name: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Prezime:</strong>
+              <input
+                type="text"
+                value={user.surname}
+                onChange={(e) => setUser({ ...user, surname: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Email:</strong>
+              <input
+                type="email"
+                value={user.email}
+                onChange={(e) => setUser({ ...user, email: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>OIB:</strong>
+              <input
+                type="text"
+                value={user.OIB}
+                onChange={(e) => setUser({ ...user, OIB: e.target.value })}
+                disabled
+              />
+            </p>
+            <p>
+              <strong>Spol:</strong>
+              <select
+                value={user.spol}
+                placeholder={user.spol}
+                onChange={(e) => setUser({ ...user, spol: e.target.value })}
+              >
+                <option value="M">Muško</option>
+                <option value="F">Žensko</option>
+              </select>
+            </p>
+            <p>
+              <strong>Datum rođenja:</strong>
+              <input
+                type="date"
+                value={getDate(user.dateOfBirth)}
+                placeholder={getDate(user.dateOfBirth)}
+                onChange={(e) => setUser({ ...user, dateOfBirth: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Adresa:</strong>
+              <input
+                type="text"
+                value={user.address}
+                onChange={(e) => setUser({ ...user, address: e.target.value })}
+              />
+            </p>
+            <p>
+              <strong>Osnovna škola:</strong>
+              <input
+                type="text"
+                value={user.primarySchool}
+                onChange={(e) =>
+                  setUser({ ...user, primarySchool: e.target.value })
+                }
+              />
+            </p>
+            <p>
+              <strong>Uloga:</strong>
+              <select
+                value={user.role}
+                placeholder={user.role}
+                onChange={(e) => setUser({ ...user, role: e.target.value })}
+              >
+                <option value="učenik">Učenik</option>
+                <option value="profesor">Profesor</option>
+                <option value="satničar">Satničar</option>
+                <option value="denied">Odbijen</option>
+              </select>
+            </p>
+            <div className="buttons">
+              <button type="submit">Spremi</button>
+              <button className="back-button" onClick={handleBackButtonClick}>
+                Nazad
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
-  );
+      ) : null
+    );    
 }
 
 export default Profile;

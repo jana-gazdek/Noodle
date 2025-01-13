@@ -9,7 +9,6 @@ import "../styles/pocetna/weather.css";
 function Pocetna({ handleLogout }) {
   const [user, setUser] = useState(null);
   const [weather, setWeather] = useState(null);
-  const [oib, setOib] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,14 +24,7 @@ function Pocetna({ handleLogout }) {
   }, []);
 
   const handleAdminButtonClick = () => {
-    navigate("/info/requests");
-  };
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (oib.trim()) {
-      navigate(`/info/profile/${oib}`);
-    }
+    navigate("/info/admin-menu");
   };
 
   const handleRepositoryButtonClick = () => {
@@ -80,18 +72,6 @@ function Pocetna({ handleLogout }) {
                     >
                       ADMIN GUMB
                     </button>
-                  </div>
-                  <div>
-                    <form onSubmit={handleSearchSubmit}>
-                      <input
-                        type="text"
-                        placeholder="Enter OIB"
-                        value={oib}
-                        onChange={(e) => setOib(e.target.value)}
-                        required
-                      />
-                      <button type="submit">Search</button>
-                    </form>
                   </div>
                 </div>
               ) : (
