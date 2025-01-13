@@ -21,6 +21,7 @@ router.post('/izdavanje-potvrde', async (req, res) => {
     }
 
     const akGod = await client.query(`select škGod from uČenik where oib = $1`, [student.OIB]);
+    const škola = await client.query(`select imeŠkole from Škola where školaid = 1`);
 
     const doc = new PDFDocument();
     const buffer = new streamBuffers.WritableStreamBuffer({
@@ -50,9 +51,9 @@ router.post('/izdavanje-potvrde', async (req, res) => {
        .text(`U evidenciji izadnih učeničkih isprava u akademskoj godini ${akGod.rows[0].škgod} utvrđeno je sljedeće:`)
        .text(`${student.name} ${student.surname}, OIB: ${student.OIB},`)
        .text(`ima upis u statusu redovitog učenika u školi:`)
-       .text(`${student.primarySchool}`);
+       .text(`${škola.rows[0].imeŠkole}`);
     doc.moveDown(2);
-    doc.text(`${student.name} ${student.surname} (${student.OIB}) pohađa školu ${student.primarySchool}.`);
+    doc.text(`${student.name} ${student.surname} (${student.OIB}) pohađa školu ${škola.rows[0].imeŠkole}.`);
     doc.end();
     doc.on('end', async () => {
       const pdfBuffer = buffer.getContents();

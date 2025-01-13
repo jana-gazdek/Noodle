@@ -141,7 +141,6 @@ router.post('/change-info-request', async(req, res) => {
     if(!updatedRequest){
       return res.status(404).json({error: 'User not found'});
     }
-
     res.json({ message: 'User information updated successfully', updatedRequest });
   } catch(err){
     console.error('Error updating user info:', err);
@@ -150,7 +149,7 @@ router.post('/change-info-request', async(req, res) => {
 });
 
 router.post('/confirm-request', async (req, res) => {
-  const { _id, email } = req.body;
+  const { _id, razredUcenika, smjerUcenika, mobBroj, razrediProesora, razrednik } = req.body;
 
   if (!_id) {
     return res.status(400).json({ error: 'User ID is required' });
@@ -171,11 +170,11 @@ router.post('/confirm-request', async (req, res) => {
     const role = request.role === 'pending' ? 'učenik' : request.role;
 
     if (role === 'učenik') {
-      const valuesUčenik = [request._id, '4b', schoolYear(), 'računarstvo', request.OIB];
+      const valuesUčenik = [request._id, razredUcenika, schoolYear(), smjerUcenika, request.OIB];
       await client.query(deleteGost, valuesDeleteGost);
       await client.query(insertQueryUčenik, valuesUčenik);
     } else {
-      const valuesDjelatnik = [request._id, '0000000000', 'NONE', 'NONE', role, request.OIB];
+      const valuesDjelatnik = [request._id, mobBroj, razrediProesora, razrednik, role, request.OIB];
       await client.query(deleteGost, valuesDeleteGost);
       await client.query(insertQueryDjelatnik, valuesDjelatnik);
 
@@ -187,21 +186,20 @@ router.post('/confirm-request', async (req, res) => {
             emailAddress: request.email,
         },
     });
-    
     }
-
-      const confirmedUser = new ConfirmedUser({
-      _id: request.id,
-      name: request.name,
-      surname: request.surname,
-      email: request.email,
-      OIB: request.OIB,
-      spol: request.spol,
-      address: request.address,
-      dateOfBirth: request.dateOfBirth,
-      dateTimeOfRequest: request.dateTimeOfRequest,
-      primarySchool: request.primarySchool,
-      role
+  
+    const confirmedUser = new ConfirmedUser({
+    _id: request.id,
+    name: request.name,
+    surname: request.surname,
+    email: request.email,
+    OIB: request.OIB,
+    spol: request.spol,
+    address: request.address,
+    dateOfBirth: request.dateOfBirth,
+    dateTimeOfRequest: request.dateTimeOfRequest,
+    primarySchool: request.primarySchool,
+    role
     });
 
     await confirmedUser.save();
@@ -247,28 +245,84 @@ router.post('/deny-request', async (req, res) => {
 });
 
 router.post('/get-user-info', async(req, res) => {
-    const { OIB } = req.body;
+  const { OIB } = req.body;
 
-	if(!OIB){
-		return res.status(400).json({ error: 'User OIB is required' });
-	}
+  if (!OIB) {
+      return res.status(400).json({ error: 'Potreban je OIB korisnika' });
+  }
 
-	try{
-		const user = await ConfirmedUser.findOne({ OIB });
+  try {
+      const user = await ConfirmedUser.findOne({ OIB });
 
-		if (!user) {
-		  return res.status(404).json({ error: 'User not found' });
-		}
+      if (!user) {
+          return res.status(404).json({ error: 'Korisnik nije pronađen' });
+      }
 
-		res.json(user);
-	} catch(err){
-		console.error('Error finding student:', err);
-    	res.status(500).json({ error: 'Failed to retrieve student' });
-	}
-})
+      if (user.role === 'učenik') {
+          const { rows } = await client.query(`
+              SELECT 
+                  K.OIB, 
+                  K.ime, 
+                  K.prezime, 
+                  K.datumRod, 
+                  K.adresa, 
+                  K.email, 
+                  K.spol, 
+                  U.učenikID, 
+                  U.razred, 
+                  U.škGod, 
+                  U.smjer
+              FROM 
+                  KORISNIK K
+              JOIN 
+                  UČENIK U ON K.OIB = U.OIB
+              WHERE 
+                  K.OIB = $1;
+          `, [OIB]);
+
+          if (rows.length === 0) {
+              return res.status(404).json({ message: 'Nije pronađen student' });
+          }
+          return res.json(rows);
+      } else if (['profesor', 'satničar', 'admin'].includes(user.role)) {
+          const { rows } = await client.query(`
+              SELECT 
+                  K.OIB, 
+                  K.ime, 
+                  K.prezime, 
+                  K.datumRod, 
+                  K.adresa, 
+                  K.email, 
+                  K.spol, 
+                  D.djelatnikID, 
+                  D.mobBroj, 
+                  D.razred, 
+                  D.razrednik, 
+                  D.status
+              FROM 
+                  KORISNIK K
+              JOIN 
+                  DJELATNIK D ON K.OIB = D.OIB
+              WHERE 
+                  K.OIB = $1;
+          `, [OIB]);
+
+          if (rows.length === 0) {
+              return res.status(404).json({ message: 'Nije pronađen djelatnik' });
+          }
+          return res.json(rows);
+      } else {
+          return res.status(404).json({ error: 'Korisnik nije pronađen' });
+      }
+  } catch (error) {
+      console.error('Greška pri traženju korisnika:', error);
+      res.status(500).json({ error: 'Greška pri traženju korisnika' });
+  }
+});
+
 
 router.post('/update-user-info', async (req, res) => {
-  const { _id, name, surname, email, OIB, address, dateOfBirth, dateTimeOfRequest, primarySchool, role } = req.body;
+  const { _id, name, surname, email, OIB, spol, address, dateOfBirth, dateTimeOfRequest, primarySchool, role } = req.body;
 
 	if(!_id){
 		return res.status(400).json({ error: 'User ID is required'});
@@ -307,7 +361,7 @@ router.post('/update-user-info', async (req, res) => {
       await client.query(`delete from KORISNIK where OIB = $1`, [updatedUser.OIB]);
     } else {
       const updateUserInfo = `update KORISNIK set OIB = $1, spol = $2, ime = $3, prezime = $4, datumRod = $5, adresa = $6, email = $7, školaID = $8 where OIB = $1`;
-      const updateUserInfoValues = [updatedUser.OIB, 'M', updatedUser.name, updatedUser.surname, updatedUser.dateOfBirth, updatedUser.address, updatedUser.email, updatedUser.primarySchool];
+      const updateUserInfoValues = [updatedUser.OIB, updatedUser.spol, updatedUser.name, updatedUser.surname, updatedUser.dateOfBirth, updatedUser.address, updatedUser.email, updatedUser.primarySchool];
       await client.query(updateUserInfo, updateUserInfoValues);
       /*if (result.rows.length === 0) {
         const updateUčenikInfo
