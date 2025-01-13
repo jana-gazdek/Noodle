@@ -6,6 +6,7 @@ const confirmedUserSchema = new mongoose.Schema({
   surname: { type: String, required: true },
   email: { type: String, required: true },
   OIB: { type: String, required: true },
+  spol: { type: String, default: 'M' },
   address: { type: String, required: true },
   dateOfBirth: { type: Date, required: true },
   dateTimeOfRequest: { type: Date, required: true },
