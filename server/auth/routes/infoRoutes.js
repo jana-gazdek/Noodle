@@ -296,7 +296,7 @@ router.post('/update-user-info', async (req, res) => {
 			return res.status(404).json({error: 'User not found'});
 		}
 
-    const result = await client.query('SELECT status FROM djelatnik WHERE OIB = $1', [updatedUser.OIB]);
+    const result = await client.query(`SELECT status FROM djelatnik WHERE OIB = $1`, [updatedUser.OIB]);
 
     if (updatedUser.role === 'denied') {
       if (result.rows.length === 0) {
@@ -306,8 +306,8 @@ router.post('/update-user-info', async (req, res) => {
       }
       await client.query(`delete from KORISNIK where OIB = $1`, [updatedUser.OIB]);
     } else {
-      const updateUserInfo = 'update KORISNIK set OIB = $1, spol = $2, ime = $3, prezime = $4, datumRod = $5, adresa = $6, email = $7, zaporka = $8, školaID = $9 where OIB = $1';
-      const updateUserInfoValues = [updatedUser.OIB, 'M', updatedUser.name, updatedUser.surname, updatedUser.dateOfBirth, updatedUser.address, updatedUser.email, 'passU',updatedUser.primarySchool];
+      const updateUserInfo = `update KORISNIK set OIB = $1, spol = $2, ime = $3, prezime = $4, datumRod = $5, adresa = $6, email = $7, školaID = $9 where OIB = $1`;
+      const updateUserInfoValues = [updatedUser.OIB, 'M', updatedUser.name, updatedUser.surname, updatedUser.dateOfBirth, updatedUser.address, updatedUser.email, updatedUser.primarySchool];
       await client.query(updateUserInfo, updateUserInfoValues);
       /*if (result.rows.length === 0) {
         const updateUčenikInfo
@@ -340,7 +340,7 @@ router.post('/upis-prostorije', async(req, res) => {
   }
 
   try {
-    const result = await client.query('SELECT * FROM PROSTORIJA WHERE oznaka = $1', [oznaka]);
+    const result = await client.query(`SELECT * FROM PROSTORIJA WHERE oznaka = $1`, [oznaka]);
     if (result.rows.length > 0) {
       const updateQuery = `
         UPDATE PROSTORIJA
@@ -371,12 +371,12 @@ router.post('/brisanje-prostorije', async (req, res) => {
   }
 
   try {
-      const findQuery = await client.query('SELECT * FROM PROSTORIJA WHERE oznaka = $1', [oznaka]);
+      const findQuery = await client.query(`SELECT * FROM PROSTORIJA WHERE oznaka = $1`, [oznaka]);
       if (findQuery.rows.length === 0) {
           return res.status(404).json({ message: 'Prostorija s danom oznakom ne postoji.' });
       }
 
-      const deleteQuery = 'DELETE FROM PROSTORIJA WHERE oznaka = $1';
+      const deleteQuery = `DELETE FROM PROSTORIJA WHERE oznaka = $1`;
       await client.query(deleteQuery, [oznaka]);
       res.json({ message: 'Prostorija uspješno obrisana.' });
   } catch (error) {
@@ -384,6 +384,5 @@ router.post('/brisanje-prostorije', async (req, res) => {
       res.status(500).json({ error: 'Došlo je do pogreške pri brisanju prostorije.' });
   }
 });
-
 
 module.exports = router;
