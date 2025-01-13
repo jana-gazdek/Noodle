@@ -5,6 +5,8 @@ const nodemailer = require('nodemailer');
 const ConfirmedUser = require('../models/ConfirmedUser');
 const streamBuffers = require('stream-buffers');
 const path = require('path');
+const client = require('../../../database/connection.js');
+const fs = require('fs');
 
 router.post('/izdavanje-potvrde', async (req, res) => {
   const { OIB } = req.body;
@@ -18,6 +20,9 @@ router.post('/izdavanje-potvrde', async (req, res) => {
       return res.status(404).json({ error: 'Učenik nije pronađen' });
     }
 
+    const akGod = await client.query(`select škGod from uČenik where oib = $1`, [student.OIB]);
+    console.log(akGod.rows);
+
     const doc = new PDFDocument();
     const buffer = new streamBuffers.WritableStreamBuffer({
       initialSize: (100 * 1024),
@@ -25,22 +30,31 @@ router.post('/izdavanje-potvrde', async (req, res) => {
     });
 
     const fontPath = path.join('..', 'fonts', 'dejavu-sans', 'DejaVuSans.ttf');
+    const boltFontPath = path.join('..', 'fonts', 'dejavu-sans', 'DejaVuSans-Bold.ttf');
     doc.registerFont('DejaVuSans', fontPath);
+    doc.registerFont('DejaVuSans-Bold', boltFontPath)
 
     doc.pipe(buffer);
-    doc.font('DejaVuSans')
+    doc.image('../images/grb.png', {
+      fit: [150, 150],
+      align: 'center',
+      x: 50,
+      y: 50 
+    });
+    doc.moveDown(10);
+    doc.font('DejaVuSans-Bold')
        .fontSize(16)
-       .text('Potvrda o studiranju', { align: 'center' });
-    doc.moveDown();
-    doc.fontSize(12)
-       .text(`Ime: ${student.name}`)
-       .text(`Prezime: ${student.surname}`)
-       .text(`OIB: ${student.OIB}`)
-       .text(`Škola: ${student.primarySchool}`);
-    doc.moveDown();
+       .text('ELEKTRONIČKI ZAPIS O STATUSU UČENIKA', { align: 'center' });
+    doc.moveDown(2);
+    doc.font('DejaVuSans')
+       .fontSize(10)
+       .text(`U evidenciji izadnih učeničkih isprava u akademskoj godini ${akGod.rows[0]['škgod']} utvrđeno je sljedeće:`)
+       .text(`${student.name} ${student.surname}, OIB: ${student.OIB},`)
+       .text(`ima upis u statusu redovitog učenika u školi:`)
+       .text(`${student.primarySchool}`);
+    doc.moveDown(2);
     doc.text(`${student.name} ${student.surname} (${student.OIB}) pohađa školu ${student.primarySchool}.`);
     doc.end();
-
     doc.on('end', async () => {
       const pdfBuffer = buffer.getContents();
 
