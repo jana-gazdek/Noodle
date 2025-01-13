@@ -20,6 +20,14 @@ const drive = google.drive({ version: "v3", auth: driveAuth });
 
 const GOOGLE_DRIVE_FOLDER_ID = "1I9H0ooP32aYfxf30jwJscSvHoMGa70FK";
 
+function schoolYear(){
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth();
+  const sYear = currentMonth >= 6 ? currentYear : currentYear - 1;
+  return `${sYear}./${sYear + 1}.`;
+}
+
 router.post('/submit-request', async (req, res) => {
   console.log('Request received at backend:', req.body);
 
@@ -148,7 +156,7 @@ router.post('/confirm-request', async (req, res) => {
     const role = request.role === 'pending' ? 'učenik' : request.role;
 
     if (role === 'učenik') {
-      const valuesUčenik = [request._id, '4b', '2023./2024.', 'računarstvo', request.OIB];
+      const valuesUčenik = [request._id, '4b', schoolYear(), 'računarstvo', request.OIB];
       await client.query(deleteGost, valuesDeleteGost);
       await client.query(insertQueryUčenik, valuesUčenik);
     } else {
@@ -271,9 +279,29 @@ router.post('/update-user-info', async (req, res) => {
 			return res.status(404).json({error: 'User not found'});
 		}
 
-    const updateUserInfo = 'update KORISNIK set OIB = $1, spol = $2, ime = $3, prezime = $4, datumRod = $5, adresa = $6, email = $7, zaporka = $8, školaID = $9 where OIB = $1';
-    const updateUserInfoValues = [updatedUser.OIB, 'M', updatedUser.name, updatedUser.surname, updatedUser.dateOfBirth, updatedUser.address, updatedUser.email, 'passU',updatedUser.primarySchool];
-    await client.query(updateUserInfo, updateUserInfoValues);
+    const result = await client.query('SELECT status FROM djelatnik WHERE OIB = $1', [updatedUser.OIB]);
+
+    if (updatedUser.role === 'denied') {
+      if (result.rows.length === 0) {
+        await client.query(`delete from UČENIK where OIB = $1`, [updatedUser.OIB]);
+      } else {
+        await client.query(`delete from DJELATNIK where OIB = $1`, [updatedUser.OIB]);
+      }
+      await client.query(`delete from KORISNIK where OIB = $1`, [updatedUser.OIB]);
+    } else {
+      const updateUserInfo = 'update KORISNIK set OIB = $1, spol = $2, ime = $3, prezime = $4, datumRod = $5, adresa = $6, email = $7, zaporka = $8, školaID = $9 where OIB = $1';
+      const updateUserInfoValues = [updatedUser.OIB, 'M', updatedUser.name, updatedUser.surname, updatedUser.dateOfBirth, updatedUser.address, updatedUser.email, 'passU',updatedUser.primarySchool];
+      await client.query(updateUserInfo, updateUserInfoValues);
+      /*if (result.rows.length === 0) {
+        const updateUčenikInfo
+        const updateUčenikInfoValues
+        await client.query(updateUčenikInfo, updateUčenikInfoValues);
+      } else {
+        const updateDjelatnikInfo
+        const updateDjelatnikInfoValues
+        await client.query(updateDjelatnikInfo, updateDjelatnikInfoValues);
+      }*/
+    }
 
     await updatedUser.save();
 

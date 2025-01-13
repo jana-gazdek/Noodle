@@ -35,6 +35,7 @@ CREATE TABLE PREDMET
   imePredmet VARCHAR(30) NOT NULL,
   brojSatova VARCHAR(1) NOT NULL,
   brojLab VARCHAR(1) NOT NULL,
+  godine VARCHAR(36) NOT NULL, 
   smjer VARCHAR(30) NOT NULL,
   školaID INT NOT NULL,
   PRIMARY KEY (predmetID),
