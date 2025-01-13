@@ -21,7 +21,6 @@ router.post('/izdavanje-potvrde', async (req, res) => {
     }
 
     const akGod = await client.query(`select škGod from uČenik where oib = $1`, [student.OIB]);
-    console.log(akGod.rows);
 
     const doc = new PDFDocument();
     const buffer = new streamBuffers.WritableStreamBuffer({
@@ -48,7 +47,7 @@ router.post('/izdavanje-potvrde', async (req, res) => {
     doc.moveDown(2);
     doc.font('DejaVuSans')
        .fontSize(10)
-       .text(`U evidenciji izadnih učeničkih isprava u akademskoj godini ${akGod.rows[0]['škgod']} utvrđeno je sljedeće:`)
+       .text(`U evidenciji izadnih učeničkih isprava u akademskoj godini ${akGod.rows[0].škgod} utvrđeno je sljedeće:`)
        .text(`${student.name} ${student.surname}, OIB: ${student.OIB},`)
        .text(`ima upis u statusu redovitog učenika u školi:`)
        .text(`${student.primarySchool}`);
