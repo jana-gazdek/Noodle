@@ -79,7 +79,7 @@ const RoutePolyline = ({ route }) => {
     map.fitBounds(bounds);
   }, [route, map]);
 
-  return <Polyline positions={route} color="blue" />;
+  return <Polyline positions={route} color="#8860D0" />;
 };
 
 export default Map;

@@ -6,10 +6,22 @@ const Repository = () => {
   const [files, setFiles] = useState([]);
   const [uploadFile, setUploadFile] = useState(null);
   const [message, setMessage] = useState("");
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchFiles();
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/auth/pocetna", { withCredentials: true })
+      .then((response) => {
+        setUser(response.data.user);
+      })
+      .catch(() => {
+        window.location.href = "/login";
+      });
   }, []);
 
   const fetchFiles = async () => {
@@ -90,17 +102,21 @@ const Repository = () => {
     <div className="form">
       <h1>Repozitorij</h1>
 
-      <div className="upload-section">
-        <input type="file" onChange={handleFileChange} />
-        <button
-          className="upload-button"
-          onClick={handleUpload}
-          disabled={loading}
-        >
-          {loading ? "Uploading..." : "Upload"}
-        </button>
-        {loading && <div className="spinner"></div>}{" "}
-      </div>
+      {user && user.role !== "učenik" ? (
+        <div className="upload-section">
+          <input type="file" onChange={handleFileChange} />
+          <button
+            className="upload-button"
+            onClick={handleUpload}
+            disabled={loading}
+          >
+            {loading ? "Uploading..." : "Upload"}
+          </button>
+          {loading && <div className="spinner"></div>}{" "}
+        </div>
+      ) : (
+        <div></div>
+      )}
 
       <div className="files-list">
         <h2>Datoteke</h2>
@@ -118,12 +134,16 @@ const Repository = () => {
                   >
                     Download
                   </button>
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDelete(file.id)}
-                  >
-                    Delete
-                  </button>
+                  {user && user.role !== "učenik" ? (
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(file.id)}
+                    >
+                      Delete
+                    </button>
+                  ) : (
+                    <div></div>
+                  )}
                 </div>
               </li>
             ))}
