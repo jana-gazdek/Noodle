@@ -4,6 +4,7 @@ const router = express.Router();
 const Request = require('../models/Requests');
 const hash = require('../controllers/hashPass.js')
 const ConfirmedUser = require('../models/ConfirmedUser');
+const upravljanjePred = require('../controllers/upravljanjePredmetima.js')
 const User = require('../models/User');
 const { google } = require("googleapis");
 const client = require('../../../database/connection.js');
@@ -455,5 +456,50 @@ router.post('/brisanje-prostorije', async (req, res) => {
       res.status(500).json({ error: 'Došlo je do pogreške pri brisanju prostorije.' });
   }
 });
+
+router.post('/pretrazi-predmete-profesora', async (req, res) => {
+  const { OIB } = req.body;
+  if(!OIB){
+    return res.status(400).json({ error: 'Potreban je OIB profesora' })
+  }
+  try {
+    const djelatnik = await upravljanjePred.getDjelatnik(OIB);
+    if (!djelatnik) {
+        return res.status(404).json({ error: 'Korisnik nije pronađen' });
+    }
+    const predmeti = await upravljanjePred.predmetiDjelatnika(djelatnik.djelatnikid);
+    return res.json({
+      djelatnik: djelatnik,
+      predmeti: predmeti
+    });
+  }catch(error){
+    console.error('Greška pri traženju korisnika:', error);
+    res.status(500).json({ error: 'Greška pri traženju korisnika' });
+  }
+});
+
+router.post('/update-predmete-profesora', async (req, res) => {
+  const { djelatnikid, predmeti } = req.body;
+
+  if (!djelatnikid || !predmeti) {
+    return res.status(400).json({ error: 'Potreban je djelatnikID profesora i lista predmeta' });
+  }
+
+  try{
+    await client.query('BEGIN');
+
+    upravljanjePred.obrisiPredmeteDjelatnika(djelatnikid);
+    upravljanjePred.dodajPredmeteDjelatnika(djelatnikid, predmeti);
+
+    await client.query('COMMIT');
+    
+    res.json({ message: 'Predmeti profesora ažurirani.' })
+
+  }catch(error){
+    await client.query('ROLLBACK');
+    console.error('Greška pri ažuriranju predmeta profesora:', error);
+    res.status(500).json({ error: 'Greška pri ažuriranju predmeta' });
+  }
+})  
 
 module.exports = router;
