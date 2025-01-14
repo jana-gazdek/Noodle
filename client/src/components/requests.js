@@ -20,7 +20,7 @@ function Requests() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/info/get-requests")
+      .get("http://localhost:3000/info/get-requests", { withCredentials: true })
       .then((response) => {
         setRequests(response.data);
       })
@@ -42,7 +42,8 @@ function Requests() {
     try {
       await axios.post(
         "http://localhost:3000/info/change-info-request",
-        updatedRequest
+        updatedRequest,
+        { withCredentials: true }
       );
       setRequests((prev) =>
         prev.map((req) => (req._id === editingRequestId ? updatedRequest : req))
@@ -66,8 +67,8 @@ function Requests() {
         smjerUcenika : smjerUcenika, 
         mobBroj : mobBroj, 
         razrediProfesora : razrediProfesora, 
-        razrednik : razrednik
-      });
+        razrednik : razrednik},
+      { withCredentials: true });
       setRequests(removeRequestById(requests, id));
       alert("Uspjesno prihvacen zahtjev.");
     } catch (error) {
@@ -77,7 +78,7 @@ function Requests() {
 
   const handleDeny = async (id) => {
     try {
-      await axios.post("http://localhost:3000/info/deny-request", { _id: id });
+      await axios.post("http://localhost:3000/info/deny-request", { _id: id }, { withCredentials: true });
       setRequests(removeRequestById(requests, id));
       alert("Uspjesno odbijen zahtjev.");
     } catch (error) {

@@ -3,7 +3,6 @@ import io from "socket.io-client";
 import "../styles/pocetna/chat.css";
 
 const stringToColor = (string) => {
-  //odreduje nasumicnu boju za svakog user-a prema username-u, uzima u obzir vrijednost svakog char-a u stringu
   let hash = 0;
   for (let i = 0; i < string.length; i++) {
     hash = string.charCodeAt(i) + (hash << (5 - hash));
@@ -18,22 +17,43 @@ const Chat = ({
 }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const [error, setError] = useState(null);
   const messagesRef = useRef(null);
 
   useEffect(() => {
     if (!user) return;
 
-    const socket = io(serverUrl);
-
-    socket.emit("joinGroup", group);
-
-    fetch(`${serverUrl}/messages/${group}`)
-      .then((res) => res.json())
-      .then((data) => setMessages(data));
-
-    socket.on("receiveMessage", (msg) => {
-      setMessages((prev) => [...prev, msg]);
+    const socket = io(serverUrl, {
+      reconnectionAttempts: 5, 
     });
+
+    socket.on("connect_error", () => {
+      setError("Ne radi. 😔");
+    });
+
+    try {
+      socket.emit("joinGroup", group);
+
+      fetch(`${serverUrl}/messages/${group}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Failed to fetch messages");
+          }
+          return res.json();
+        })
+        .then((data) => setMessages(data))
+        .catch((err) => {
+          console.error("Error fetching messages:", err.message);
+          setError("Ne radi. 😔");
+        });
+
+      socket.on("receiveMessage", (msg) => {
+        setMessages((prev) => [...prev, msg]);
+      });
+    } catch (err) {
+      console.error("Error initializing chat:", err.message);
+      setError("Ne radi. 😔");
+    }
 
     return () => {
       socket.disconnect();
@@ -62,6 +82,14 @@ const Chat = ({
   };
 
   if (!user) return <div>Loading...</div>;
+
+  if (error) {
+    return (
+      <div className="chat-error">
+        <p>{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="chat-container">

@@ -37,7 +37,7 @@ function InfoForm({ user }) {
           primarySchool: formData.primarySchool,
           googleId: user.googleId,
           dateTimeOfRequest,
-        }
+        }, { withCredentials: true }
       );
 
       alert("Zahtjev uspješno poslan!");

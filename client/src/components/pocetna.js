@@ -9,6 +9,7 @@ import "../styles/pocetna/weather.css";
 function Pocetna({ handleLogout }) {
   const [user, setUser] = useState(null);
   const [weather, setWeather] = useState(null);
+  const [chatError, setChatError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,7 +55,16 @@ function Pocetna({ handleLogout }) {
         ) : (
           <>
             <div className="chat-container">
-              <Chat user={user} />
+              {chatError ? (
+                <p>Ne radi. 😔</p>
+              ) : (
+                <Chat 
+                  user={user}
+                  onError={() => {
+                    setChatError(true);
+                  }} 
+                />
+              )}
             </div>
             <button
               className="map-gumb"
