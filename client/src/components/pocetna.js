@@ -31,6 +31,10 @@ function Pocetna({ handleLogout }) {
     navigate("/auth/repository");
   };
 
+  const handleMapButtonClick = () => {
+    navigate("/auth/map");
+  };
+
   return (
     <div className="pocetna-container">
       {user &&
@@ -52,9 +56,12 @@ function Pocetna({ handleLogout }) {
             <div className="chat-container">
               <Chat user={user} />
             </div>
-            <div className="map-container">
-              <Map />
-            </div>
+            <button
+              className="map-gumb"
+              onClick={handleMapButtonClick}
+            >
+              MAP
+            </button>
             <div>
               <div className="user-container">
                 <h1>

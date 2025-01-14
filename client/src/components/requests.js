@@ -9,6 +9,13 @@ function Requests() {
   const [error, setError] = useState(null);
   const [editingRequestId, setEditingRequestId] = useState(null);
   const [updatedRequest, setUpdatedRequest] = useState({});
+
+  const [razredUcenika, setrazredUcenika] = useState(null);
+  const [smjerUcenika, setsmjerUcenika] = useState(null);
+  const [mobBroj, setmobBroj] = useState(null);
+  const [razrediProfesora, setrazrediProfesora] = useState(null);
+  const [razrednik, setrazrednik] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,7 +61,12 @@ function Requests() {
   const handleConfirm = async (id) => {
     try {
       await axios.post("http://localhost:3000/info/confirm-request", {
-        _id: id,
+        _id : id, 
+        razredUcenika : razredUcenika, 
+        smjerUcenika : smjerUcenika, 
+        mobBroj : mobBroj, 
+        razrediProfesora : razrediProfesora, 
+        razrednik : razrednik
       });
       setRequests(removeRequestById(requests, id));
       alert("Uspjesno prihvacen zahtjev.");
@@ -234,12 +246,96 @@ function Requests() {
                         })
                       }
                     >
+                      <option value="">Odaberi ulogu</option>
                       <option value="učenik">Učenik</option>
                       <option value="satničar">Satničar</option>
                       <option value="profesor">Profesor</option>
                     </select>{" "}
                     <br />
                   </div>
+                  {updatedRequest.role === "učenik" && (
+                    <>
+                      <div className="redak">
+                        <strong>Razred:</strong>
+                        <input
+                          name="class"
+                          value={razredUcenika || ""}
+                          placeholder='oblik BrojVelikoSlovo; npr. "1B"'
+                          onChange={(e) =>
+                          setrazredUcenika(e.target.value)
+                          }
+                        />
+                        <br />
+                      </div>
+                      <div className="redak">
+                        <strong>Smjer:</strong>
+                        <select
+                          name="smjer"
+                          value={smjerUcenika || ""}
+                          onChange={(e) =>
+                            setsmjerUcenika(e.target.value)
+                          }>
+                            <option value="">Odaberi smjer</option>
+                            <option value="matematički">Matematički</option>
+                            <option value="informatički">Informatički</option>
+                          </select>{" "}
+                          <br />
+                      </div>
+                    </>
+                  )}
+                  {updatedRequest.role === "profesor" && (
+                    <>
+                      <div className="redak">
+                        <strong>Broj mobitela:</strong>
+                        <input
+                          name="mobBroj"
+                          value={mobBroj || ""}
+                          onChange={(e) =>
+                          setmobBroj(e.target.value)
+                          }
+                        />
+                        <br />
+                      </div>
+                      <div className="redak">
+                        <strong>Razredi:</strong>
+                        <input
+                          name="razrediProfesora"
+                          value={razrediProfesora || ""}
+                          placeholder='oblik BrojVelikoSlovo,...; npr. "1B,2B,"'
+                          onChange={(e) =>
+                          setrazrediProfesora(e.target.value)
+                          }
+                        />
+                        <br />
+                      </div>
+                      <div className="redak">
+                        <label>
+                          <input
+                            type="checkbox"
+                            checked={razrednik !== null}
+                            onChange={(e) => {
+                              if (!e.target.checked) {
+                                setrazrednik(null);
+                              } else {
+                                setrazrednik("");
+                              }
+                            }}
+                          />
+                        </label>
+                        <br />
+                        <strong>Razrednik:</strong>
+                        <input
+                          name="razrednik"
+                          value={razrednik || ""}
+                          placeholder='oblik BrojVelikoSlovo; npr. "1B"'
+                          onChange={(e) => setrazrednik(e.target.value)}
+                          disabled={razrednik === null}
+                          className={razrednik === null ? "ugaseno" : ""}
+                        />
+                        <br />
+                      </div>
+                    </>
+                  )}
                   <div className="redak">
                     <button className="req-button" onClick={handleSave}>
                       Spremi
@@ -264,7 +360,7 @@ function Requests() {
                   <br />
                   <strong>Osnovna škola:</strong> {request.primarySchool} <br />
                   <strong>Uloga:</strong>{" "}
-                  {request.role === "pending" ? "učenik" : request.role} <br />
+                  {request.role === "pending" ? "odaberi ulogu" : request.role} <br />
                   <button
                     className="req-button"
                     onClick={() => handleEdit(request)}

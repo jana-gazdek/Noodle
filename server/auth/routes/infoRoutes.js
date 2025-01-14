@@ -149,7 +149,7 @@ router.post('/change-info-request', async(req, res) => {
 });
 
 router.post('/confirm-request', async (req, res) => {
-  const { _id, razredUcenika, smjerUcenika, mobBroj, razrediProesora, razrednik } = req.body;
+  const { _id, razredUcenika, smjerUcenika, mobBroj, razrediProfesora, razrednik } = req.body;
 
   if (!_id) {
     return res.status(400).json({ error: 'User ID is required' });
@@ -174,7 +174,7 @@ router.post('/confirm-request', async (req, res) => {
       await client.query(deleteGost, valuesDeleteGost);
       await client.query(insertQueryUčenik, valuesUčenik);
     } else {
-      const valuesDjelatnik = [request._id, mobBroj, razrediProesora, razrednik, role, request.OIB];
+      const valuesDjelatnik = [request._id, mobBroj, razrediProfesora, razrednik, role, request.OIB];
       await client.query(deleteGost, valuesDeleteGost);
       await client.query(insertQueryDjelatnik, valuesDjelatnik);
 

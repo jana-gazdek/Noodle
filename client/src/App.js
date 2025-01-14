@@ -11,6 +11,7 @@ import Adminmenu from "./components/admin_menu";
 import Requests from "./components/requests";
 import Profile from "./components/profiles";
 import Repository from "./components/repository";
+import Map from "./components/map.js";
 import Prostorije from "./components/prostorije";
 import Unauthorized from "./components/unauthorized";
 import axios from "axios";
@@ -112,6 +113,15 @@ function App() {
       element:
         isAuthenticated && user.role !== "unverified" ? (
           <Repository />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "/auth/map",
+      element:
+        isAuthenticated && user.role !== "unverified" ? (
+          <Map />
         ) : (
           <Unauthorized />
         ),
