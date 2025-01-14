@@ -13,6 +13,7 @@ import Profile from "./components/profiles";
 import Repository from "./components/repository";
 import Map from "./components/map.js";
 import Prostorije from "./components/prostorije";
+import Predmet from "./components/predmet";
 import Unauthorized from "./components/unauthorized";
 import axios from "axios";
 import "./styles/App.css";
@@ -95,6 +96,15 @@ function App() {
       element:
         isAuthenticated && user.role === "admin" ? (
           <Prostorije />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "info/admin-menu/predmet/:id",
+      element:
+        isAuthenticated && user.role === "admin" ? (
+          <Predmet />
         ) : (
           <Unauthorized />
         ),

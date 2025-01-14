@@ -4,6 +4,7 @@ import "../styles/admin_menu.css";
 
 function InfoForm({ user }) {
     const [oib, setOib] = useState("");
+    const [oib_predmet, setOibPredmet] = useState("");
     const navigate = useNavigate();
 
     const handleRequestButtonClick = () => {
@@ -20,13 +21,20 @@ function InfoForm({ user }) {
         navigate("/info/admin-menu/prostorije");
     };
 
+    const handlePredmetSearch = (e) => {
+      e.preventDefault();
+      if (oib_predmet.trim()) {
+        navigate(`/info/admin-menu/predmet/${oib_predmet}`);
+      }
+    };
+
     const handleBackButtonClick = () => {
         navigate("/auth/pocetna");
       };
 
     return (
     <div className ="menu-container">
-        <h1>Admin meni</h1>
+        <h1>Admin izbornik</h1>
       <button className="req-button" onClick={handleRequestButtonClick}>
             Zahtjevi
       </button>
@@ -34,7 +42,7 @@ function InfoForm({ user }) {
         <input
           type="text"
           className = "menu-input"
-          placeholder="Upiši OIB za pretraživanje"
+          placeholder="Upiši OIB korisnika"
           value={oib}
           onChange={(e) => setOib(e.target.value)}
           required
@@ -44,6 +52,17 @@ function InfoForm({ user }) {
       <button className="req-button" onClick={handleProstorijeButtonClick}>
             Prostorije
       </button>
+      <form onSubmit={handlePredmetSearch}>
+        <input
+          type="text"
+          className = "menu-input"
+          placeholder="Upiši OIB profesora"
+          value={oib_predmet}
+          onChange={(e) => setOibPredmet(e.target.value)}
+          required
+        />
+        <button className = "req-button" type="submit">Pretraži</button>
+      </form>
       <button className="back-button" onClick={handleBackButtonClick}>
             Nazad
       </button>

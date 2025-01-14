@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { MapContainer, TileLayer, Polyline, useMap } from "react-leaflet";
+import { useNavigate } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import "../styles/map.css";
 
@@ -7,6 +8,11 @@ const Map = () => {
   const [startCity, setStartCity] = useState("");
   const [endCity, setEndCity] = useState("");
   const [route, setRoute] = useState(null);
+  const navigate = useNavigate();
+
+  const handleBackButtonClick = () => {
+    navigate("/auth/pocetna");
+  };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -58,6 +64,9 @@ const Map = () => {
           />
         </label>
         <button type="submit">Pronađi rutu</button>
+        <button className="back-button" onClick={handleBackButtonClick}>
+          Nazad
+        </button>
       </form>
 
       <MapContainer center={[0, 0]} zoom={2} className="map-container">
@@ -68,6 +77,7 @@ const Map = () => {
         {route && <RoutePolyline route={route} />}
       </MapContainer>
     </div>
+    
   );
 };
 
