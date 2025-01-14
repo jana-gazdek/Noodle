@@ -21,7 +21,6 @@ function Profile() {
     smjer: "",
     djelatnikID: "",
     mobBroj: "",
-    škGod: "",
     razrednik: null,
     id: "",
     role: ""
@@ -43,7 +42,7 @@ function Profile() {
           spol: response?.data?.spol || "",
           učenikID: response?.data?.učenikid || "",
           djelatnikID: response?.data?.djelatnikid || "",
-          mobBroj: response?.data?.mobBroj || "",
+          mobBroj: response?.data?.mobbroj || "",
           razred: response?.data?.razred || "",
           razrednik: response?.data?.razrednik || null,
           škGod: response?.data?.škgod || "",

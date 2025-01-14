@@ -1,0 +1,32 @@
+
+  
+  h2 {
+    font-size: 16px; /* Adjusts the font size of the subtitle */
+    color: #555; /* Slightly lighter color for the subtitle */
+    margin-top: 0; /* Removes unnecessary space above */
+  }
+  
+  ul {
+    list-style-type: none; /* Removes the dots */
+    padding: 0;
+    margin: 20px 0; /* Adds spacing between the box and the checklist */
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap to the next line */
+    justify-content: center; /* Centers the list horizontally */
+    gap: 15px; /* Adds space between list items */
+  }
+  
+  li {
+    margin: 5px 10px;
+  }
+    
+  input[type="checkbox"] {
+    margin-right: 8px; /* Adds spacing between checkbox and text */
+  }
+  
+
+  
+  button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+  

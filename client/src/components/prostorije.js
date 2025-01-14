@@ -67,13 +67,16 @@ const Prostorije = () => {
           onChange={(e) => setOznaka(e.target.value)}
           required
         />
-        <input
-          type="text"
-          placeholder="Tip"
+        <select
+          name="tip"
           value={tip}
           onChange={(e) => setTip(e.target.value)}
           required
-        />
+        >
+            <option value="">Odaberi tip</option>
+            <option value="učionica">Učionica</option>
+            <option value="dvorana">Dvorana</option>
+        </select>
         <button className = "req-button" type="submit">Spremi</button>
       </form>
 
