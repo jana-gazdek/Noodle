@@ -1,5 +1,5 @@
 {
   "scripts": {
-    "start": "cd server/auth && node app.js"
+    "start": "node server.js"
   }
 }
