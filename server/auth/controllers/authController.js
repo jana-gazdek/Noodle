@@ -8,7 +8,7 @@ const setCookies = (res, accessToken, refreshToken) => {
 
 const login = (req, res, accessToken, refreshToken) => {
   setCookies(res, accessToken, refreshToken);
-  res.redirect('http://localhost:3001/pocetna');
+  res.redirect('https://noodle-frontend.onrender.com/pocetna');
 };
 
 const logout = (req, res) => {
@@ -22,7 +22,7 @@ const logout = (req, res) => {
   res.clearCookie('connect.sid', { httpOnly: true, secure: false });
   res.clearCookie('accessToken', { httpOnly: true, sameSite: 'None', secure: true });
   res.clearCookie('refreshToken', { httpOnly: true, sameSite: 'None', secure: true });
-  res.redirect('http://localhost:3001/login')
+  res.redirect('https://noodle-frontend.onrender.com/login')
 };
 
 const verifyOrRefreshAccessToken = async (req, res, next) => {
