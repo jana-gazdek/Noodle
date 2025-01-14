@@ -20,7 +20,7 @@ const transporter = nodemailer.createTransport({
 });
 
 const driveAuth = new google.auth.GoogleAuth({
-  keyFile: JSON.parse(process.env.GOOGLE_DRIVE_CREDENTIALS),
+  credentials: JSON.parse(process.env.GOOGLE_DRIVE_CREDENTIALS),
   scopes: ["https://www.googleapis.com/auth/drive"],
 });
 
