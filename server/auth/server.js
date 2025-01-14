@@ -12,7 +12,7 @@ const izdavanjePotvrde = require('./routes/izdavanjePotvrde');
 const MongoStore = require('connect-mongo');
 require('./config/passportConfig');
 
-dotenv.config({ path: './env' });
+dotenv.config();
 
 const app = express();
 const port = 3000;
