@@ -512,8 +512,8 @@ router.post('/update-predmete-profesora', async (req, res) => {
   try{
     await client.query('BEGIN');
 
-    upravljanjePred.obrisiPredmeteDjelatnika(djelatnikid);
-    upravljanjePred.dodajPredmeteDjelatnika(djelatnikid, predmeti);
+    await upravljanjePred.obrisiPredmeteDjelatnika(djelatnikid);
+    await upravljanjePred.dodajPredmeteDjelatnika(djelatnikid, predmeti);
 
     await client.query('COMMIT');
     
@@ -524,6 +524,16 @@ router.post('/update-predmete-profesora', async (req, res) => {
     console.error('Greška pri ažuriranju predmeta profesora:', error);
     res.status(500).json({ error: 'Greška pri ažuriranju predmeta' });
   }
-})  
+})
+
+router.post('/svi-predmeti', async (req, res) => {
+  try{
+    const predmeti = await upravljanjePred.getAllSubjects();
+    res.json({ predmeti: predmeti });
+  }catch(error){
+    console.error('Greška pri traženju predmeta:', error);
+    res.status(500).json({ error: 'Greška pri traženju predmeta' });
+  }
+});
 
 module.exports = router;

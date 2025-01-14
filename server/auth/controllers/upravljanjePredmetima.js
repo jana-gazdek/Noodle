@@ -20,6 +20,23 @@ async function getDjelatnik(OIB) {
   }
 }
 
+async function getAllSubjects(){
+  try {
+    const queryText = 'SELECT predmetID, imePredmet FROM PREDMET;';
+    const result = await client.query(queryText);
+
+    const subjects = result.rows.map(row => ({
+      predmetID: row.predmetid,
+      imePredmet: row.imepredmet
+    }));
+
+    return subjects;
+  } catch (err) {
+    console.error('Error executing getAllSubjects query:', err.stack);
+    return [];
+  }
+}
+
 async function predmetiDjelatnika(djelatnikID) {
   const query = `
     SELECT p.predmetID, p.imePredmet
@@ -63,5 +80,6 @@ module.exports = {
   predmetiDjelatnika,
   getDjelatnik,
   obrisiPredmeteDjelatnika,
-  dodajPredmeteDjelatnika
+  dodajPredmeteDjelatnika,
+  getAllSubjects
 };
