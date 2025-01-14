@@ -24,11 +24,11 @@ app.use(cookieParser());
 
 // COOKIE TEST
 
-// app.use((req, res, next) => {
-//   console.log('Cookies:', req.cookies);
-//   console.log('Raw Cookie Header:', req.headers.cookie);
-//   next();
-// });
+app.use((req, res, next) => {
+  console.log('Cookies:', req.cookies);
+  console.log('Raw Cookie Header:', req.headers.cookie);
+  next();
+});
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
