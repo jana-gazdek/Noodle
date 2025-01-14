@@ -8,20 +8,29 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
                                                         accessType: 'offline', 
                                                         prompt:'consent' }));
 
-router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), authController.login);
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
+  const { accessToken, refreshToken } = req.user;
+  authController.login(req, res, accessToken, refreshToken);
+});
+
 
 router.get('/logout', authController.logout);
 
 router.get('/login', authController.verifyOrRefreshAccessToken, (req, res) => {
   if (req.user) {
-    const user = req.user;
-    res.status(200).json(user);
+    req.login(req.user, (err) => {
+      if (err) {
+        console.error('Failed to log in:', err);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+      res.status(200).json(req.user);
+    });
   } else {
-    res.status(401).json({ message: 'Unauthorized na login' });
+    res.status(401).json({ message: 'Unauthorized' });
   }
 });
 
-router.get('/pocetna', authController.verifyOrRefreshAccessToken, async (req, res) => {
+router.get('/pocetna', /*authController.verifyOrRefreshAccessToken,*/ async (req, res) => {
   if (req.user) {
     const user = req.user;
 
@@ -32,7 +41,8 @@ router.get('/pocetna', authController.verifyOrRefreshAccessToken, async (req, re
         params: {
           q: city,
           appid: process.env.WEATHER_API_KEY,
-          units: 'metric'
+          units: 'metric',
+          lang: 'hr'
         }
       });
       const weatherData = {
@@ -42,14 +52,14 @@ router.get('/pocetna', authController.verifyOrRefreshAccessToken, async (req, re
         city: weatherResponse.data.name,
         country: weatherResponse.data.sys.country
       };
-      
+
       res.status(200).json({ user, weather: weatherData });
     } catch (error) {
       console.error('Error fetching weather data:', error);
       res.status(200).json({user, weather: null});
     }
   } else {
-    res.status(401).json({ message: 'Unauthorized na pocetnu' });
+    res.status(401).json({ message: 'Unauthorized' });
   }
 });
 
