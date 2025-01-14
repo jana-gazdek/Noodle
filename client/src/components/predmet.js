@@ -100,7 +100,12 @@ function Predmet() {
               </li>
             ))}
           </ul>
-          <button className = "req-button" type="submit">Submit</button>
+          <div className="buttons">
+            <button className = "req-button" type="submit">Spremi</button>
+            <button className="req-button" onClick={handleBackButtonClick}>
+                  Nazad
+            </button>
+          </div>
         </form>
         </div>
       </>

@@ -24,8 +24,6 @@
     margin-right: 8px; /* Adds spacing between checkbox and text */
   }
   
-
-  
   button[type="submit"]:hover {
     background-color: #0056b3;
   }
