@@ -8,15 +8,23 @@ import "../styles/profiles.css";
 function Profile() {
   const { id } = useParams();
   const [user, setUser] = useState({
+    OIB: "",
     name: "",
     surname: "",
-    email: "",
-    OIB: "",
-    spol: "",
     dateOfBirth: "",
     address: "",
-    primarySchool: "",
-    role: "učenik",
+    email: "",
+    spol: "",
+    učenikID: "",
+    razred: "",
+    škGod: "",
+    smjer: "",
+    djelatnikID: "",
+    mobBroj: "",
+    škGod: "",
+    razrednik: null,
+    id: "",
+    role: ""
   });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -25,7 +33,24 @@ function Profile() {
     axios
       .post("http://localhost:3000/info/get-user-info", { OIB: id })
       .then((response) => {
-        setUser(response.data);
+        setUser({
+          OIB: response?.data?.oib || "",
+          name: response?.data?.ime || "",
+          surname: response?.data?.prezime || "",
+          dateOfBirth: response?.data?.datumrod || "",
+          address: response?.data?.adresa || "",
+          email: response?.data?.email || "",
+          spol: response?.data?.spol || "",
+          učenikID: response?.data?.učenikid || "",
+          djelatnikID: response?.data?.djelatnikid || "",
+          mobBroj: response?.data?.mobBroj || "",
+          razred: response?.data?.razred || "",
+          razrednik: response?.data?.razrednik || null,
+          škGod: response?.data?.škgod || "",
+          smjer: response?.data?.smjer || "",
+          id: response?.data?._id || "",
+          role: response?.data?.role || "",
+        });
       })
       .catch((error) => {
         setError("Korisnik nije pronađen.");
@@ -38,8 +63,12 @@ function Profile() {
 
   const handleUpdate = (e) => {
     e.preventDefault();
+    const podatci =
+      user.role === "učenik"
+        ? {_id : user.id, OIB: user.OIB, ime: user.name, prezime : user.surname, datumRod : user.dateOfBirth, adresa : user.address, email : user.email, spol : user.spol, role : user.role, učenikid : user.učenikID, razred : user.razred, škgod : user.škGod, smjer : user.smjer}
+        : {_id : user.id, OIB: user.OIB, ime: user.name, prezime : user.surname, datumRod : user.dateOfBirth, adresa : user.address, email : user.email, spol : user.spol, role : user.role, djelatnikid : user.djelatnikID, mobbroj : user.mobBroj, razred : user.razred, razrednik : user.razrednik}
     axios
-      .post("http://localhost:3000/info/update-user-info", user)
+      .post("http://localhost:3000/info/update-user-info", podatci)
       .then(() => {
         alert("Profil uspješno uređen.");
       })
@@ -94,15 +123,6 @@ function Profile() {
               />
             </p>
             <p>
-              <strong>OIB:</strong>
-              <input
-                type="text"
-                value={user.OIB}
-                onChange={(e) => setUser({ ...user, OIB: e.target.value })}
-                disabled
-              />
-            </p>
-            <p>
               <strong>Spol:</strong>
               <select
                 value={user.spol}
@@ -131,16 +151,6 @@ function Profile() {
               />
             </p>
             <p>
-              <strong>Osnovna škola:</strong>
-              <input
-                type="text"
-                value={user.primarySchool}
-                onChange={(e) =>
-                  setUser({ ...user, primarySchool: e.target.value })
-                }
-              />
-            </p>
-            <p>
               <strong>Uloga:</strong>
               <select
                 value={user.role}
@@ -153,6 +163,83 @@ function Profile() {
                 <option value="denied">Odbijen</option>
               </select>
             </p>
+            {user.role === "učenik" ? (
+              <>
+                <p>
+                  <strong>Razred:</strong>
+                  <input
+                    type = "text"
+                    value={user.razred}
+                    placeholder='oblik BrojVelikoSlovo; npr. "1B"'
+                    onChange={(e) => setUser({ ...user, razred: e.target.value })}
+                  />
+                </p>
+                <p>
+                  <strong>Školska godina:</strong>
+                  <input
+                    type = "text"
+                    value={user.škGod}
+                    placeholder='godina./godina.; npr. 2024./2025.'
+                    onChange={(e) => setUser({ ...user, škGod: e.target.value })}
+                  />
+                </p>
+                <p>
+                  <strong>Smjer:</strong>
+                  <select
+                    name="smjer"
+                    value={user.smjer || ""}
+                    onChange={(e) => setUser({ ...user, smjer: e.target.value })
+                    }>
+                      <option value="matematički">Matematički</option>
+                      <option value="informatički">Informatički</option>
+                  </select>{" "}
+                </p>
+            </>
+            ) : (
+              <>
+                <p>
+                  <strong>Broj mobitela:</strong>
+                  <input
+                    type = "text"
+                    value={user.mobBroj}
+                    onChange={(e) => setUser({ ...user, mobBroj: e.target.value })}
+                  />
+                </p>
+                <p>
+                  <strong>Razred/i:</strong>
+                  <input
+                    type = "text"
+                    value={user.razred}
+                    placeholder='oblik BrojVelikoSlovo,...; npr. "1B,2B"'
+                    onChange={(e) => setUser({ ...user, razred: e.target.value })}
+                  />
+                </p>
+                <p>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={user.razrednik !== null}
+                      onChange={(e) => {
+                        if (!e.target.checked) {
+                          setUser({ ...user, razrednik: null })
+                        } else {
+                          setUser({ ...user, razrednik: "" })
+                        }
+                      }}/>
+                  </label>
+                  <strong>Razrednik:</strong>
+                    <input
+                      name="razrednik"
+                      value={user.razrednik || ""}
+                      placeholder='oblik BrojVelikoSlovo; npr. "1B"'
+                      onChange={(e) => setUser({ ...user, razrednik: e.target.value })}
+                      disabled={user.razrednik === null}
+                      className={user.razrednik === null ? "ugaseno" : ""}
+                    />
+                </p>
+            </>
+            )                
+            }
             <div className="buttons">
               <button type="submit">Spremi</button>
               <button className="back-button" onClick={handleBackButtonClick}>
