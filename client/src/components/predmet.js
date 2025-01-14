@@ -83,7 +83,7 @@ function Predmet() {
         <div className="form">
           <h1>Profesor sa OIB-om: {id}</h1>
           <h2>Odaberite predmete za profesora: </h2>
-          <form onSubmit={handleSubmit}>
+          <form className = "predmet-form" onSubmit={handleSubmit}>
           <ul>
             {sviPredmeti.map((subject) => (
               <li key={subject.predmetID}>
