@@ -9,6 +9,15 @@ const User = require('../models/User');
 const { google } = require("googleapis");
 const client = require('../../../database/connection.js');
 client.connect();
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'obavijestnoodle@gmail.com',
+    pass: 'jrwludmatzlqyocj'
+  }
+});
 
 const serviceAccountKey = require("../../objavaMaterijala/service-account-key.json");
 
@@ -204,6 +213,21 @@ router.post('/confirm-request', async (req, res) => {
     });
 
     await confirmedUser.save();
+
+    const mailOptions = {
+      from: '"Noodle" <no-reply@yourdomain.com>',
+      to: confirmedUser.email,
+      subject: 'Obavijest o registraciji',
+      text: `Pozdrav ${confirmedUser.name},\n\nTvoja registracija je odobrena! Dobrodošao u ${razredUcenika || ""}!\n\nSrdačan pozdrav,\nTvoja škola!`
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Failed to send email:', error);
+      } else {
+        console.log('Email sent to: ' + mailOptions.to);
+      }
+    });
 
     await User.findOneAndUpdate({ googleId: _id }, { role }, { new: true })
 

@@ -26,7 +26,7 @@ const Repository = () => {
 
   const fetchFiles = async () => {
     try {
-      const response = await axios.get("http://localhost:3003/files", { withCredentials: true });
+      const response = await axios.get("http://localhost:3003/files");
       setFiles(response.data);
     } catch (error) {
       console.error("Error fetching files:", error);
@@ -52,7 +52,7 @@ const Repository = () => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      }, { withCredentials: true });
+      });
       setMessage("File uploaded successfully!");
       fetchFiles();
     } catch (error) {
@@ -67,7 +67,7 @@ const Repository = () => {
     try {
       const response = await axios.get(`http://localhost:3003/download/${id}`, {
         responseType: "blob",
-      }, { withCredentials: true });
+      });
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
@@ -89,7 +89,7 @@ const Repository = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3003/delete/${id}`, { withCredentials: true });
+      await axios.delete(`http://localhost:3003/delete/${id}`);
       setMessage("File deleted successfully!");
       fetchFiles();
     } catch (error) {

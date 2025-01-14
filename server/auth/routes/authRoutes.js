@@ -41,7 +41,8 @@ router.get('/pocetna', /*authController.verifyOrRefreshAccessToken,*/ async (req
         params: {
           q: city,
           appid: process.env.WEATHER_API_KEY,
-          units: 'metric'
+          units: 'metric',
+          lang: 'hr'
         }
       });
       const weatherData = {
