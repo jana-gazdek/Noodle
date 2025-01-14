@@ -1,0 +1,65 @@
+.chat-container {
+    width: 400px;
+    height: 600px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  #messages {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px;
+    border-bottom: 1px solid black;
+  }
+  
+  .message {
+    margin-bottom: 10px;
+    max-width: 75%;
+    padding: 8px 12px;
+    border-radius: 12px;
+    word-wrap: break-word;
+    overflow: hidden;
+  }
+  
+  .user-message {
+    background: rgba(136, 96, 208, 0.5); /* tamnija boja stranice, ali rgb da moze opacity na 0.5 samo backgrounda */
+    align-self: flex-start;
+  }
+  
+  .other-message {
+    background: rgba(193, 200, 228, 0.5); /* svijetlija boja stranice, ali rgb da moze opacity na 0.5 samo backgrounda */
+    align-self: flex-start;
+  }
+  
+  strong {
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+  
+  #send-container {
+    display: flex;
+    padding: 10px;
+  }
+  
+  #send-container input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 4px;
+  }
+  
+  #send-container button {
+    margin-left: 10px;
+    padding: 10px;
+    border: none;
+    background: #8860D0;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  

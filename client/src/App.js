@@ -1,22 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate
-} from 'react-router-dom';
-import Pocetna from './components/pocetna';
-import Login from './components/login';
-import axios from 'axios';
-import './styles/App.css';
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
+import Pocetna from "./components/pocetna";
+import Login from "./components/login";
+import InfoForm from "./components/infoform";
+import Adminmenu from "./components/admin_menu";
+import Requests from "./components/requests";
+import Profile from "./components/profiles";
+import Repository from "./components/repository";
+import Map from "./components/map.js";
+import Prostorije from "./components/prostorije";
+import Predmet from "./components/predmet";
+import Unauthorized from "./components/unauthorized";
+import axios from "axios";
+import "./styles/App.css";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     axios
-      .get('https://noodle-x652.onrender.com/auth/pocetna', { withCredentials: true })
-      .then(response => {
+      .get("http://localhost:3000/auth/pocetna", { withCredentials: true })
+      .then((response) => {
+        setUser(response.data.user);
         if (response.status === 200) {
           setIsAuthenticated(true);
         } else {
@@ -29,38 +39,113 @@ function App() {
   }, []);
 
   const handleGoogleLogin = () => {
-    window.location.href = 'https://noodle-x652.onrender.com/auth/google';
+    window.location.href = "http://localhost:3000/auth/google";
   };
 
   if (isAuthenticated === null) {
     return null;
   }
 
-  return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route
-            path="/login"
-            element={
-              isAuthenticated ? <Navigate to="/auth/pocetna" /> : <Login handleGoogleLogin={handleGoogleLogin} />
-            }
-          />
-          
-          <Route
-            path="/auth/pocetna"
-            element={
-              isAuthenticated ? <Pocetna /> : <Navigate to="/login" />
-            }
-          />
+  const router = createBrowserRouter([
+    {
+      path: "/login",
+      element: isAuthenticated ? (
+        <Navigate to="/info/form" />
+      ) : (
+        <Login handleGoogleLogin={handleGoogleLogin} />
+      ),
+    },
+    {
+      path: "/info/form",
+      element:
+        isAuthenticated && user.role === "unverified" ? (
+          <InfoForm user={user} />
+        ) : (
+          <Navigate to="/auth/pocetna" />
+        ),
+    },
+    {
+      path: "/info/admin-menu",
+      element:
+        isAuthenticated && user.role === "admin" ? (
+          <Adminmenu />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "/info/admin-menu/requests",
+      element:
+        isAuthenticated && user.role === "admin" ? (
+          <Requests />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "info/admin-menu/profile/:id",
+      element:
+        isAuthenticated && user.role === "admin" ? (
+          <Profile />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "info/admin-menu/prostorije",
+      element:
+        isAuthenticated && user.role === "admin" ? (
+          <Prostorije />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "info/admin-menu/predmet/:id",
+      element:
+        isAuthenticated && user.role === "admin" ? (
+          <Predmet />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "/auth/pocetna",
+      element:
+        isAuthenticated && user.role !== "unverified" ? (
+          <Pocetna />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "/auth/repository",
+      element:
+        isAuthenticated && user.role !== "unverified" ? (
+          <Repository />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "/auth/map",
+      element:
+        isAuthenticated && user.role !== "unverified" ? (
+          <Map />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "*",
+      element: <Navigate to="/login" />,
+    },
+  ]);
 
-          <Route
-            path="*"
-            element={<Navigate to="/login" />}
-          />
-        </Routes>
-      </div>
-    </Router>
+  return (
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
   );
 }
 

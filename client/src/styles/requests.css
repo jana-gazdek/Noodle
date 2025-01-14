@@ -1,0 +1,148 @@
+body {
+    margin: 0;
+    font-family: 'Inter', 'Roboto', sans-serif;
+    background-color: #c1c8e4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+.list{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.req-button {
+    background-color: #8860D0;
+    color: #D9D9D9;
+    border: none;
+    border-radius: 25px;
+    padding: 1vh;
+    width: 8vh;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+
+.req-button:hover {
+    background-color: #5e3fbf;
+  }
+  
+.back-button {
+    background-color: #8860D0;
+    color: #D9D9D9;
+    border: none;
+    border-radius: 25px;
+    padding: 1vh;
+    width: 8vh;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #5e3fbf;
+}
+
+.redak {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1vh;
+}
+
+.heder {
+    height: 10vh;
+}
+.requests {
+    height: 90vh;
+    margin-top: 1vh;
+    padding: 0;
+    display: flex;
+    list-style: none;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.redak strong {
+    width: 40%;
+}
+
+.redak input {
+    width: 60%;
+}
+
+.redak select {
+    width: 60%;
+    background-color: #D9D9D9;
+}
+
+  h1 {
+    margin-top: 2vh;
+    font-size: 2rem;
+  }
+
+  .nema {
+    margin-top: 3vh;
+  }
+
+  
+.requests-li {
+    background-color: white;
+    margin: 20px;
+    margin-bottom: 20px;
+    padding: 20px; 
+    box-shadow: 5px 5px 2px rgba(0, 0, 0, 0.2);
+    min-width: 35vh;
+    min-height: 30vh;
+    height: fit-content;
+  }
+  
+.requests-li input { 
+    background-color: #D9D9D9;
+    width: 90%;
+    padding: 0.5vh;
+    margin: 0.5vh 0;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    padding-left: 0.8vh;
+  }
+
+  .requests-li select {
+    background-color: #D9D9D9;
+    width: 90%;
+    padding: 0.5vh;
+    margin: 0.5vh 0;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    padding-left: 0.8vh;
+  }
+  
+  .requests-li button {
+    margin-right: 5px;
+    margin-left: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin-bottom: 10px 0;
+  }
+
+  .ugaseno {
+    cursor: not-allowed;
+  }
+  
+  .ugaseno::placeholder {
+    color: #888; /* Dim the placeholder text as well */
+  }

@@ -44,7 +44,6 @@ body {
   margin-bottom: 4%;
   padding: 0 5%;
   font-size: 1.5vw;
-  
 }
 
 .login-button {
@@ -108,6 +107,7 @@ body {
   font-size: 3.5vw;
   color: #fff;
   margin-bottom: 1%;
+  text-align: center;
 }
 
 .welcome-section p {
