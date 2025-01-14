@@ -301,10 +301,10 @@ function Requests() {
                         <input
                           name="razrediProfesora"
                           value={razrediProfesora || ""}
-                          placeholder='oblik BrojVelikoSlovo,...; npr. "1B,2B,"'
+                          placeholder='oblik BrojVelikoSlovo,...; npr. "1B,2B"'
                           onChange={(e) =>
                           setrazrediProfesora(e.target.value)
-                          }
+                        }
                         />
                         <br />
                       </div>
