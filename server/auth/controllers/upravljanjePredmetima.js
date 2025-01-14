@@ -1,4 +1,4 @@
-const client = require('../../database/connection.js');
+const client = require('../../connection.js');
 
 async function getDjelatnik(OIB) {
   const query = `
