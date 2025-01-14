@@ -30,13 +30,6 @@ app.use(cookieParser());
 //  next();
 //});
 
-// TEST SESSION
-
-app.get('/test-session', (req, res) => {
-  console.log('Session ID:', req.sessionID);
-  res.send('Check your console for the session ID!');
-});
-
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -61,6 +54,13 @@ app.use('/info', infoRoutes);
 app.use('/auth', authRoutes);
 app.use('/schedule', scheduleRoutes);
 app.use('/potvrda', izdavanjePotvrde);
+
+// TEST SESSION
+
+app.get('/test-session', (req, res) => {
+  console.log('Session ID:', req.sessionID);
+  res.send('Check your console for the session ID!');
+});
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
