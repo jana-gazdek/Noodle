@@ -22,6 +22,8 @@ app.use(express.json());
 app.use(cors({ origin: 'https://noodle-frontend.onrender.com', credentials: true }));
 app.use(cookieParser());
 
+app.set('trust proxy', 1);
+
 // COOKIE TEST
 
 //app.use((req, res, next) => {
