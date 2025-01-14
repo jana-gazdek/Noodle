@@ -30,6 +30,13 @@ app.use(cookieParser());
 //  next();
 //});
 
+// TEST SESSION
+
+app.get('/test-session', (req, res) => {
+  console.log('Session ID:', req.sessionID);
+  res.send('Check your console for the session ID!');
+});
+
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
