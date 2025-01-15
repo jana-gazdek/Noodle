@@ -94,7 +94,7 @@ function Profile() {
     );
 
     return (
-      user.name !== "" ? (
+      user.OIB !== "" ? (
         <div className="form">
           <h1>Profil sa OIB-om: {id}</h1>
           <form className="infoform_profile" onSubmit={handleUpdate}>
