@@ -1,22 +1,80 @@
-body {
-    margin: 0;
-    font-family: 'Inter', 'Roboto', sans-serif;
-    background-color: #c1c8e4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    height: 100vh;
-}
-
 .pocetna-container {
     display: flex;
-    width: 90vw;
-    background-color: #c1c8e4; 
-    position: relative;
-    margin: auto;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-}
+    background-color: #c1c8e4;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .pocetna-heder {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: space-between;
+    width: 98%;
+    margin: 20px 0;
+    background-color: #8860D0; 
+    padding: 30px;
+    border-radius: 10px;
+  }
+  
+  .user-container h1 {
+    margin: 0;
+    color: white;
+  }
+  
+  button {
+    background-color: white;
+    color: #8a6fd3;
+    border: none;
+    padding: 10px 15px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  button:hover {
+    background-color: #c1c8e4;
+  }
+  
+  .pocetna-sredina {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 98%;
+    background-color: #c1c8e4;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+  }
+  
+  .raspored {
+    flex: 2;
+    background-color: #8860D0; 
+    padding: 15px;
+    border-radius: 10px;
+    margin-right: 10px;
+  }
+  
+  .desno {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  .status-container {
+    text-align: center;
+  }
+  
+  .info-text {
+    color: red;
+    font-size: 18px;
+    margin-top: 10px;
+  }

@@ -166,7 +166,6 @@ function Profile() {
             ) : (
               <p></p>
             )
-              
             } 
             {user.role === "učenik" ? (
               <>
