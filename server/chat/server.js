@@ -82,10 +82,6 @@ app.get("/messages/:group", async (req, res) => {
   }
 });
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
-
 io.on("connection", (socket) => {
   console.log("A user connected");
 
