@@ -54,32 +54,20 @@ function Pocetna({ handleLogout }) {
           </div>
         ) : (
           <>
-            <div className="chat-container">
-              {chatError ? (
-                <p>Ne radi. 😔</p>
-              ) : (
-                <Chat 
-                  user={user}
-                  onError={() => {
-                    setChatError(true);
-                  }} 
-                />
-              )}
-            </div>
-            <button
-              className="map-gumb"
-              onClick={handleMapButtonClick}
-            >
-              MAP
-            </button>
-            <div>
+            <div className = "pocetna-heder">
               <div className="user-container">
                 <h1>
                   Bok, {user.name} {user.surname}!
                 </h1>
-                <p>Prijava uspješna.</p>
               </div>
-
+              <button
+                className="map-gumb"
+                onClick={handleMapButtonClick}>MAP
+              </button>
+              <button
+                className="repository-gumb"
+                onClick={handleRepositoryButtonClick}>REPOZITORIJ
+              </button>
               {user.role === "admin" ? (
                 <div>
                   <div>
@@ -94,35 +82,48 @@ function Pocetna({ handleLogout }) {
               ) : (
                 <div></div>
               )}
+            </div>
 
-              {weather ? (
-                <div className="weather-container">
-                  <div className="weather-city">
-                    <h2>{weather.city}</h2>
-                    <p>{weather.country}</p>
+            <div className = "pocetna-sredina">
+              <div className = "raspored">
+                Raspored
+              </div>
+              <div className = "desno">
+                {weather ? (
+                  <div className="weather-container">
+                    <div className="weather-city">
+                      <h2>{weather.city}</h2>
+                      <p>{weather.country}</p>
+                    </div>
+                    <div className="weather-icon">
+                      <img
+                        src={`http://openweathermap.org/img/wn/${weather.icon}@2x.png`}
+                        alt={weather.description}
+                      ></img>
+                    </div>
+                    <div className="weather-temp">
+                      <h2>{weather.temperature}°C</h2>
+                      <p>{weather.description}</p>
+                    </div>
                   </div>
-                  <div className="weather-icon">
-                    <img
-                      src={`http://openweathermap.org/img/wn/${weather.icon}@2x.png`}
-                      alt={weather.description}
-                    ></img>
+                ) : (
+                  <div className="weather-container">
+                    <p>Greška: podatci o vremenu su nedostupni.</p>
                   </div>
-                  <div className="weather-temp">
-                    <h2>{weather.temperature}°C</h2>
-                    <p>{weather.description}</p>
-                  </div>
+                )}
+                <div className="chat-container">
+                  {(chatError || user.role === "admin") ? (
+                    <p className = "ne-radi">Ne radi. 😔</p>
+                  ) : (
+                    <Chat 
+                      user={user}
+                      onError={() => {
+                        setChatError(true);
+                      }} 
+                    />
+                )}
                 </div>
-              ) : (
-                <div className="weather-container">
-                  <p>Greška: podatci o vremenu su nedostupni.</p>
-                </div>
-              )}
-              <button
-                className="repository-gumb"
-                onClick={handleRepositoryButtonClick}
-              >
-                REPOZITORIJ
-              </button>
+              </div>
             </div>
           </>
         ))}
