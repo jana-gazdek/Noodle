@@ -284,7 +284,7 @@ function Requests() {
                       </div>
                     </>
                   )}
-                  {updatedRequest.role === "profesor" && (
+                  {updatedRequest.role !== "učenik" && (
                     <>
                       <div className="redak">
                         <strong>Broj mobitela:</strong>
