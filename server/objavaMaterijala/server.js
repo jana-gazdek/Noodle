@@ -10,6 +10,8 @@ const upload = multer({ dest: "uploads/" });
 const cors = require("cors");
 app.use(cors());
 
+app.set('trust proxy', 1);
+
 const serviceAccountKey = require("./service-account-key.json");
 
 const driveAuth = new google.auth.GoogleAuth({
@@ -21,19 +23,8 @@ const drive = google.drive({ version: "v3", auth: driveAuth });
 
 const GOOGLE_DRIVE_FOLDER_ID = "1I9H0ooP32aYfxf30jwJscSvHoMGa70FK";
 
-//const ConfirmedUser = require('../auth/models/ConfirmedUser');
-//const User = require('../models/User');
-const client = require("../../database/connection.js");
+const client = require("../connection.js");
 client.connect();
-
-/* 
-    //glavni repozitorij, treba runnat jednom prije korištenja (na Renderu će bit automatski) 
-    const insertQueryRep = `insert into REPOZITORIJ(repID, imeRep, školaID) 
-    values ($1, $2, $3)`;
-    const valuesRep = [GOOGLE_DRIVE_FOLDER_ID, 'Noodle', 1];
-
-    await client.query(insertQueryRep, valuesRep);
-*/
 
 app.use(express.static(path.join(__dirname, "public")));
 

@@ -12,6 +12,8 @@ const ORS_API_KEY = process.env.ORS_API_KEY;
 app.use(cors());
 app.use(express.json());
 
+app.set('trust proxy', 1);
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.post("/route", async (req, res) => {
