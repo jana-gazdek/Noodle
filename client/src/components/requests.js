@@ -178,7 +178,7 @@ function Requests() {
                     <strong>Spol:</strong>
                     <select
                       name="spol"
-                      value={updatedRequest.role}
+                      value={updatedRequest.spol}
                       onChange={(e) =>
                         setUpdatedRequest({
                           ...updatedRequest,
@@ -284,7 +284,7 @@ function Requests() {
                       </div>
                     </>
                   )}
-                  {updatedRequest.role === "profesor" && (
+                  {updatedRequest.role !== "učenik" && (
                     <>
                       <div className="redak">
                         <strong>Broj mobitela:</strong>

@@ -7,7 +7,7 @@ const ConfirmedUser = require('../models/ConfirmedUser');
 const upravljanjePred = require('../controllers/upravljanjePredmetima.js')
 const User = require('../models/User');
 const { google } = require("googleapis");
-const client = require('../../../database/connection.js');
+const client = require('../../connection.js');
 client.connect();
 const nodemailer = require('nodemailer');
 

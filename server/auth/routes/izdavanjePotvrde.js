@@ -5,7 +5,7 @@ const nodemailer = require('nodemailer');
 const ConfirmedUser = require('../models/ConfirmedUser');
 const streamBuffers = require('stream-buffers');
 const path = require('path');
-const client = require('../../../database/connection.js');
+const client = require('../../connection.js');
 const fs = require('fs');
 
 router.post('/izdavanje-potvrde', async (req, res) => {
