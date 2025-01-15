@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Chat from "./chat.js";
-import Map from "./map.js";
 import "../styles/pocetna/pocetna.css";
 import "../styles/pocetna/weather.css";
 
-function Pocetna({ handleLogout }) {
+function Pocetna({handleLogout}) {
   const [user, setUser] = useState(null);
   const [weather, setWeather] = useState(null);
   const [chatError, setChatError] = useState(null);
@@ -85,7 +84,9 @@ function Pocetna({ handleLogout }) {
             </div>
 
             <div className = "pocetna-sredina">
-              <div className = "raspored">raspored</div>
+              <div className = "raspored">
+                Raspored
+              </div>
               <div className = "desno">
                 {weather ? (
                   <div className="weather-container">
@@ -110,8 +111,8 @@ function Pocetna({ handleLogout }) {
                   </div>
                 )}
                 <div className="chat-container">
-                  {chatError ? (
-                    <p>Ne radi. 😔</p>
+                  {(chatError || user.role === "admin") ? (
+                    <p className = "ne-radi">Ne radi. 😔</p>
                   ) : (
                     <Chat 
                       user={user}
