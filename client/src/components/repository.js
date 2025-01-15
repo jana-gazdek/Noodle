@@ -45,6 +45,10 @@ const Repository = () => {
 
     const formData = new FormData();
     formData.append("file", uploadFile);
+    if (user) {
+      formData.append("name", user.name);
+      formData.append("surname", user.surname);
+    }
     setLoading(true);
 
     try {
