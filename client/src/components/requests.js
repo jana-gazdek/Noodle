@@ -178,7 +178,7 @@ function Requests() {
                     <strong>Spol:</strong>
                     <select
                       name="spol"
-                      value={updatedRequest.role}
+                      value={updatedRequest.spol}
                       onChange={(e) =>
                         setUpdatedRequest({
                           ...updatedRequest,
