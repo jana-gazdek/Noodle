@@ -10,21 +10,54 @@ const stringToColor = (string) => {
   return `hsl(${hash % 360}, 70%, 50%)`;
 };
 
-const Chat = ({
-  user,
-  group = "general",
-  serverUrl = "http://localhost:3002",
+const Chat = ({ 
+  user, 
+  serverUrl = "https://noodle-chat.onrender.com" 
 }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const [group, setGroup] = useState(null);
   const [error, setError] = useState(null);
   const messagesRef = useRef(null);
 
   useEffect(() => {
     if (!user) return;
 
+    const fetchGroup = async () => {
+      try {
+        const response = await fetch(`${serverUrl}/getRazred`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            googleId: user.googleId,
+            role: user.role,
+          }),
+        });
+        
+
+
+        if (response.ok) {
+          const data = await response.json();
+          setGroup(data.razred);
+        } else {
+          console.error("Failed to fetch razred");
+        }
+      } catch (err) {
+        console.error("Error fetching group:", err.message);
+        setError("Ne radi. 😔");
+      }
+    };
+
+    fetchGroup();
+  }, [user, serverUrl]);
+
+  useEffect(() => {
+    if (!group || !user) return;
+
     const socket = io(serverUrl, {
-      reconnectionAttempts: 5, 
+      reconnectionAttempts: 5,
     });
 
     socket.on("connect_error", () => {
@@ -32,7 +65,7 @@ const Chat = ({
     });
 
     try {
-      socket.emit("joinGroup", group);
+      socket.emit("joinGroup", user.googleId, user.role);
 
       fetch(`${serverUrl}/messages/${group}`)
         .then((res) => {
@@ -70,7 +103,9 @@ const Chat = ({
     if (message.trim()) {
       const socket = io(serverUrl);
       const username = `${user.name} ${user.surname}`;
-      socket.emit("sendMessage", { username, group, message });
+      const googleId = user.googleId;
+      const role = user.role;
+      socket.emit("sendMessage", { googleId, username, group, message, role});
       setMessage("");
     }
   };
@@ -95,7 +130,7 @@ const Chat = ({
     <div className="chat-container">
       <div id="messages" ref={messagesRef}>
         {messages.map((msg, index) => {
-          const isUserMessage = msg.username === `${user.name} ${user.surname}`;
+          const isUserMessage = msg.username === (user.name + " " + user.surname);
           return (
             <div
               key={index}
