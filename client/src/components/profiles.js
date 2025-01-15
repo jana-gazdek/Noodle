@@ -150,19 +150,24 @@ function Profile() {
                 onChange={(e) => setUser({ ...user, address: e.target.value })}
               />
             </p>
-            <p>
-              <strong>Uloga:</strong>
-              <select
-                value={user.role}
-                placeholder={user.role}
-                onChange={(e) => setUser({ ...user, role: e.target.value })}
-              >
-                <option value="učenik">Učenik</option>
-                <option value="profesor">Profesor</option>
-                <option value="satničar">Satničar</option>
-                <option value="denied">Odbijen</option>
-              </select>
-            </p>
+            { user.role !== "admin" ? (
+              <p>
+                <strong>Uloga:</strong>
+                <select
+                  value={user.role}
+                  placeholder={user.role}
+                  onChange={(e) => setUser({ ...user, role: e.target.value })}
+                >
+                  <option value="učenik">Učenik</option>
+                  <option value="profesor">Profesor</option>
+                  <option value="satničar">Satničar</option>
+                  <option value="denied">Odbijen</option>
+                </select>
+              </p>
+            ) : (
+              <p></p>
+            )
+            } 
             {user.role === "učenik" ? (
               <>
                 <p>
