@@ -41,6 +41,7 @@ function formatFileSize(bytes) {
 }
 
 app.post("/upload", upload.single("file"), async (req, res) => {
+  const { name, surname } = req.body;
   const filePath = path.join(__dirname, req.file.path);
 
   try {
@@ -56,6 +57,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       fields: 'id, size',
     });
 
+    console.log(`Uploaded by: ${name} ${surname}`);
     //const user = await ConfirmedUser.findById(req.body._id);
     const insertQueryLink = `insert into LINK(brojPregleda, autor, datumObjave, linkTekst, repID) 
     values ($1, $2, date_trunc('second', CURRENT_TIMESTAMP), $3, $4)`;
