@@ -26,6 +26,7 @@ const GOOGLE_DRIVE_FOLDER_ID = "1I9H0ooP32aYfxf30jwJscSvHoMGa70FK";
 const client = require("../connection.js");
 client.connect();
 
+app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 function formatFileSize(bytes) {
@@ -41,7 +42,7 @@ function formatFileSize(bytes) {
 }
 
 app.post("/upload", upload.single("file"), async (req, res) => {
-  const { name, surname } = req.body;
+  const { name, surname, googleId } = req.body;
   const filePath = path.join(__dirname, req.file.path);
 
   try {
@@ -57,17 +58,18 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       fields: 'id, size',
     });
 
-    console.log(`Uploaded by: ${name} ${surname}`);
-    //const user = await ConfirmedUser.findById(req.body._id);
-    const insertQueryLink = `insert into LINK(brojPregleda, autor, datumObjave, linkTekst, repID) 
-    values ($1, $2, date_trunc('second', CURRENT_TIMESTAMP), $3, $4)`;
+    const razredres = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = '$1'`, [googleId]);
+    const razredi = razredres.rows[0].razred;
+    const insertQueryLink = `insert into LINK(brojPregleda, autor, razred, datumObjave, linkTekst, repID) 
+    values ($1, $2, $3, date_trunc('second', CURRENT_TIMESTAMP), $4, $5)`;
     const insertQueryDatoteka = `insert into DATOTEKA(veličina, linkTekst) values ($1, $2)`;
     const fileLink =
       'https://drive.google.com/file/d/' + response.data.id + '/view';
 
     const valuesLink = [
       '0',
-      'jurica cizic' /*user.name + " " + user.surname*/,
+      `${name} ${surname}`,
+      razredi,
       fileLink,
       GOOGLE_DRIVE_FOLDER_ID,
     ];
@@ -86,8 +88,21 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   }
 });
 
-app.get("/files", async (req, res) => {
+app.post("/files", async (req, res) => {
+  const { googleId } = req.body;
   try {
+    const userResult = await client.query(`SELECT razred FROM UČENIK WHERE UČENIK.učenikId = $1`, [googleId]);
+    const userRazred = userResult.rows[0].razred;
+
+    const prikaz = await client.query(`SELECT REGEXP_REPLACE(linktekst, '^.*file/d/([^/]+)/.*$', '\\1') AS ids, razred FROM LINK`);
+    const filteredLinks = prikaz.rows.filter(row => {
+      const linkRazred = row["razred"].split(",");
+      return linkRazred.includes(userRazred); 
+    });
+    const fileIds = filteredLinks.map(row => row.ids);
+    const query = fileIds.map(id => `'${id}' in parents`).join(" or ");
+    
+    console.log(query);
     const response = await drive.files.list({
       q: `'${GOOGLE_DRIVE_FOLDER_ID}' in parents`,
       fields: "files(id, name)",
