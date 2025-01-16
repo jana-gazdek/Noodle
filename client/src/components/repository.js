@@ -110,7 +110,7 @@ const Repository = () => {
     <div className="form">
       <h1>Repozitorij</h1>
 
-      {user && user.role !== "učenik" ? (
+      {user && user.role !== "učenik" && user.role !== "admin"? (
         <div className="upload-section">
           <input type="file" onChange={handleFileChange} />
           <button

@@ -104,19 +104,19 @@ async function getFileDetails(drive, fileId) {
 
 app.post("/files", async (req, res) => {
   const { googleId, role } = req.body;
-  let userRazred;
+  let userRazred = [];
   try {
     if (role === 'učenik'){
       const userResult = await client.query(`SELECT razred FROM UČENIK WHERE UČENIK.učenikId = $1`, [googleId]);
       userRazred = userResult.rows[0]["razred"];
-    } else {
+    } else if (role !== 'admin') {
       const userResult = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
       userRazred = userResult.rows[0]["razred"].split(",");
     }
     const prikaz = await client.query(`SELECT REGEXP_REPLACE(linktekst, '^.*file/d/([^/]+)/.*$', '\\1') AS ids, razred FROM LINK`);
     const filteredLinks = prikaz.rows.filter(row => {
       const linkRazred = row["razred"].split(",");
-      return linkRazred.some(item => userRazred.includes(item));
+      return linkRazred.some(raz => userRazred.includes(raz));
     });
     const fileIds = filteredLinks.map(row => row.ids);
 
