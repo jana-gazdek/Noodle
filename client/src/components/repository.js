@@ -28,7 +28,7 @@ const Repository = () => {
 
   const fetchFiles = async () => {
     try {
-      const response = await axios.post("http://localhost:3003/files", { googleId: user.googleId });
+      const response = await axios.post("http://localhost:3003/files", { googleId: user.googleId, role: user.role });
 
       setFiles(response.data);
     } catch (error) {

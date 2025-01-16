@@ -58,7 +58,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       fields: 'id, size',
     });
 
-    const razredres = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = '$1'`, [googleId]);
+    const razredres = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
     const razredi = razredres.rows[0].razred;
     const insertQueryLink = `insert into LINK(brojPregleda, autor, razred, datumObjave, linkTekst, repID) 
     values ($1, $2, $3, date_trunc('second', CURRENT_TIMESTAMP), $4, $5)`;
@@ -88,27 +88,47 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   }
 });
 
-app.post("/files", async (req, res) => {
-  const { googleId } = req.body;
+async function getFileDetails(drive, fileId) {
   try {
-    const userResult = await client.query(`SELECT razred FROM UČENIK WHERE UČENIK.učenikId = $1`, [googleId]);
-    const userRazred = userResult.rows[0].razred;
+      const response = await drive.files.get({
+          fileId: fileId,
+          fields: 'id, name'
+      });
+      return response.data;
+  } catch (error) {
+      console.error(`Error fetching file with ID ${fileId}:`, error.message);
+      return null;
+  }
+}
 
+
+app.post("/files", async (req, res) => {
+  const { googleId, role } = req.body;
+  let userRazred;
+  try {
+    if (role === 'učenik'){
+      const userResult = await client.query(`SELECT razred FROM UČENIK WHERE UČENIK.učenikId = $1`, [googleId]);
+      userRazred = userResult.rows[0]["razred"];
+    } else {
+      const userResult = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
+      userRazred = userResult.rows[0]["razred"].split(",");
+    }
     const prikaz = await client.query(`SELECT REGEXP_REPLACE(linktekst, '^.*file/d/([^/]+)/.*$', '\\1') AS ids, razred FROM LINK`);
     const filteredLinks = prikaz.rows.filter(row => {
       const linkRazred = row["razred"].split(",");
-      return linkRazred.includes(userRazred); 
+      return linkRazred.some(item => userRazred.includes(item));
     });
     const fileIds = filteredLinks.map(row => row.ids);
-    const query = fileIds.map(id => `'${id}' in parents`).join(" or ");
-    
-    console.log(query);
-    const response = await drive.files.list({
-      q: `'${GOOGLE_DRIVE_FOLDER_ID}' in parents`,
-      fields: "files(id, name)",
-    });
 
-    res.status(200).json(response.data.files);
+    if (fileIds.length === 0) {
+      console.error("No file IDs found.");
+      res.status(404).send("No files found");
+      return;
+    }
+    const filesDetails = await Promise.all(fileIds.map(id => getFileDetails(drive, id)));
+    const validFiles = filesDetails.filter(file => file !== null);
+
+    res.status(200).json(validFiles);
   } catch (error) {
     console.error("Error listing files:", error.message);
     res.status(500).send("Error fetching file list");
