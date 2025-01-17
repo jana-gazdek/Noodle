@@ -18,7 +18,7 @@ const Map = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://noodle-map.onrender.com", {
+      const response = await fetch("https://noodle-map.onrender.com/route", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
