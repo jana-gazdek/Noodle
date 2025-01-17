@@ -14,7 +14,6 @@ function InfoForm({ user }) {
     dateOfBirth: "",
     primarySchool: "",
   });
-  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
