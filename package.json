@@ -32,5 +32,6 @@
     "stream-buffers": "^3.0.3",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1"
+    "@mapbox/polyline": "^1.2.1",
   }
 }
