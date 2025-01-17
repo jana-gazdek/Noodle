@@ -68,7 +68,6 @@ const Repository = () => {
     if (user) {
       formData.append("name", user.name);
       formData.append("surname", user.surname);
-      formData.append("googleId", user.googleId);
       formData.append("razredi", selectedRazredList);
     }
     setLoading(true);

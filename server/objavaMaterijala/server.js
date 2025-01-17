@@ -42,9 +42,8 @@ function formatFileSize(bytes) {
 }
 
 app.post("/upload", upload.single("file"), async (req, res) => {
-  const { name, surname, googleId, razredi } = req.body;
+  const { name, surname, razredi } = req.body;
   const filePath = path.join(__dirname, req.file.path);
-  console.log(razredi)
   try {
     const response = await drive.files.create({
       requestBody: {
@@ -58,8 +57,6 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       fields: 'id, size',
     });
 
-    const razredres = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
-    const razredi = razredres.rows[0].razred;
     const insertQueryLink = `insert into LINK(brojPregleda, autor, razred, datumObjave, linkTekst, repID) 
     values ($1, $2, $3, date_trunc('second', CURRENT_TIMESTAMP), $4, $5)`;
     const insertQueryDatoteka = `insert into DATOTEKA(veličina, linkTekst) values ($1, $2)`;
