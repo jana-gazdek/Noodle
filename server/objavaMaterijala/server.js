@@ -42,9 +42,9 @@ function formatFileSize(bytes) {
 }
 
 app.post("/upload", upload.single("file"), async (req, res) => {
-  const { name, surname, googleId } = req.body;
+  const { name, surname, googleId, razredi } = req.body;
   const filePath = path.join(__dirname, req.file.path);
-
+  console.log(razredi)
   try {
     const response = await drive.files.create({
       requestBody: {
@@ -132,6 +132,25 @@ app.post("/files", async (req, res) => {
   } catch (error) {
     console.error("Error listing files:", error.message);
     res.status(500).send("Error fetching file list");
+  }
+});
+
+app.post("/getRazred", async (req, res) => {
+  const { googleId } = req.body;
+  let userRazred = [];
+  
+  try {
+    const userResult = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
+    userRazred = userResult.rows[0]["razred"].split(",");
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).send("User not found");
+    }
+
+    res.status(200).json({userRazred});
+  } catch (error) {
+    console.error("Error fetching razred:", error.message);
+    res.status(500).send("Error retrieving razred");
   }
 });
 
