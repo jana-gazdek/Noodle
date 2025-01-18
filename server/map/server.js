@@ -40,14 +40,6 @@ app.post("/route", async (req, res) => {
       `https://api.openrouteservice.org/v2/directions/driving-car`,
       {
         coordinates: [startCoords, endCoords],
-        options: {
-          avoid_features: [],
-          weightings: {
-            motorway: 1.0,
-            primary: 0.6,
-            secondary: 0.3
-        }
-      },
         preference: "shortest",
       },
       {
