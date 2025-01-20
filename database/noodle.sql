@@ -143,8 +143,8 @@ CREATE TABLE IZOSTANAK
   izostanakID VARCHAR NOT NULL,
   učenikID VARCHAR NOT NULL,
   izostanakDatum DATE NOT NULL,
-  izostanakSat VARCHAR NOT NULL CHECK (status IN ('1.', '2.', '3.', '4.', '5.', '6.', '7.', '8.')),
-  izostanakStatus VARCHAR CHECK (status IN ('Opravdan', 'Neopravdan', 'Na čekanju')),
+  izostanakSat VARCHAR NOT NULL CHECK (izostanakSat IN ('1.', '2.', '3.', '4.', '5.', '6.', '7.', '8.')),
+  izostanakStatus VARCHAR CHECK (izostanakStatus IN ('Opravdan', 'Neopravdan', 'Na čekanju')),
   izostanakOpis VARCHAR(255),
   PRIMARY KEY (izostanakID),
   FOREIGN KEY (učenikID) REFERENCES UČENIK(učenikID)
