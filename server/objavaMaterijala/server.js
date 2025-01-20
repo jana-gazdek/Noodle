@@ -109,12 +109,19 @@ app.post("/files", async (req, res) => {
     } else if (role !== 'admin') {
       const userResult = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
       userRazred = userResult.rows[0]["razred"].split(",");
+    } else if (role === 'admin') {
+      const userResult = await client.query("SELECT razrednik FROM DJELATNIK WHERE razrednik != 'NONE'");
+      for (let num = 0; num < userResult.rowCount; num++){
+        userRazred.push(userResult.rows[num]["razrednik"]);
+      }
     }
     const prikaz = await client.query(`SELECT REGEXP_REPLACE(linktekst, '^.*file/d/([^/]+)/.*$', '\\1') AS ids, razred FROM LINK`);
+
     const filteredLinks = prikaz.rows.filter(row => {
       const linkRazred = row["razred"].split(",");
       return linkRazred.some(raz => userRazred.includes(raz));
     });
+
     const fileIds = filteredLinks.map(row => row.ids);
 
     if (fileIds.length === 0) {
@@ -129,25 +136,6 @@ app.post("/files", async (req, res) => {
   } catch (error) {
     console.error("Error listing files:", error.message);
     res.status(500).send("Error fetching file list");
-  }
-});
-
-app.post("/getRazred", async (req, res) => {
-  const { googleId } = req.body;
-  let userRazred = [];
-  
-  try {
-    const userResult = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
-    userRazred = userResult.rows[0]["razred"].split(",");
-
-    if (userResult.rows.length === 0) {
-      return res.status(404).send("User not found");
-    }
-
-    res.status(200).json({userRazred});
-  } catch (error) {
-    console.error("Error fetching razred:", error.message);
-    res.status(500).send("Error retrieving razred");
   }
 });
 
