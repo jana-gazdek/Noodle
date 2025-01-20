@@ -26,26 +26,25 @@ const Repository = () => {
 
   useEffect(() => {
     if (user){
-    fetchFiles();
+    fetchFiles(user.googleId, user.role);
     if (user.role === "profesor" || user.role === "satničar") {
-      fetchRazred(user.googleId);
+      fetchRazred(user.googleId, user.role);
     }
     }
   }, [user]);
 
-  const fetchRazred = async (googleId) => {
+  const fetchRazred = async (googleId, role) => {
     try {
-      const response = await axios.post("http://localhost:3003/getRazred", {googleId});
-
+      const response = await axios.post("http://localhost:3003/getRazred", {googleId, role});
       setRazredList(response.data.userRazred);
     } catch (error) {
       console.error("Error fetching razred:", error.message);
     }
   };
 
-  const fetchFiles = async () => {
+  const fetchFiles = async (googleId, role) => {
     try {
-      const response = await axios.post("http://localhost:3003/files", { googleId: user.googleId, role: user.role });
+      const response = await axios.post("http://localhost:3003/files", { googleId, role });
 
       setFiles(response.data);
     } catch (error) {
@@ -79,7 +78,7 @@ const Repository = () => {
         },
       });
       setMessage("File uploaded successfully!");
-      fetchFiles();
+      fetchFiles(user.googleId, user.role);
     } catch (error) {
       console.error("Error uploading file:", error);
       setMessage("Error uploading file.");
@@ -116,7 +115,7 @@ const Repository = () => {
     try {
       await axios.delete(`http://localhost:3003/delete/${id}`);
       setMessage("File deleted successfully!");
-      fetchFiles();
+      fetchFiles(user.googleId, user.role);
     } catch (error) {
       console.error("Error deleting file:", error);
       setMessage("Error deleting file.");

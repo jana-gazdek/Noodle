@@ -536,7 +536,7 @@ router.post('/svi-predmeti', async (req, res) => {
   }
 });
 
-router.post('/izostanci', async (req, res) => {
+router.post('/upis-izostanka', async (req, res) => {
   const { učenikID, izostanakDatum, izostanakSat, izostanakStatus, izostanakOpis } = req.body;
 
   if (!izostanakStatus || !izostanakDatum || !izostanakSat) {
@@ -560,8 +560,9 @@ router.post('/izostanci', async (req, res) => {
         VALUES ($1, $2, $3, $4, $5, $6)
       `;
       await client.query(insertQuery, [izostanakID, učenikID, izostanakDatum, izostanakSat, izostanakStatus, izostanakOpis]);
-      res.json({ message: 'Prostorija uspješno dodana.' });
+      res.json({ message: 'Izostanak uspješno dodan.' });
     }
+
   } catch (error) {
     console.log('Neuspješan upis:', error);
     res.status(500).json({ error: 'Greška pri upisu u bazu' });
@@ -588,6 +589,63 @@ router.post('/brisanje-izostanka', async (req, res) => {
   } catch (error) {
       console.error('Greška pri brisanju izostanka:', error);
       res.status(500).json({ error: 'Došlo je do pogreške pri brisanju izostanka.' });
+  }
+});
+
+router.post('/učenik-izostanci', async (req, res) => {
+  const { učenikID } = req.body;
+  try {
+    const result = await client.query(`SELECT izostanakDatum, izostanakSat, izostanakStatus, izostanakOpis FROM IZOSTANAK WHERE učenikID = $1`, [učenikID]);
+
+    const učenikIzostanci = result.rows.map(row => ({
+      izostanakDatum: row.izostanakDatum,
+      izostanakSat: row.izostanakSat,
+      izostanakStatus: row.izostanakStatus,
+      izostanakOpis: row.izostanakOpis
+    }));
+    return učenikIzostanci;
+  } catch (error) {
+    console.error('Greška pri traženju izostanaka:', error);
+    res.status(500).json({ error: 'Greška pri traženju izostanaka' });
+  }
+});
+
+router.post('/getRazredUčenici', async (req, res) => {
+  const { razred } = req.body;
+  try {
+    const result = await client.query(`SELECT U.učenikID, K.ime, K.prezime, K.OIB FROM KORISNIK K NATURAL JOIN UČENIK U WHERE UČENIK.razred = $1`, [razred]);
+    const podaci = result.rows;
+
+    res.status(200).json({podaci});
+} catch (error) {
+  console.error("Error :/", error.message);
+  res.status(500).send("Error fetching učenici list");
+}});
+
+router.post("/getRazred", async (req, res) => {
+  const { googleId, role } = req.body;
+  let userRazred = [];
+  let userResult = [];
+  
+  try {
+    if (role === 'profesor') {
+      userResult = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
+      userRazred = userResult.rows[0]["razred"].split(",");
+    } else if (role === 'admin') {
+      userResult = await client.query(`SELECT razrednik FROM DJELATNIK WHERE razrednik != 'NONE'`);
+      for (let num = 0; num < userResult.rowCount; num++){
+        userRazred.push(userResult.rows[num]["razrednik"]);
+      }
+    }
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).send("User not found");
+    }
+
+    res.status(200).json({userRazred});
+  } catch (error) {
+    console.error("Error fetching razred:", error.message);
+    res.status(500).send("Error retrieving razred");
   }
 });
 
