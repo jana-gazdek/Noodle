@@ -34,6 +34,10 @@ function Pocetna({handleLogout}) {
   const handleMapButtonClick = () => {
     navigate("/auth/map");
   };
+  
+  const handleLogoutButtonClick = () => {
+    window.location.href = "http://localhost:3000/auth/logout";
+  };
 
   return (
     <div className="pocetna-container">
@@ -66,6 +70,10 @@ function Pocetna({handleLogout}) {
               <button
                 className="repository-gumb"
                 onClick={handleRepositoryButtonClick}>REPOZITORIJ
+              </button>
+              <button
+                className="logout-gumb"
+                onClick={handleLogoutButtonClick}>LOGOUT
               </button>
               {user.role === "admin" ? (
                 <div>
