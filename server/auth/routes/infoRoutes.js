@@ -536,4 +536,59 @@ router.post('/svi-predmeti', async (req, res) => {
   }
 });
 
+router.post('/izostanci', async (req, res) => {
+  const { učenikID, izostanakDatum, izostanakSat, izostanakStatus, izostanakOpis } = req.body;
+
+  if (!izostanakStatus || !izostanakDatum || !izostanakSat) {
+    return res.status(400).json({ error: 'Sva polja osim opisa moraju biti ispunjena!'});
+  }
+
+  try {
+    const izostanakID = `${učenikID}-${izostanakDatum}-${izostanakSat}`;
+    const result = await client.query(`SELECT * FROM UČENIK WHERE izostanakID = $1`, [izostanakID]);
+    if (result.rows.length > 0) {
+      const updateQuery = `
+        UPDATE IZOSTANAK
+        SET izostanakDatum = $1, izostanakSat = $2, izostanakStatus = $3, izostanakOpis = $4
+        WHERE izostanakID = $5
+      `;
+      await client.query(updateQuery, [izostanakDatum, izostanakSat, izostanakStatus, izostanakOpis, izostanakID]);
+      res.json({ message: 'Izostanak je uređen.' });
+    } else {
+      const insertQuery = `
+        INSERT INTO IZOSTANAK (izostanakID, učenikID, izostanakDatum, izostanakSat, izostanakStatus, izostanakOpis)
+        VALUES ($1, $2, $3, $4, $5, $6)
+      `;
+      await client.query(insertQuery, [izostanakID, učenikID, izostanakDatum, izostanakSat, izostanakStatus, izostanakOpis]);
+      res.json({ message: 'Prostorija uspješno dodana.' });
+    }
+  } catch (error) {
+    console.log('Neuspješan upis:', error);
+    res.status(500).json({ error: 'Greška pri upisu u bazu' });
+  }
+});
+
+router.post('/brisanje-izostanka', async (req, res) => {
+  const { učenikID, izostanakDatum, izostanakSat } = req.body;
+
+  if (!izostanakDatum || !izostanakSat) {
+      return res.status(400).json({ error: 'Datum i sat izostanka su obavezni za brisanje!' });
+  }
+
+  try {
+    const izostanakID = `${učenikID}-${izostanakDatum}-${izostanakSat}`;
+      const findQuery = await client.query(`SELECT * FROM IZOSTANAK WHERE izostanakID = $1`, [izostanakID]);
+      if (findQuery.rows.length === 0) {
+          return res.status(404).json({ message: 'Izostanak ne postoji.' });
+      }
+
+      const deleteQuery = `DELETE FROM IZOSTANAK WHERE izostanakID = $1`;
+      await client.query(deleteQuery, [izostanakID]);
+      res.json({ message: 'Izostanak uspješno obrisan.' });
+  } catch (error) {
+      console.error('Greška pri brisanju izostanka:', error);
+      res.status(500).json({ error: 'Došlo je do pogreške pri brisanju izostanka.' });
+  }
+});
+
 module.exports = router;

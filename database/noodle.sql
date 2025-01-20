@@ -137,3 +137,15 @@ CREATE TABLE OBAVIJEST
   PRIMARY KEY (linkTekst),
   FOREIGN KEY (linkTekst) REFERENCES LINK(linkTekst)
 );
+
+CREATE TABLE IZOSTANAK
+(
+  izostanakID VARCHAR NOT NULL,
+  učenikID VARCHAR NOT NULL,
+  izostanakDatum DATE NOT NULL,
+  izostanakSat VARCHAR NOT NULL CHECK (status IN ('1.', '2.', '3.', '4.', '5.', '6.', '7.', '8.')),
+  izostanakStatus VARCHAR CHECK (status IN ('Opravdan', 'Neopravdan', 'Na čekanju')),
+  izostanakOpis VARCHAR(255),
+  PRIMARY KEY (izostanakID),
+  FOREIGN KEY (učenikID) REFERENCES UČENIK(učenikID)
+);
