@@ -629,7 +629,10 @@ router.post("/getRazred", async (req, res) => {
   let userResult = [];
   
   try {
-    if (role === "profesor") {
+    if (role === "učenik"){
+      userResult = await client.query(`SELECT razred FROM učenik WHERE učenik.učenikId = $1`, [googleId]);
+      userRazred = userResult.rows[0]["razred"];
+    } else if (role === "profesor") {
       userResult = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
       userRazred = userResult.rows[0]["razred"].split(",");
     } else if (role === 'admin') {
