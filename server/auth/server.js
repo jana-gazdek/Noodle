@@ -10,6 +10,7 @@ const scheduleRoutes = require('./routes/scheduleRoutes');
 const infoRoutes = require('./routes/infoRoutes');
 const izdavanjePotvrde = require('./routes/izdavanjePotvrde');
 const MongoStore = require('connect-mongo');
+const notificationRoutes = require('./routes/notificationRoutes');
 require('./config/passportConfig');
 
 dotenv.config();
@@ -54,6 +55,7 @@ app.use('/info', infoRoutes);
 app.use('/auth', authRoutes);
 app.use('/schedule', scheduleRoutes);
 app.use('/potvrda', izdavanjePotvrde);
+app.use('/notification', notificationRoutes);
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
