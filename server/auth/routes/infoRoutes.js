@@ -218,7 +218,7 @@ router.post('/confirm-request', async (req, res) => {
       from: '"Noodle" <no-reply@yourdomain.com>',
       to: confirmedUser.email,
       subject: 'Obavijest o registraciji',
-      text: `Pozdrav ${confirmedUser.name},\n\nTvoja registracija je odobrena! Dobrodošao u ${razredUcenika || ""}!\n\nSrdačan pozdrav,\nTvoja škola!`
+      text: `Pozdrav ${confirmedUser.name},\n\nTvoja registracija je odobrena! Dobrodošao/la u ${razredUcenika || ""}!\n\nSrdačan pozdrav,\nTvoja škola!`
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
