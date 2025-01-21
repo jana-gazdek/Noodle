@@ -27,7 +27,7 @@ const Repository = () => {
   useEffect(() => {
     if (user){
     fetchFiles(user.googleId, user.role);
-    if (user.role === "profesor" || user.role === "satničar") {
+    if (user.role !== "učenik") {
       fetchRazred(user.googleId, user.role);
     }
     }
@@ -35,7 +35,7 @@ const Repository = () => {
 
   const fetchRazred = async (googleId, role) => {
     try {
-      const response = await axios.post("http://localhost:3003/getRazred", {googleId, role});
+      const response = await axios.post("http://localhost:3000/info/getRazred", {googleId, role});
       setRazredList(response.data.userRazred);
     } catch (error) {
       console.error("Error fetching razred:", error.message);
@@ -163,12 +163,12 @@ const Repository = () => {
           </div>
           <div>
             <form>
-              <div class="multiselect">
+              <div className="multiselect">
                 <div className="selectBox" onClick={() => expanded = showCheckboxes(expanded)}>
                   <select>
                     <option>Odaberi razrede: </option>
                   </select>
-                  <div class="overSelect"></div>
+                  <div className="overSelect"></div>
                 </div>
                 <div id="checkboxes">
                   {razredList.map((razred) => (

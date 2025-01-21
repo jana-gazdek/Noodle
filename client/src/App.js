@@ -14,6 +14,8 @@ import Repository from "./components/repository";
 import Map from "./components/map.js";
 import Prostorije from "./components/prostorije";
 import Predmet from "./components/predmet";
+import Izostanci from "./components/izostanci";
+import IzostanciAdmin from "./components/izostanci_admin";
 import Unauthorized from "./components/unauthorized";
 import axios from "axios";
 import "./styles/App.css";
@@ -121,7 +123,7 @@ function App() {
     {
       path: "/auth/repository",
       element:
-        isAuthenticated && user.role !== "unverified" ? (
+        isAuthenticated && user.role !== "unverified" && user.role !== "pending" ? (
           <Repository />
         ) : (
           <Unauthorized />
@@ -130,8 +132,23 @@ function App() {
     {
       path: "/auth/map",
       element:
-        isAuthenticated && user.role !== "unverified" ? (
+        isAuthenticated && user.role !== "unverified" && user.role !== "pending" ? (
           <Map />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "/auth/izostanci",
+      element:
+        isAuthenticated ? (
+          user.role === "admin" ? (
+            <IzostanciAdmin />
+          ) : user.role !== "unverified" && user.role !== "pending" && user.role !== "učenik" ? (
+            <Izostanci />
+          ) : (
+            <Unauthorized />
+          )
         ) : (
           <Unauthorized />
         ),

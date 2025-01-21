@@ -545,7 +545,7 @@ router.post('/upis-izostanka', async (req, res) => {
 
   try {
     const izostanakID = `${učenikID}-${izostanakDatum}-${izostanakSat}`;
-    const result = await client.query(`SELECT * FROM UČENIK WHERE izostanakID = $1`, [izostanakID]);
+    const result = await client.query(`SELECT * FROM IZOSTANAK WHERE izostanakid = $1`, [izostanakID]);
     if (result.rows.length > 0) {
       const updateQuery = `
         UPDATE IZOSTANAK
@@ -592,31 +592,32 @@ router.post('/brisanje-izostanka', async (req, res) => {
   }
 });
 
-router.post('/učenik-izostanci', async (req, res) => {
+router.post('/ucenik-izostanci', async (req, res) => {
   const { učenikID } = req.body;
   try {
     const result = await client.query(`SELECT izostanakDatum, izostanakSat, izostanakStatus, izostanakOpis FROM IZOSTANAK WHERE učenikID = $1`, [učenikID]);
 
     const učenikIzostanci = result.rows.map(row => ({
-      izostanakDatum: row.izostanakDatum,
-      izostanakSat: row.izostanakSat,
-      izostanakStatus: row.izostanakStatus,
-      izostanakOpis: row.izostanakOpis
+      izostanakDatum: row.izostanakdatum,
+      izostanakSat: row.izostanaksat,
+      izostanakStatus: row.izostanakstatus,
+      izostanakOpis: row.izostanakopis
     }));
-    return učenikIzostanci;
+
+    res.status(200).json(učenikIzostanci);
   } catch (error) {
     console.error('Greška pri traženju izostanaka:', error);
     res.status(500).json({ error: 'Greška pri traženju izostanaka' });
   }
 });
 
-router.post('/getRazredUčenici', async (req, res) => {
+router.post('/getRazredUcenici', async (req, res) => {
   const { razred } = req.body;
   try {
-    const result = await client.query(`SELECT U.učenikID, K.ime, K.prezime, K.OIB FROM KORISNIK K NATURAL JOIN UČENIK U WHERE UČENIK.razred = $1`, [razred]);
+    const result = await client.query(`SELECT U.učenikID, K.ime, K.prezime, K.OIB FROM KORISNIK K NATURAL JOIN UČENIK U WHERE U.razred = $1`, [razred]);
     const podaci = result.rows;
 
-    res.status(200).json({podaci});
+    res.status(200).json(podaci);
 } catch (error) {
   console.error("Error :/", error.message);
   res.status(500).send("Error fetching učenici list");
@@ -628,7 +629,7 @@ router.post("/getRazred", async (req, res) => {
   let userResult = [];
   
   try {
-    if (role === 'profesor') {
+    if (role === "profesor") {
       userResult = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
       userRazred = userResult.rows[0]["razred"].split(",");
     } else if (role === 'admin') {

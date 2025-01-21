@@ -39,6 +39,10 @@ function Pocetna({handleLogout}) {
     window.location.href = "http://localhost:3000/auth/logout";
   };
 
+  const handleIzostanakButtonClick = () => {
+    navigate("/auth/izostanci");
+  };
+
   return (
     <div className="pocetna-container">
       {user &&
@@ -75,6 +79,20 @@ function Pocetna({handleLogout}) {
                 className="logout-gumb"
                 onClick={handleLogoutButtonClick}>LOGOUT
               </button>
+              {user.role !== "učenik" ? (
+                <div>
+                  <div>
+                    <button
+                      className="izostanak-gumb"
+                      onClick={handleIzostanakButtonClick}
+                    >
+                      IZOSTANCI
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div></div>
+              )}
               {user.role === "admin" ? (
                 <div>
                   <div>
