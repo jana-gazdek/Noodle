@@ -1,0 +1,85 @@
+.izostanci-naslov {
+    height: 10vh;
+}
+
+.izostanci-lista {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1vh;
+    padding: 0;
+    display: flex;
+    list-style: none;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.izostanci-podatci {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.izostanci-infoform {
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .izostanci-infoform input {
+    width: 90%;
+    height: 3rem;
+    border-radius: 25px;
+    border: none;
+    background-color: #D9D9D9;
+    padding: 0 1rem;
+    font-size: 1rem;
+  }
+  
+  .izostanci-infoform button {
+    width: 50%;
+    height: 3rem;
+    background-color: #8860D0;
+    color: #ffffff;
+    border-radius: 25px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .izostanci-infoform select {
+    width: 98%;
+    height: 3rem;
+    border-radius: 25px;
+    border: none;
+    background-color: #D9D9D9;
+    padding: 0 1rem;
+    font-size: 1rem;
+  }
+  
+  .izostanci-infoform button:hover {
+    background-color: #5e3fbf;
+  } 
+
+.izostanci-inputi {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vh;
+    align-items: center;
+}
+
+.izostanci-li {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    margin: 20px;
+    margin-bottom: 20px;
+    padding: 20px; 
+    box-shadow: 5px 5px 2px rgba(0, 0, 0, 0.2);
+    height: fit-content;
+    gap: 1vh;
+  }

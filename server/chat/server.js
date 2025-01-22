@@ -26,6 +26,10 @@ mongoose
   .then(() => console.log("Connected to MongoDB!"))
   .catch((err) => console.error("Error connecting to MongoDB:", err));
 
+<<<<<<< HEAD
+=======
+// MongoDB Schema for Chat
+>>>>>>> dev
 const ChatSchema = new mongoose.Schema({
   username: String,
   group: String,
@@ -57,8 +61,14 @@ async function getRazred(googleId, role) {
   }
 }
 
+<<<<<<< HEAD
 app.post("/getRazred", async (req, res) => {
   const { googleId, role } = req.body;
+=======
+// API Endpoint to Fetch Group (Razred)
+app.post("/getRazred", async (req, res) => {
+  const { googleId, role } = req.body; // Retrieve data from the request body
+>>>>>>> dev
   try {
     const razred = await getRazred(googleId, role);
     if (razred) {
@@ -71,6 +81,10 @@ app.post("/getRazred", async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
+=======
+// API Endpoint to Get Messages by Group from MongoDB
+>>>>>>> dev
 app.get("/messages/:group", async (req, res) => {
   const { group } = req.params;
   try {
@@ -82,9 +96,22 @@ app.get("/messages/:group", async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
 io.on("connection", (socket) => {
   console.log("A user connected");
 
+=======
+// Serve the Chat Page
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
+
+// WebSocket Events
+io.on("connection", (socket) => {
+  console.log("A user connected");
+
+  // Join Group Event
+>>>>>>> dev
   socket.on("joinGroup", async (googleId, role) => {
     try {
       const group = await getRazred(googleId, role);
@@ -99,6 +126,10 @@ io.on("connection", (socket) => {
     }
   });
 
+<<<<<<< HEAD
+=======
+  // Send Message Event
+>>>>>>> dev
   socket.on("sendMessage", async (data) => {
     const { googleId, username, message, role} = data;
     try {
@@ -115,11 +146,19 @@ io.on("connection", (socket) => {
     }
   });
 
+<<<<<<< HEAD
+=======
+  // Disconnect Event
+>>>>>>> dev
   socket.on("disconnect", () => {
     console.log("A user disconnected");
   });
 });
 
+<<<<<<< HEAD
+=======
+// Start the Server
+>>>>>>> dev
 server.listen(3002, () => {
   console.log("Server running on http://localhost:3002");
 });

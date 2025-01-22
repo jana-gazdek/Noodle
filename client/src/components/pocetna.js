@@ -6,7 +6,7 @@ import Map from "./map.js";
 import "../styles/pocetna/pocetna.css";
 import "../styles/pocetna/weather.css";
 
-function Pocetna({ handleLogout }) {
+function Pocetna({handleLogout}) {
   const [user, setUser] = useState(null);
   const [weather, setWeather] = useState(null);
   const [chatError, setChatError] = useState(null);
@@ -34,6 +34,14 @@ function Pocetna({ handleLogout }) {
 
   const handleMapButtonClick = () => {
     navigate("/auth/map");
+  };
+  
+  const handleLogoutButtonClick = () => {
+    window.location.href = "https://noodle-x652.onrender.com/auth/logout";
+  };
+
+  const handleIzostanakButtonClick = () => {
+    navigate("/auth/izostanci");
   };
 
   return (
@@ -68,6 +76,24 @@ function Pocetna({ handleLogout }) {
                 className="repository-gumb"
                 onClick={handleRepositoryButtonClick}>REPOZITORIJ
               </button>
+              <button
+                className="logout-gumb"
+                onClick={handleLogoutButtonClick}>LOGOUT
+              </button>
+              {user.role !== "učenik" ? (
+                <div>
+                  <div>
+                    <button
+                      className="izostanak-gumb"
+                      onClick={handleIzostanakButtonClick}
+                    >
+                      IZOSTANCI
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div></div>
+              )}
               {user.role === "admin" ? (
                 <div>
                   <div>

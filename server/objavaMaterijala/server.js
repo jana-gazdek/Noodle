@@ -26,6 +26,10 @@ const GOOGLE_DRIVE_FOLDER_ID = "1I9H0ooP32aYfxf30jwJscSvHoMGa70FK";
 const client = require("../connection.js");
 client.connect();
 
+<<<<<<< HEAD
+=======
+app.use(express.json());
+>>>>>>> dev
 app.use(express.static(path.join(__dirname, "public")));
 
 function formatFileSize(bytes) {
@@ -41,9 +45,14 @@ function formatFileSize(bytes) {
 }
 
 app.post("/upload", upload.single("file"), async (req, res) => {
+<<<<<<< HEAD
   const { name, surname } = req.body;
   const filePath = path.join(__dirname, req.file.path);
 
+=======
+  const { name, surname, razredi } = req.body;
+  const filePath = path.join(__dirname, req.file.path);
+>>>>>>> dev
   try {
     const response = await drive.files.create({
       requestBody: {
@@ -57,17 +66,27 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       fields: 'id, size',
     });
 
+<<<<<<< HEAD
     console.log(`Uploaded by: ${name} ${surname}`);
     //const user = await ConfirmedUser.findById(req.body._id);
     const insertQueryLink = `insert into LINK(brojPregleda, autor, datumObjave, linkTekst, repID) 
     values ($1, $2, date_trunc('second', CURRENT_TIMESTAMP), $3, $4)`;
+=======
+    const insertQueryLink = `insert into LINK(brojPregleda, autor, razred, datumObjave, linkTekst, repID) 
+    values ($1, $2, $3, date_trunc('second', CURRENT_TIMESTAMP), $4, $5)`;
+>>>>>>> dev
     const insertQueryDatoteka = `insert into DATOTEKA(veličina, linkTekst) values ($1, $2)`;
     const fileLink =
       'https://drive.google.com/file/d/' + response.data.id + '/view';
 
     const valuesLink = [
       '0',
+<<<<<<< HEAD
       'jurica cizic' /*user.name + " " + user.surname*/,
+=======
+      `${name} ${surname}`,
+      razredi,
+>>>>>>> dev
       fileLink,
       GOOGLE_DRIVE_FOLDER_ID,
     ];
@@ -86,6 +105,7 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
 app.get("/files", async (req, res) => {
   try {
     const response = await drive.files.list({
@@ -94,6 +114,56 @@ app.get("/files", async (req, res) => {
     });
 
     res.status(200).json(response.data.files);
+=======
+async function getFileDetails(drive, fileId) {
+  try {
+      const response = await drive.files.get({
+          fileId: fileId,
+          fields: 'id, name'
+      });
+      return response.data;
+  } catch (error) {
+      console.error(`Error fetching file with ID ${fileId}:`, error.message);
+      return null;
+  }
+}
+
+
+app.post("/files", async (req, res) => {
+  const { googleId, role } = req.body;
+  let userRazred = [];
+  try {
+    if (role === 'učenik'){
+      const userResult = await client.query(`SELECT razred FROM UČENIK WHERE UČENIK.učenikId = $1`, [googleId]);
+      userRazred = userResult.rows[0]["razred"];
+    } else if (role !== 'admin') {
+      const userResult = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
+      userRazred = userResult.rows[0]["razred"].split(",");
+    } else if (role === 'admin') {
+      const userResult = await client.query("SELECT razrednik FROM DJELATNIK WHERE razrednik != 'NONE'");
+      for (let num = 0; num < userResult.rowCount; num++){
+        userRazred.push(userResult.rows[num]["razrednik"]);
+      }
+    }
+    const prikaz = await client.query(`SELECT REGEXP_REPLACE(linktekst, '^.*file/d/([^/]+)/.*$', '\\1') AS ids, razred FROM LINK`);
+
+    const filteredLinks = prikaz.rows.filter(row => {
+      const linkRazred = row["razred"].split(",");
+      return linkRazred.some(raz => userRazred.includes(raz));
+    });
+
+    const fileIds = filteredLinks.map(row => row.ids);
+
+    if (fileIds.length === 0) {
+      console.error("No file IDs found.");
+      res.status(404).send("No files found");
+      return;
+    }
+    const filesDetails = await Promise.all(fileIds.map(id => getFileDetails(drive, id)));
+    const validFiles = filesDetails.filter(file => file !== null);
+
+    res.status(200).json(validFiles);
+>>>>>>> dev
   } catch (error) {
     console.error("Error listing files:", error.message);
     res.status(500).send("Error fetching file list");

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raspored</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="schedule-container">
+    <h2 id="schedule-title">Raspored za 1A razred</h2> <!-- Title to be updated dynamically -->
+    <table class="schedule-table">
+      <thead>
+        <tr>
+          <th>Vrijeme</th>
+          <th>Pon</th>
+          <th>Uto</th>
+          <th>Sri</th>
+          <th>Čet</th>
+          <th>Pet</th>
+        </tr>
+      </thead>
+      <tbody id="schedule-body">
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Function to fetch and display the schedule for a given class (razred)
+    function fetchScheduleForRazred(razred) {
+      fetch(`/schedule-data?razred=${razred}`)
+        .then(response => response.json())
+        .then(data => {
+          const { original_tjedan } = data;
+          const timeSlots = ["8:00", "8:50", "9:40", "10:40", "11:30", "12:20", "13:10"];
+
+          // Update the title with the selected class
+          const title = document.getElementById("schedule-title");
+          title.innerText = `Raspored za ${razred} razred`;
+
+          // Function to populate the schedule table
+          function populateTable(schedule, tableBodyId) {
+            const tableBody = document.getElementById(tableBodyId);
+            tableBody.innerHTML = ''; // Clear previous data
+            timeSlots.forEach((time, rowIndex) => {
+              const tr = document.createElement("tr");
+              tr.innerHTML = `
+                <td>${time}</td>
+                ${schedule.map(day => `<td>${day[rowIndex] || ""}</td>`).join("")}
+              `;
+              tableBody.appendChild(tr);
+            });
+          }
+
+          // Populate the schedule table
+          populateTable(original_tjedan, "schedule-body");
+        })
+        .catch(error => console.error("Greška pri dohvaćanju podataka rasporeda:", error));
+    }
+
+    // Example: Setting the razred dynamically in JavaScript
+    let razred = "2A"; // You can change this value to any class dynamically
+
+    // Fetch and display the schedule for the selected razred
+    fetchScheduleForRazred(razred);
+  </script>
+</body>
+</html>

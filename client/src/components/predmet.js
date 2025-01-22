@@ -15,7 +15,7 @@ function Predmet() {
     razrednik: null,
   });
 
-  const [predmeti, setPredmeti] = useState(null);
+  const [predmeti, setPredmeti] = useState([]);
   const [sviPredmeti, setsviPredmeti] = useState([]);
   const [error, setError] = useState([]);
   const navigate = useNavigate();
@@ -57,14 +57,64 @@ function Predmet() {
     navigate("/info/admin-menu");
   };
 
+  const handleChange = (event) => {
+    const { value, checked } = event.target;
+    const predmetID = parseInt(value, 10);
+
+    if (checked) {
+      setPredmeti((prev) => [...prev, { predmetID }]);
+    } else {
+      setPredmeti((prev) => prev.filter((item) => item.predmetID !== predmetID));
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const podatci = { djelatnikid: djelatnik.djelatnikID, predmeti };
+    axios
+      .post("https://noodle-x652.onrender.com/info/update-predmete-profesora", podatci, { withCredentials: true })
+      .then(() => {
+        alert("Predmet dodan.");
+      })
+      .catch(() => {
+        alert("Greška pri uređivanju profila.");
+      });
+  };
+
   return (
     djelatnik.djelatnikID !== "" ? (
-      <div className="form">
-        <h1>Profesor sa OIB-om: {id}</h1>
-        <h2>Odaberite predmete za profesora: </h2>
-      </div>
+      <>
+        <div className="form">
+          <h1>Profesor sa OIB-om: {id}</h1>
+          <h2>Odaberite predmete za profesora: </h2>
+          <form className = "predmet-form" onSubmit={handleSubmit}>
+          <ul>
+            {sviPredmeti.map((subject) => (
+              <li key={subject.predmetID}>
+                <label>
+                  <input
+                    type="checkbox"
+                    id={subject.predmetID}
+                    value={subject.predmetID}
+                    checked={predmeti.some((p) => p.predmetID === subject.predmetID)}
+                    onChange={handleChange}
+                  />
+                  {subject.imePredmet}
+                </label>
+              </li>
+            ))}
+          </ul>
+          <div className="buttons">
+            <button className = "req-button" type="submit">Spremi</button>
+            <button className="req-button" onClick={handleBackButtonClick}>
+                  Nazad
+            </button>
+          </div>
+        </form>
+        </div>
+      </>
     ) : null
-  );    
+  );
 }
 
 export default Predmet;

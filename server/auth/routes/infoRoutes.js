@@ -536,4 +536,121 @@ router.post('/svi-predmeti', async (req, res) => {
   }
 });
 
+router.post('/upis-izostanka', async (req, res) => {
+  const { učenikID, izostanakDatum, izostanakSat, izostanakStatus, izostanakOpis } = req.body;
+
+  if (!izostanakStatus || !izostanakDatum || !izostanakSat) {
+    return res.status(400).json({ error: 'Sva polja osim opisa moraju biti ispunjena!'});
+  }
+
+  try {
+    const izostanakID = `${učenikID}-${izostanakDatum}-${izostanakSat}`;
+    const result = await client.query(`SELECT * FROM IZOSTANAK WHERE izostanakid = $1`, [izostanakID]);
+    if (result.rows.length > 0) {
+      const updateQuery = `
+        UPDATE IZOSTANAK
+        SET izostanakDatum = $1, izostanakSat = $2, izostanakStatus = $3, izostanakOpis = $4
+        WHERE izostanakID = $5
+      `;
+      await client.query(updateQuery, [izostanakDatum, izostanakSat, izostanakStatus, izostanakOpis, izostanakID]);
+      res.json({ message: 'Izostanak je uređen.' });
+    } else {
+      const insertQuery = `
+        INSERT INTO IZOSTANAK (izostanakID, učenikID, izostanakDatum, izostanakSat, izostanakStatus, izostanakOpis)
+        VALUES ($1, $2, $3, $4, $5, $6)
+      `;
+      await client.query(insertQuery, [izostanakID, učenikID, izostanakDatum, izostanakSat, izostanakStatus, izostanakOpis]);
+      res.json({ message: 'Izostanak uspješno dodan.' });
+    }
+
+  } catch (error) {
+    console.log('Neuspješan upis:', error);
+    res.status(500).json({ error: 'Greška pri upisu u bazu' });
+  }
+});
+
+router.post('/brisanje-izostanka', async (req, res) => {
+  const { učenikID, izostanakDatum, izostanakSat } = req.body;
+
+  if (!izostanakDatum || !izostanakSat) {
+      return res.status(400).json({ error: 'Datum i sat izostanka su obavezni za brisanje!' });
+  }
+
+  try {
+    const izostanakID = `${učenikID}-${izostanakDatum}-${izostanakSat}`;
+      const findQuery = await client.query(`SELECT * FROM IZOSTANAK WHERE izostanakID = $1`, [izostanakID]);
+      if (findQuery.rows.length === 0) {
+          return res.status(404).json({ message: 'Izostanak ne postoji.' });
+      }
+
+      const deleteQuery = `DELETE FROM IZOSTANAK WHERE izostanakID = $1`;
+      await client.query(deleteQuery, [izostanakID]);
+      res.json({ message: 'Izostanak uspješno obrisan.' });
+  } catch (error) {
+      console.error('Greška pri brisanju izostanka:', error);
+      res.status(500).json({ error: 'Došlo je do pogreške pri brisanju izostanka.' });
+  }
+});
+
+router.post('/ucenik-izostanci', async (req, res) => {
+  const { učenikID } = req.body;
+  try {
+    const result = await client.query(`SELECT izostanakDatum, izostanakSat, izostanakStatus, izostanakOpis FROM IZOSTANAK WHERE učenikID = $1`, [učenikID]);
+
+    const učenikIzostanci = result.rows.map(row => ({
+      izostanakDatum: row.izostanakdatum,
+      izostanakSat: row.izostanaksat,
+      izostanakStatus: row.izostanakstatus,
+      izostanakOpis: row.izostanakopis
+    }));
+
+    res.status(200).json(učenikIzostanci);
+  } catch (error) {
+    console.error('Greška pri traženju izostanaka:', error);
+    res.status(500).json({ error: 'Greška pri traženju izostanaka' });
+  }
+});
+
+router.post('/getRazredUcenici', async (req, res) => {
+  const { razred } = req.body;
+  try {
+    const result = await client.query(`SELECT U.učenikID, K.ime, K.prezime, K.OIB FROM KORISNIK K NATURAL JOIN UČENIK U WHERE U.razred = $1`, [razred]);
+    const podaci = result.rows;
+
+    res.status(200).json(podaci);
+} catch (error) {
+  console.error("Error :/", error.message);
+  res.status(500).send("Error fetching učenici list");
+}});
+
+router.post("/getRazred", async (req, res) => {
+  const { googleId, role } = req.body;
+  let userRazred = [];
+  let userResult = [];
+  
+  try {
+    if (role === "učenik"){
+      userResult = await client.query(`SELECT razred FROM učenik WHERE učenik.učenikId = $1`, [googleId]);
+      userRazred = userResult.rows[0]["razred"];
+    } else if (role === "profesor") {
+      userResult = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
+      userRazred = userResult.rows[0]["razred"].split(",");
+    } else if (role === 'admin') {
+      userResult = await client.query(`SELECT razrednik FROM DJELATNIK WHERE razrednik != 'NONE'`);
+      for (let num = 0; num < userResult.rowCount; num++){
+        userRazred.push(userResult.rows[num]["razrednik"]);
+      }
+    }
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).send("User not found");
+    }
+
+    res.status(200).json({userRazred});
+  } catch (error) {
+    console.error("Error fetching razred:", error.message);
+    res.status(500).send("Error retrieving razred");
+  }
+});
+
 module.exports = router;

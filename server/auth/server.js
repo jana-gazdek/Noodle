@@ -10,6 +10,7 @@ const scheduleRoutes = require('./routes/scheduleRoutes');
 const infoRoutes = require('./routes/infoRoutes');
 const izdavanjePotvrde = require('./routes/izdavanjePotvrde');
 const MongoStore = require('connect-mongo');
+const notificationRoutes = require('./routes/notificationRoutes');
 require('./config/passportConfig');
 
 dotenv.config();
