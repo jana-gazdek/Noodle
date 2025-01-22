@@ -155,6 +155,7 @@ def main():
     razredi_RASPORED_TJEDAN = []
     predviden_broj_predmeta_po_razredu = []
     least_frequently_used = {}
+    razredi_prethodni_predmet = {}
     for razred in razredi:
         razredi_RASPORED_DAN = {}
         predmeti, labovi = lista_predmeta(predmet_data, razred[0])
@@ -164,6 +165,7 @@ def main():
         razredi_PREDMETI[razred[0]] = predmeti
         razredi_PREDMETI_LAB[razred[0]] = labovi
         least_frequently_used[razred[0]] = {}
+        razredi_prethodni_predmet[razred[0]] = 'NONE'
         for LFU_predmet in (list(set(predmeti))):
             least_frequently_used[razred[0]][LFU_predmet] = 1
     
@@ -200,30 +202,26 @@ def main():
 
                 #print(dijeli_profesora)
                 temrin_ID += 1
-                flag = True
-                counter = dict(Counter(razredi_PREDMETI[razred[0]]))
-                for LFU_key in counter:
-                    blok_sat_fix = 1
-                    if dict(Counter(razredi_PREDMETI[razred[0]]))[LFU_key] > 5 - i:
-                        blok_sat_fix = 1000
-                    counter[LFU_key] = counter[LFU_key] * least_frequently_used[razred[0]][LFU_key] * blok_sat_fix
-                counter = dict(sorted(counter.items(), key=lambda item: (item[1], dijeli_profesora[item[0]]), reverse = True))
-                #print(counter)
                 PROVJERA_2_PREDMETA_U_DANU = []
                 for predmeti_razred in predmeti_u_danu:
                     if razred[0] in predmeti_razred:
                         PROVJERA_2_PREDMETA_U_DANU = copy.deepcopy(predmeti_razred[razred[0]])
+                flag = True
+                counter = dict(Counter(razredi_PREDMETI[razred[0]]))
+                for LFU_key in counter:
+                    blok_sat_fix = 1
+                    if dict(Counter(razredi_PREDMETI[razred[0]]))[LFU_key] > 5 - i and LFU_key in PROVJERA_2_PREDMETA_U_DANU:
+                        blok_sat_fix = 1000
+                    counter[LFU_key] = counter[LFU_key] * least_frequently_used[razred[0]][LFU_key] * blok_sat_fix
+                counter = dict(sorted(counter.items(), key=lambda item: (item[1], dijeli_profesora[item[0]]), reverse = True))
+                #print(counter)
                 predmeti_REZERVA = []
                 predaje_REZERVA = []
                 for predmet in counter:
                     for predaje in dostupni_profesori:
                         for key in predaje:
-                            broj_predmeta = 0
-                            for predviden_broj_predmeta_odredenog_razreda in predviden_broj_predmeta_po_razredu:
-                                if razred[0] == list(predviden_broj_predmeta_odredenog_razreda.keys())[0]:
-                                    broj_predmeta = predviden_broj_predmeta_odredenog_razreda[razred[0]].get(key, 0)
-                            if razred[0] in predaje.get(predmet, "Nema") and flag == True and key in razredi_PREDMETI[razred[0]] and PROVJERA_2_PREDMETA_U_DANU.count(key) < broj_predmeta//3 + 1:
-                                if key in PROVJERA_2_PREDMETA_U_DANU and counter[key] <= 5 - i:
+                            if razred[0] in predaje.get(predmet, "Nema") and flag == True and key in razredi_PREDMETI[razred[0]] and PROVJERA_2_PREDMETA_U_DANU.count(key) < 2:
+                                if key in PROVJERA_2_PREDMETA_U_DANU and counter[key] <= 5 - i and key != razredi_prethodni_predmet[razred[0]]:         #upitno je li counter[key] <= 5 uopće potrebno
                                     predmeti_REZERVA.append(key)
                                     predaje_REZERVA.append(copy.deepcopy(predaje))
                                     #print("REZERVA NA ČEKANJU: " + razred[0] + ", predmet: " + key)
@@ -237,12 +235,13 @@ def main():
                                         if razred[0] in predmeti_razred:
                                             predmeti_razred[razred[0]].append(key)
                                     least_frequently_used[razred[0]][key] = 1
+                                    razredi_prethodni_predmet[razred[0]] = key
                                     PROVJERA_2_PREDMETA_U_DANU.append(key)      
                                     enter_query(                     
                                         "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s)",
                                         (temrin_ID,
                                         razred,
-                                        dostupne_prostorije.pop(),
+                                        "DVORANA" if key == "TZK" else dostupne_prostorije.pop(),
                                         key,
                                         '1',
                                         i,
@@ -258,11 +257,12 @@ def main():
                             predmeti_razred[razred[0]].append(predmeti_REZERVA[0])
                     least_frequently_used[razred[0]][key] = 1
                     PROVJERA_2_PREDMETA_U_DANU.append(key)
+                    razredi_prethodni_predmet[razred[0]] = key
                     enter_query(
                         "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s)",
                         (temrin_ID,
                         razred,
-                        dostupne_prostorije.pop(),
+                        "DVORANA" if key == "TZK" else dostupne_prostorije.pop(),
                         predmeti_REZERVA[0],
                         '1',
                         i,
@@ -274,7 +274,7 @@ def main():
                         "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s)",
                         (temrin_ID,
                         razred,
-                        dostupne_prostorije.pop(),
+                        "/",
                         "PRAZAN_SAT",
                         '1',
                         i,
