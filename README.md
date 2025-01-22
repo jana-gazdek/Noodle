@@ -10,7 +10,7 @@ Cilj Noodlea je digitalizirati i modernizirati školski sustav učinkovitim upra
 4. Komunikacija između korisnika: Sustav mora osigurati stvaranje grupa po razredima te omogućiti komunikaciju za sve članove grupe (chat funkcionalnost).<br/>
 5. Upravljanje resursima: Sustav treba pratiti korištenje učionica i opreme potrebne za praktičnu nastavu. <br/>
 6. Generiranje izvještaja i potvrda: Sustav treba na zahtjev učenika generirati i slati potvrde o upisu putem elektroničke pošte. <br/>
-7. Terenska nastava i praksa: Sustav treba obavijestiti učenike o terenskoj nastavi i praksi, uključujući lokaciju i upute (integrirane koristeći Google Maps).<br/>
+7. Terenska nastava i praksa: Sustav treba obavijestiti učenike o terenskoj nastavi i praksi, uključujući lokaciju i upute.<br/>
 # Tehnologije
 Dokumentacija: Astah UML, Wiki<br/>
 Frontend: React, Figma <br/>
