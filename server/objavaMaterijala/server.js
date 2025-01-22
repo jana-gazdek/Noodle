@@ -26,10 +26,7 @@ const GOOGLE_DRIVE_FOLDER_ID = "1I9H0ooP32aYfxf30jwJscSvHoMGa70FK";
 const client = require("../connection.js");
 client.connect();
 
-<<<<<<< HEAD
-=======
 app.use(express.json());
->>>>>>> dev
 app.use(express.static(path.join(__dirname, "public")));
 
 function formatFileSize(bytes) {
@@ -45,14 +42,8 @@ function formatFileSize(bytes) {
 }
 
 app.post("/upload", upload.single("file"), async (req, res) => {
-<<<<<<< HEAD
-  const { name, surname } = req.body;
-  const filePath = path.join(__dirname, req.file.path);
-
-=======
   const { name, surname, razredi } = req.body;
   const filePath = path.join(__dirname, req.file.path);
->>>>>>> dev
   try {
     const response = await drive.files.create({
       requestBody: {
@@ -66,27 +57,16 @@ app.post("/upload", upload.single("file"), async (req, res) => {
       fields: 'id, size',
     });
 
-<<<<<<< HEAD
-    console.log(`Uploaded by: ${name} ${surname}`);
-    //const user = await ConfirmedUser.findById(req.body._id);
-    const insertQueryLink = `insert into LINK(brojPregleda, autor, datumObjave, linkTekst, repID) 
-    values ($1, $2, date_trunc('second', CURRENT_TIMESTAMP), $3, $4)`;
-=======
     const insertQueryLink = `insert into LINK(brojPregleda, autor, razred, datumObjave, linkTekst, repID) 
     values ($1, $2, $3, date_trunc('second', CURRENT_TIMESTAMP), $4, $5)`;
->>>>>>> dev
     const insertQueryDatoteka = `insert into DATOTEKA(veličina, linkTekst) values ($1, $2)`;
     const fileLink =
       'https://drive.google.com/file/d/' + response.data.id + '/view';
 
     const valuesLink = [
       '0',
-<<<<<<< HEAD
-      'jurica cizic' /*user.name + " " + user.surname*/,
-=======
       `${name} ${surname}`,
       razredi,
->>>>>>> dev
       fileLink,
       GOOGLE_DRIVE_FOLDER_ID,
     ];
@@ -105,16 +85,6 @@ app.post("/upload", upload.single("file"), async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-app.get("/files", async (req, res) => {
-  try {
-    const response = await drive.files.list({
-      q: `'${GOOGLE_DRIVE_FOLDER_ID}' in parents`,
-      fields: "files(id, name)",
-    });
-
-    res.status(200).json(response.data.files);
-=======
 async function getFileDetails(drive, fileId) {
   try {
       const response = await drive.files.get({
@@ -163,7 +133,6 @@ app.post("/files", async (req, res) => {
     const validFiles = filesDetails.filter(file => file !== null);
 
     res.status(200).json(validFiles);
->>>>>>> dev
   } catch (error) {
     console.error("Error listing files:", error.message);
     res.status(500).send("Error fetching file list");
