@@ -430,7 +430,7 @@ router.post('/update-user-info', async (req, res) => {
         await client.query(updateUčenikInfo, [razred, škgod, smjer, učenikid]);
       }else{
         const updateDjelatnikInfo = `update DJELATNIK set mobbroj = $1, razred = $2, razrednik = $3, status = $4 where djelatnikid = $5`;
-        await client.query(updateDjelatnikInfo, [mobbroj, razred, razrednik, updatedUser.role, djelatnikid]);
+        await client.query(updateDjelatnikInfo, [mobbroj, razred, razrednik || "NONE", updatedUser.role, djelatnikid]);
       }
     }
 
@@ -650,7 +650,7 @@ router.post("/getRazred", async (req, res) => {
   
   try {
     if (role === "učenik"){
-      userResult = await client.query(`SELECT razred FROM učenik WHERE učenik.učenikId = $1`, [googleId]);
+      userResult = await client.query(`SELECT razred FROM UČENIK WHERE UČENIK.učenikId = $1`, [googleId]);
       userRazred = userResult.rows[0]["razred"];
     } else if (role === "profesor") {
       userResult = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
@@ -667,6 +667,26 @@ router.post("/getRazred", async (req, res) => {
     }
 
     res.status(200).json({userRazred});
+  } catch (error) {
+    console.error("Error fetching razred:", error.message);
+    res.status(500).send("Error retrieving razred");
+  }
+});
+
+router.post("/getRazrednik", async (req, res) => {
+  const { googleId } = req.body;
+  let userRazrednik = [];
+  let userResult = [];
+  
+  try {
+    userResult = await client.query(`SELECT razrednik FROM DJELATNIK WHERE DJELATNIK.djelatnikId = $1`, [googleId]);
+    userRazrednik = userResult.rows[0]["razrednik"];
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).send("Greska");
+    }
+
+    res.status(200).json({userRazrednik});
   } catch (error) {
     console.error("Error fetching razred:", error.message);
     res.status(500).send("Error retrieving razred");

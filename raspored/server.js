@@ -1,9 +1,14 @@
 const express = require('express');
 const app = express();
-const random = require('random');
 const path = require('path');
 const cors = require('cors');
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3001', 
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
+app.use(express.json());
 
 const client = require('../server/connection.js');
 client.connect();
@@ -19,7 +24,7 @@ async function generateSchedule(razred) {
 
         result.rows.forEach((row) => {
             //console.log("Row data:", row);
-            tjedan[row.dan - 1].push(`${row.imepredmet} [${row.oznaka}]`);
+            tjedan[row.dan - 1].push({text: `${row.imepredmet} [${row.oznaka}]`, vrijeme : row.vrijeme});
         });
 
         return tjedan;
@@ -29,17 +34,52 @@ async function generateSchedule(razred) {
     }
 }
 
+async function generateScheduleProf(googleId) {
+    let tjedan = [[], [], [], [], []];
 
-app.use(express.static(path.join(__dirname, 'public')));
+    try {
+        const result = await client.query(
+            `SELECT r.terminId, r.razred, r.oznaka, r.imepredmet, r.školaid, r.dan, r.vrijeme 
+                FROM djelatnik d 
+                JOIN predaje p ON d.djelatnikid = p.djelatnikid 
+                JOIN predmet p2 ON p.predmetid = p2.predmetid 
+                JOIN raspored r ON r.imepredmet = p2.imepredmet
+                WHERE d.djelatnikid = $1
+                AND (
+                    (r.imepredmet != 'Sat razrednika' AND d.razred LIKE '%' || r.razred || '%') 
+                    OR 
+                    (r.imepredmet = 'Sat razrednika' AND d.razrednik LIKE '%' || r.razred || '%')
+                );`, [googleId]);
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+        //console.log("Query result:", result.rows);
 
-app.get('/schedule-data', async (req, res) => {
-    const razred = '1C' //HARD CODED, promjeni
+        result.rows.forEach((row) => {
+            //console.log("Row data:", row);
+            tjedan[row.dan - 1].push({text: `${row.imepredmet} (${row.razred}) [${row.oznaka}]`, vrijeme : row.vrijeme});
+        });
+
+        return tjedan;
+    } catch (err) {
+        console.error("Error fetching schedule:", err);
+        return tjedan;
+    }
+}
+
+app.post('/schedule-data', async (req, res) => {
+    const {razred} = req.body;
     try {
         const tjedan = await generateSchedule(razred);
+        res.json({ original_tjedan: tjedan });
+    } catch (err) {
+        console.error("Error generating schedule:", err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.post('/schedule-data-prof', async (req, res) => {
+    const {googleId} = req.body;
+    try {
+        const tjedan = await generateScheduleProf(googleId);
         res.json({ original_tjedan: tjedan });
     } catch (err) {
         console.error("Error generating schedule:", err);

@@ -77,6 +77,16 @@ function Predmet() {
       });
   };
 
+  if (error)
+    return (
+      <div>
+        <h2>{error}</h2>
+        <button className="back-button" onClick={handleBackButtonClick}>
+          Nazad
+        </button>
+      </div>
+    );
+    
   return (
     djelatnik.djelatnikID !== "" ? (
       <>
