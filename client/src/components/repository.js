@@ -44,7 +44,7 @@ const Repository = () => {
 
   const fetchFiles = async (googleId, role) => {
     try {
-      const response = await axios.post("http://localhost:3003/files", { googleId, role });
+      const response = await axios.post("https://noodle-repo.onrender.com/files", { googleId, role });
 
       setFiles(response.data);
     } catch (error) {
@@ -72,7 +72,7 @@ const Repository = () => {
     setLoading(true);
 
     try {
-      await axios.post("http://localhost:3003/upload", formData, {
+      await axios.post("https://noodle-repo.onrender.com/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -89,7 +89,7 @@ const Repository = () => {
 
   const handleDownload = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:3003/download/${id}`, {
+      const response = await axios.get(`https://noodle-repo.onrender.com/download/${id}`, {
         responseType: "blob",
       });
 
@@ -113,7 +113,7 @@ const Repository = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3003/delete/${id}`);
+      await axios.delete(`https://noodle-repo.onrender.com/delete/${id}`);
       setMessage("File deleted successfully!");
       fetchFiles(user.googleId, user.role);
     } catch (error) {
