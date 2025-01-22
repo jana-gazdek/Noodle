@@ -238,11 +238,12 @@ def main():
                                     razredi_prethodni_predmet[razred[0]] = key
                                     PROVJERA_2_PREDMETA_U_DANU.append(key)      
                                     enter_query(                     
-                                        "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s)",
+                                        "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, labos, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)",
                                         (temrin_ID,
                                         razred,
                                         "DVORANA" if key == "TZK" else dostupne_prostorije.pop(),
                                         key,
+                                        "ne",
                                         '1',
                                         i,
                                         time_str)
@@ -259,11 +260,12 @@ def main():
                     PROVJERA_2_PREDMETA_U_DANU.append(key)
                     razredi_prethodni_predmet[razred[0]] = key
                     enter_query(
-                        "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s)",
+                        "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, labos, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)",
                         (temrin_ID,
                         razred,
                         "DVORANA" if key == "TZK" else dostupne_prostorije.pop(),
                         predmeti_REZERVA[0],
+                        "ne",
                         '1',
                         i,
                         time_str)
@@ -271,11 +273,12 @@ def main():
                 elif flag == True:
                     time_str = f"{vrijeme_h:02}:{vrijeme_min:02}"
                     enter_query(
-                        "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s)",
+                        "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, labos, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)",
                         (temrin_ID,
                         razred,
                         "/",
                         "PRAZAN_SAT",
+                        "ne",
                         '1',
                         i,
                         time_str)

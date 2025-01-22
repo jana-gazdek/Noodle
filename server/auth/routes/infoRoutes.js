@@ -656,7 +656,7 @@ router.post("/getRazred", async (req, res) => {
       userResult = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
       userRazred = userResult.rows[0]["razred"].split(",");
     } else if (role === 'admin') {
-      userResult = await client.query(`SELECT razrednik FROM DJELATNIK WHERE razrednik != 'NONE'`);
+      userResult = await client.query(`SELECT razrednik FROM DJELATNIK WHERE razrednik != 'NONE' ORDER BY razrednik`);
       for (let num = 0; num < userResult.rowCount; num++){
         userRazred.push(userResult.rows[num]["razrednik"]);
       }
