@@ -9,14 +9,14 @@ router.post('/slanje-obavijesti', async (req, res) => {
   const repID = '1I9H0ooP32aYfxf30jwJscSvHoMGa70FK';
 
   try {
-    // if(req.user){
-    //   if (
-    //     req.user.role !== 'profesor' && req.user.role !== 'satničar' && req.user.role !== 'admin') {
-    //     return res.status(403).json({ error: 'Unauthorized' });
-    //   }
-    // }else{
-    //   return res.status(403).json({ error: 'Unauthorized (nema user objekta)' });
-    // }
+    if(req.user){
+      if (
+        req.user.role !== 'profesor' && req.user.role !== 'satničar' && req.user.role !== 'admin') {
+        return res.status(403).json({ error: 'Unauthorized' });
+      }
+    }else{
+      return res.status(403).json({ error: 'Unauthorized (nema user objekta)' });
+    }
     
 
     const insertQueryLink = `INSERT INTO LINK (brojPregleda, autor, razred, datumObjave, linkTekst, repID)
@@ -75,20 +75,15 @@ router.get('/ispis-obavijesti', async (req, res) => {
 });
 
 router.post('/ispis-obavijesti-razred', async (req, res) => {
-  let razredi;
-  if("razred" in req.body){
-    razredi = req.body.razred
-  }else if("razredi" in req.body){
-    razredi = req.body.razredi
-  }
-
-  if (!razredi) {
+  const { razredi } = req.body;
+  if (!razredi) {  
     return res.status(400).json({ error: 'Razred je obavezan' });
   }
 
   try {
     const razrediArray = razredi.split(',').map(razred => razred.trim());
-    const placeholders = razrediArray.map((_, index) => `$${index + 1}`).join(', ');
+    const conditions = razrediArray.map((_, index) => `link.razred LIKE $${index + 1}`).join(' OR ');
+
     const query = `
       SELECT 
         obavijest.tekst,
@@ -107,10 +102,12 @@ router.post('/ispis-obavijesti-razred', async (req, res) => {
       INNER JOIN 
         REPOZITORIJ repozitorij ON link.repID = repozitorij.repID
       WHERE 
-        link.razred IN (${placeholders})
+        ${conditions}
     `;
 
-    const result = await client.query(query, razrediArray);
+    const values = razrediArray.map((razred) => `%${razred}%`);
+
+    const result = await client.query(query, values);
 
     res.status(200).json({
       message: 'Obavijesti za odabrani razred uspješno dohvaćene',
@@ -176,6 +173,32 @@ router.post('/zasebna-obavijest', async (req, res) => {
   } catch (error) {
     console.error('Greška pri dohvaćanju obavijesti:', error);
     res.status(500).json({ error: 'Greška pri dohvaćanju obavijesti' });
+  }
+});
+
+router.post('/brisanje-obavijesti', async (req, res) => {
+  const { linkTekst } = req.body;
+  if (!linkTekst) {
+    return res.status(400).json({ error: 'linkTekst je obavezan' });
+  }
+  try {
+    const deleteObavijestQuery = `
+      DELETE FROM OBAVIJEST
+      WHERE linkTekst = $1
+    `;
+    const obavijestResult = await client.query(deleteObavijestQuery, [linkTekst]);
+    if (obavijestResult.rowCount === 0) {
+      return res.status(404).json({ error: 'Obavijest nije pronađena' });
+    }
+    const deleteLinkQuery = `
+      DELETE FROM LINK
+      WHERE linkTekst = $1
+    `;
+    await client.query(deleteLinkQuery, [linkTekst]);
+    res.status(200).json({ message: 'Obavijest i povezan link uspješno obrisani' });
+  } catch (error) {
+    console.error('Greška pri brisanju obavijesti:', error);
+    res.status(500).json({ error: 'Greška pri brisanju obavijesti' });
   }
 });
 

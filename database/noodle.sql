@@ -83,6 +83,7 @@ CREATE TABLE RASPORED
   razred VARCHAR(4) NOT NULL,
   oznaka VARCHAR(20) NOT NULL,
   imePredmet VARCHAR(30) NOT NULL,
+  labos varchar(2) NOT NULL,
   školaID INT NOT NULL,
   PRIMARY KEY (terminID),
   FOREIGN KEY (školaID) REFERENCES ŠKOLA(školaID)

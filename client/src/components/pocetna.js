@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Chat from "./chat.js";
+import Raspored from "./raspored.js";
 import Map from "./map.js";
 import "../styles/pocetna/pocetna.css";
 import "../styles/pocetna/weather.css";
@@ -44,6 +45,10 @@ function Pocetna({handleLogout}) {
     navigate("/auth/izostanci");
   };
 
+  const handleObavijestiButtonClick = () => {
+    navigate("/auth/obavijesti");
+  };
+
   return (
     <div className="pocetna-container">
       {user &&
@@ -75,6 +80,10 @@ function Pocetna({handleLogout}) {
               <button
                 className="repository-gumb"
                 onClick={handleRepositoryButtonClick}>REPOZITORIJ
+              </button>
+              <button
+                className="obavijesti-gumb"
+                onClick={handleObavijestiButtonClick}>OBAVIJESTI
               </button>
               <button
                 className="logout-gumb"
@@ -112,7 +121,7 @@ function Pocetna({handleLogout}) {
 
             <div className = "pocetna-sredina">
               <div className = "raspored">
-                Raspored
+                <Raspored/>
               </div>
               <div className = "desno">
                 {weather ? (

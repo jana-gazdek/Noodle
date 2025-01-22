@@ -16,6 +16,8 @@ import Prostorije from "./components/prostorije";
 import Predmet from "./components/predmet";
 import Izostanci from "./components/izostanci";
 import IzostanciAdmin from "./components/izostanci_admin";
+import Obavijesti from "./components/obavijesti";
+import Zasebnaobavijest from "./components/zasebnaobavijest";
 import Unauthorized from "./components/unauthorized";
 import axios from "axios";
 import "./styles/App.css";
@@ -149,6 +151,24 @@ function App() {
           ) : (
             <Unauthorized />
           )
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "/auth/obavijesti",
+      element:
+        isAuthenticated && user.role !== "unverified" && user.role !== "pending" ? (
+          <Obavijesti />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "auth/obavijesti/:linktekst",
+      element:
+      isAuthenticated && user.role !== "unverified" && user.role !== "pending" ? (
+          <Zasebnaobavijest />
         ) : (
           <Unauthorized />
         ),
