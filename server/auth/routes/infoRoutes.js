@@ -19,10 +19,10 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-const serviceAccountKey = require("../../objavaMaterijala/service-account-key.json");
-
+const credentials = JSON.parse(process.env.GOOGLE_DRIVE_CREDENTIALS);
+credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
 const driveAuth = new google.auth.GoogleAuth({
-  keyFile: "../objavaMaterijala/service-account-key.json",
+  credentials,
   scopes: ["https://www.googleapis.com/auth/drive"],
 });
 
