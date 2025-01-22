@@ -203,7 +203,10 @@ def main():
                 flag = True
                 counter = dict(Counter(razredi_PREDMETI[razred[0]]))
                 for LFU_key in counter:
-                    counter[LFU_key] = counter[LFU_key] * least_frequently_used[razred[0]][LFU_key]
+                    blok_sat_fix = 1
+                    if dict(Counter(razredi_PREDMETI[razred[0]]))[LFU_key] > 5 - i:
+                        blok_sat_fix = 1000
+                    counter[LFU_key] = counter[LFU_key] * least_frequently_used[razred[0]][LFU_key] * blok_sat_fix
                 counter = dict(sorted(counter.items(), key=lambda item: (item[1], dijeli_profesora[item[0]]), reverse = True))
                 #print(counter)
                 PROVJERA_2_PREDMETA_U_DANU = []
