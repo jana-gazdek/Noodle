@@ -1,6 +1,7 @@
 # Noodle
-_Noodle - školski sustav nove generacije_
+_Noodle - školski sustav nove generacije_ (https://noodle-frontend.onrender.com)
 # Opis projekta 
+Ovaj projekt rezultat je timskog rada razvijenog u sklopu projektnog zadatka kolegija [Programsko inženjerstvo](https://www.fer.unizg.hr/predmet/proinz) na Fakultetu elektrotehnike i računarstva Sveučilišta u Zagrebu. <br/> <br/>
 Cilj Noodlea je digitalizirati i modernizirati školski sustav učinkovitim upravljanjem nastavnim procesom i komunikacijom između svih sudionika – učenika, nastavnika, ravnatelja i administrativnog osoblja. Problem koji se rješava je neučinkovita organizacija školskih aktivnosti i komunikacije, što može rezultirati gubitkom informacija, kašnjenjem u promjenama rasporeda i ograničenim pristupom važnim materijalima. Ovaj projekt pruža priliku za proširenje znanja o sustavima za upravljanje resursima, korištenje vanjskih usluga autentifikacije (OAuth2) i primjenu naprednih tehnika u responzivnom web dizajnu.
 # Funkcijski zahtjevi
 1. Upravljanje korisnicima: Korisnici trebaju imati mogućnost registracije i prijave unutar aplikacije putem sustava za autentifikaciju (OAuth2.0). <br/>

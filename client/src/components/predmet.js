@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import dayjs from "dayjs";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../styles/predmet.css";
@@ -21,7 +22,7 @@ function Predmet() {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3000/info/pretrazi-predmete-profesora", { OIB: id }, { withCredentials: true })
+      .post("https://noodle-x652.onrender.com/info/pretrazi-predmete-profesora", { OIB: id }, { withCredentials: true })
       .then((response) => {
         setDjelatnik({
           djelatnikID: response?.data?.djelatnik.djelatnikid || "",
@@ -40,14 +41,17 @@ function Predmet() {
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const response = await axios.post("http://localhost:3000/info/svi-predmeti");
+        const response = await axios.post("https://noodle-x652.onrender.com/info/svi-predmeti");
         setsviPredmeti(response.data.predmeti || []);
+        console.log(sviPredmeti)
       } catch (err) {
         setError(err.message);
       }
     };
     fetchSubjects();
+
   }, []);
+
 
   const handleBackButtonClick = () => {
     navigate("/info/admin-menu");
@@ -68,7 +72,7 @@ function Predmet() {
     e.preventDefault();
     const podatci = { djelatnikid: djelatnik.djelatnikID, predmeti };
     axios
-      .post("http://localhost:3000/info/update-predmete-profesora", podatci, { withCredentials: true })
+      .post("https://noodle-x652.onrender.com/info/update-predmete-profesora", podatci, { withCredentials: true })
       .then(() => {
         alert("Predmet dodan.");
       })

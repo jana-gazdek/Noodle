@@ -20,16 +20,18 @@ const port = 3000;
 
 app.use(express.json());
 
-app.use(cors({ origin: 'http://localhost:3001', credentials: true }));
+app.use(cors({ origin: 'https://noodle-frontend.onrender.com', credentials: true }));
 app.use(cookieParser());
+
+app.set('trust proxy', 1);
 
 // COOKIE TEST
 
-// app.use((req, res, next) => {
-//   console.log('Cookies:', req.cookies);
-//   console.log('Raw Cookie Header:', req.headers.cookie);
-//   next();
-// });
+//app.use((req, res, next) => {
+//  console.log('Cookies:', req.cookies);
+//  console.log('Raw Cookie Header:', req.headers.cookie);
+//  next();
+//});
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -42,8 +44,8 @@ app.use(session({
   cookie:{
     maxAge: 7*24*60*60*1000,
     httpOnly: true,
-    secure: false,
-    //sameSite: 'none'
+    secure: true,
+    sameSite: 'None'
   }
 }));
 app.use(passport.initialize());
@@ -55,7 +57,13 @@ app.use('/info', infoRoutes);
 app.use('/auth', authRoutes);
 app.use('/schedule', scheduleRoutes);
 app.use('/potvrda', izdavanjePotvrde);
-app.use('/notification', notificationRoutes);
+
+// TEST SESSION
+
+app.get('/test-session', (req, res) => {
+  console.log('Session ID:', req.sessionID);
+  res.send('Check your console for the session ID!');
+});
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

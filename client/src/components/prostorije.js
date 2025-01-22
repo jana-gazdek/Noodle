@@ -19,7 +19,7 @@ const Prostorije = () => {
     const prostorija = { kapacitet, oznaka, tip };
 
     try {
-      const response = await axios.post('http://localhost:3000/info/upis-prostorije', prostorija, { withCredentials: true });
+      const response = await axios.post('https://noodle-x652.onrender.com/info/upis-prostorije', prostorija, { withCredentials: true });
       const message = response.data.message;
       if (message === 'Prostorija uspješno dodana.') {
         alert('Prostorija je uspješno dodana u bazu podataka.');
@@ -36,7 +36,7 @@ const Prostorije = () => {
     const prostorija = { oznaka: deleteOznaka };
 
     try {
-      const response = await axios.post('http://localhost:3000/info/brisanje-prostorije', prostorija, { withCredentials: true });
+      const response = await axios.post('https://noodle-x652.onrender.com/info/brisanje-prostorije', prostorija, { withCredentials: true });
       const message = response.data.message;
       if (message === 'Prostorija uspješno obrisana.') {
         alert('Prostorija je uspješno obrisana iz baze podataka.');
