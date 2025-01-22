@@ -3,7 +3,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Chat from "./chat.js";
 import Raspored from "./raspored.js";
-import Map from "./map.js";
 import "../styles/pocetna/pocetna.css";
 import "../styles/pocetna/weather.css";
 
@@ -15,7 +14,7 @@ function Pocetna({handleLogout}) {
 
   useEffect(() => {
     axios
-      .get("https://noodle-x652.onrender.com/auth/pocetna", { withCredentials: true })
+      .get("http://localhost:3000/auth/pocetna", { withCredentials: true })
       .then((response) => {
         setUser(response.data.user);
         setWeather(response.data.weather);
@@ -38,7 +37,7 @@ function Pocetna({handleLogout}) {
   };
   
   const handleLogoutButtonClick = () => {
-    window.location.href = "https://noodle-x652.onrender.com/auth/logout";
+    window.location.href = "http://localhost:3000/auth/logout";
   };
 
   const handleIzostanakButtonClick = () => {

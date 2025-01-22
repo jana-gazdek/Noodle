@@ -22,7 +22,7 @@ function InfoForm({ user }) {
 
     try {
       const response = await axios.post(
-        "https://noodle-x652.onrender.com/info/submit-request",
+        "http://localhost:3000/info/submit-request",
         {
           name: formData.name,
           surname: formData.surname,
