@@ -1,10 +1,9 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, send_from_directory, jsonify
+from flask_cors import CORS
 app = Flask(__name__)
+CORS(app)
 from collections import Counter
 import copy
-
-
-
 import psycopg2
 
 DB_PARAMS = {
@@ -295,4 +294,17 @@ def main():
     
     #print(razredi_PREDMETI)
 
-main()
+@app.route('/')
+def home():
+    return send_from_directory('.', 'index.html')
+
+@app.route('/run-script', methods=['POST'])
+def run_script():
+    try:
+        main()
+        return jsonify({'status': 'success', 'message': 'Script executed successfully'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)

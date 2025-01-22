@@ -8,6 +8,7 @@ const Raspored = () => {
   const [scheduleR, setScheduleR] = useState([]);
   const [razred, setRazred] = useState("");
   const [razrednik, setRazrednik] = useState("");
+  const [scriptMessage, setScriptMessage] = useState("");
 
   useEffect(() => {
     axios
@@ -91,6 +92,15 @@ const Raspored = () => {
     }
   };
 
+  const runPythonScript = async () => {
+    try {
+      const response = await axios.post("http://localhost:5000/run-script"); // Ensure Flask server runs on port 5000
+      setScriptMessage(response.data.message);
+    } catch (error) {
+      setScriptMessage("Error running script.");
+    }
+  };
+
   const timeSlots = ["08:00:00", "08:50:00", "09:40:00", "10:30:00", "11:20:00", "12:10:00", "13:00:00"];
   const timeSlots2 = ["8:00", "8:50", "9:40", "10:40", "11:30", "12:20", "13:10"];
 
@@ -126,6 +136,14 @@ const Raspored = () => {
           </tbody>
         </table>
       </div>
+      <>
+      <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <button onClick={runPythonScript} className="btn">
+          Run Python Script
+        </button>
+        {scriptMessage && <p>{scriptMessage}</p>}
+      </div>
+      </>
       <>
         {((user?.role === "profesor" || user?.role === "satničar") && razrednik !== "NONE") ?
           (<div className="schedule-container">

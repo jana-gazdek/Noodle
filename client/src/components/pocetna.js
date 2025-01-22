@@ -44,6 +44,10 @@ function Pocetna({handleLogout}) {
     navigate("/auth/izostanci");
   };
 
+  const handleObavijestiButtonClick = () => {
+    navigate("/auth/obavijesti");
+  };
+
   return (
     <div className="pocetna-container">
       {user &&
@@ -75,6 +79,10 @@ function Pocetna({handleLogout}) {
               <button
                 className="repository-gumb"
                 onClick={handleRepositoryButtonClick}>REPOZITORIJ
+              </button>
+              <button
+                className="obavijesti-gumb"
+                onClick={handleObavijestiButtonClick}>OBAVIJESTI
               </button>
               <button
                 className="logout-gumb"
