@@ -38,6 +38,24 @@ function schoolYear(){
   return `${sYear}./${sYear + 1}.`;
 }
 
+const getSchoolName = async (schoolID) => {
+  try {
+    const query = `SELECT imeŠkole FROM ŠKOLA WHERE školaID = $1`;
+    const values = [schoolID];
+
+    const result = await client.query(query, values);
+
+    if (result.rows.length > 0) {
+      return result.rows[0].imeŠkole;
+    } else {
+      throw new Error('Škola nije pronađena');
+    }
+  } catch (error) {
+    console.error('Greška pri pristupu bazi:', error);
+    throw error;
+  }
+};
+
 // router.post('/test-hash', async(req, res) =>{
 //   const {pass, hashPass} = req.body
 //   console.log(pass, hashPass)
@@ -214,11 +232,13 @@ router.post('/confirm-request', async (req, res) => {
 
     await confirmedUser.save();
 
+    const skola = getSchoolName(1);
+
     const mailOptions = {
       from: '"Noodle" <no-reply@yourdomain.com>',
       to: confirmedUser.email,
       subject: 'Obavijest o registraciji',
-      text: `Pozdrav ${confirmedUser.name},\n\nTvoja registracija je odobrena! Dobrodošao/la u ${razredUcenika || ""}!\n\nSrdačan pozdrav,\nTvoja škola!`
+      text: `Pozdrav ${confirmedUser.name},\n\nTvoja registracija je odobrena! Dobrodošao/la u ${razredUcenika || skola || ""}!\n\nSrdačan pozdrav,\nTvoja škola!`
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
