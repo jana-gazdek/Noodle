@@ -232,7 +232,7 @@ router.post('/confirm-request', async (req, res) => {
 
     await confirmedUser.save();
 
-    const skola = getSchoolName(1);
+    const skola = await getSchoolName(1);
 
     const mailOptions = {
       from: '"Noodle" <no-reply@yourdomain.com>',
