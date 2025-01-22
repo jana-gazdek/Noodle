@@ -169,7 +169,28 @@ router.post('/change-info-request', async(req, res) => {
     if(!updatedRequest){
       return res.status(404).json({error: 'User not found'});
     }
-    res.json({ message: 'User information updated successfully', updatedRequest });
+
+    // const updatedUser = await User.findOneAndUpdate(
+    //   { _id },
+    //   {
+    //     name,
+    //     surname,
+    //     email,
+    //     OIB,
+    //     spol,
+    //     address,
+    //     dateOfBirth,
+    //     primarySchool,
+    //     role
+    //   },
+    //   { new: true }
+    // );
+
+    // if(!updatedUser){
+    //   return res.status(404).json({error: 'User not found in User collection'});
+    // }
+
+    res.json({ message: 'User information updated successfully', updatedRequest, updatedUser });
   } catch(err){
     console.error('Error updating user info:', err);
     res.status(500).json({ error: 'Failed to update user information' });
