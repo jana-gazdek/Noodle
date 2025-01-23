@@ -94,7 +94,7 @@ const Raspored = () => {
 
   const runPythonScript = async () => {
     try {
-      const response = await axios.post("https://noodle-raspored.onrender.com/run-script"); // Ensure Flask server runs on port 5000
+      const response = await axios.post("https://noodle-generate-raspored.onrender.com/run-script");
       setScriptMessage(response.data.message);
     } catch (error) {
       setScriptMessage("Error running script.");
