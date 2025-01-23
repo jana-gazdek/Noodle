@@ -21,6 +21,14 @@ function Header({ user = {}, handleLogout }) {
     navigate("/auth/izostanci");
   };
 
+  const handleObavijestiButtonClick = () => {
+    navigate("/auth/obavijesti");
+  };
+
+  const handleSatnicarButtonClick = () => {
+    navigate("/info/satnicar-menu");
+  };
+
   return (
     <header className="main-header">
       <div className="logo">
@@ -33,6 +41,8 @@ function Header({ user = {}, handleLogout }) {
         <button onClick={handleMapButtonClick}>Karta</button>
         <button onClick={handleRepositoryButtonClick}>Repozitorij</button>
         <button onClick={handleIzostanakButtonClick}>Izostanci</button>
+        <button onClick={handleObavijestiButtonClick}>Obavijesti</button>
+        <button onClick={handleSatnicarButtonClick}>Satničar</button>
         {user.role === "admin" && (
           <button onClick={handleAdminButtonClick}>Admin</button>
         )}
