@@ -3,13 +3,15 @@ body{
 }
 
 .map-container {
-    height: 70vh;
-    width: 90vw;
-    margin-top: 20px;
-    border-radius: 8px;
-    margin-bottom: 3%;
-    align-items: center;
-  }
+  height: 70vh;
+  width: 90vw;
+  margin: 20px;
+  border-radius: 8px;
+  margin-bottom: 3%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
   
   .route-form {
     display: grid;
@@ -55,4 +57,9 @@ body{
   .route-form button:hover {
     background-color: #5e3fbf;
   }
+
+  div {
+    width: 100%;
+  }
+  
   

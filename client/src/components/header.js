@@ -34,7 +34,7 @@ function Header({ user = {}, handleLogout }) {
         <button onClick={handleRepositoryButtonClick}>Repozitorij</button>
         <button onClick={handleIzostanakButtonClick}>Izostanci</button>
         {user.role === "admin" && (
-          <button onClick={handleAdminButtonClick}>Admin Gumb</button>
+          <button onClick={handleAdminButtonClick}>Admin</button>
         )}
       </nav>
       <div className="user-info">
