@@ -190,7 +190,7 @@ router.post('/change-info-request', async(req, res) => {
     //   return res.status(404).json({error: 'User not found in User collection'});
     // }
 
-    res.json({ message: 'User information updated successfully', updatedRequest, updatedUser });
+    res.json({ message: 'User information updated successfully', updatedRequest });
   } catch(err){
     console.error('Error updating user info:', err);
     res.status(500).json({ error: 'Failed to update user information' });
