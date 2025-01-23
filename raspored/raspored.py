@@ -1,7 +1,7 @@
-from flask import Flask, render_template, send_from_directory, jsonify
+from flask import Flask, render_template, send_from_directory, jsonify, request
 from flask_cors import CORS
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "https://noodle-frontend.onrender.com"}})
 from collections import Counter
 import copy
 import psycopg2
