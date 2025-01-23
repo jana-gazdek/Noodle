@@ -57,6 +57,7 @@ app.use('/info', infoRoutes);
 app.use('/auth', authRoutes);
 app.use('/schedule', scheduleRoutes);
 app.use('/potvrda', izdavanjePotvrde);
+app.use('/notification', notificationRoutes);
 
 // TEST SESSION
 
