@@ -1,6 +1,6 @@
 .chat-container {
-    width: 400px;
-    height: 600px;
+    width: 20vw;
+    height: 58vh;
     border: 1px solid #ccc;
     border-radius: 8px;
     background: #fff;
@@ -63,3 +63,9 @@
     cursor: pointer;
   }
   
+  @media (max-width: 768px) {
+    .chat-container {
+      width: 60vw;
+      height: 100%;
+    }
+  }

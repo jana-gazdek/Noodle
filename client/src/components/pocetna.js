@@ -75,7 +75,7 @@ function Pocetna({handleLogout}) {
                     </div>
                   </div>
                 ) : (
-                  <div className="weather-container">
+                  <div className="weather-container-pocetna">
                     <p>Greška: podatci o vremenu su nedostupni.</p>
                   </div>
                 )}
