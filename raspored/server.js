@@ -101,7 +101,7 @@ app.post('/schedule-data-prof-oib', async (req, res) => {
     }
 }); 
 
-app.post('/update-schedule-data'), async (req, res) => {
+app.post('/update-schedule-data', async (req, res) => {
     const { dan, vrijeme, razred, imePredmet, labos } = req.body;
     try {
         await client.query(`UPDATE raspored SET labos = $1, imePredmet = $2 WHERE dan = $3 AND vrijeme = $4 AND razred = $5`, [labos, imePredmet, dan, vrijeme, razred]);
@@ -110,9 +110,9 @@ app.post('/update-schedule-data'), async (req, res) => {
         console.error("Greška pri ažuriranju termina:", err);
         res.status(500).json({ error: "Greška pri ažuriranju termina" });
     }
-}
+});
 
-app.post('/free-profs'), async (req, res) => {
+app.post('/free-profs', async (req, res) => {
     const { dan, vrijeme, razred } = req.body;
     try {
         const slobodni = await client.query(`
@@ -147,7 +147,7 @@ app.post('/free-profs'), async (req, res) => {
         console.error("Greška pri dohvaćivanju slobodnih profesora:", err);
         res.status(500).json({ error: "Greška pri dohvaćivanju slobodnih profesora" });
     }
-}
+});
 
 app.listen(3006, () => {
     console.log("Server running on http://localhost:3006");

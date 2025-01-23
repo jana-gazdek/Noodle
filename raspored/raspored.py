@@ -302,7 +302,7 @@ def home():
 def run_script():
     try:
         main()
-        return jsonify({'status': 'success', 'message': 'Script executed successfully'})
+        return jsonify({'status': 'success', 'message': 'Raspored uspješno generiran. Osvježite stranicu.'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
