@@ -1,10 +1,9 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, send_from_directory, jsonify
+from flask_cors import CORS
 app = Flask(__name__)
+CORS(app)
 from collections import Counter
 import copy
-
-
-
 import psycopg2
 
 DB_PARAMS = {
@@ -238,11 +237,12 @@ def main():
                                     razredi_prethodni_predmet[razred[0]] = key
                                     PROVJERA_2_PREDMETA_U_DANU.append(key)      
                                     enter_query(                     
-                                        "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s)",
+                                        "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, labos, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)",
                                         (temrin_ID,
                                         razred,
                                         "DVORANA" if key == "TZK" else dostupne_prostorije.pop(),
                                         key,
+                                        "ne",
                                         '1',
                                         i,
                                         time_str)
@@ -259,11 +259,12 @@ def main():
                     PROVJERA_2_PREDMETA_U_DANU.append(key)
                     razredi_prethodni_predmet[razred[0]] = key
                     enter_query(
-                        "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s)",
+                        "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, labos, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)",
                         (temrin_ID,
                         razred,
                         "DVORANA" if key == "TZK" else dostupne_prostorije.pop(),
                         predmeti_REZERVA[0],
+                        "ne",
                         '1',
                         i,
                         time_str)
@@ -271,11 +272,12 @@ def main():
                 elif flag == True:
                     time_str = f"{vrijeme_h:02}:{vrijeme_min:02}"
                     enter_query(
-                        "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s)",
+                        "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, labos, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)",
                         (temrin_ID,
                         razred,
                         "/",
                         "PRAZAN_SAT",
+                        "ne",
                         '1',
                         i,
                         time_str)
@@ -292,4 +294,17 @@ def main():
     
     #print(razredi_PREDMETI)
 
-main()
+@app.route('/')
+def home():
+    return send_from_directory('.', 'index.html')
+
+@app.route('/run-script', methods=['POST'])
+def run_script():
+    try:
+        main()
+        return jsonify({'status': 'success', 'message': 'Script executed successfully'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)

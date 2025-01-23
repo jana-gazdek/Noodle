@@ -104,10 +104,10 @@ app.post("/files", async (req, res) => {
   let userRazred = [];
   try {
     if (role === 'učenik'){
-      const userResult = await client.query(`SELECT razred FROM UČENIK WHERE UČENIK.učenikId = $1`, [googleId]);
+      const userResult = await client.query(`SELECT razred FROM UČENIK WHERE UČENIK.učenikid = $1`, [googleId]);
       userRazred = userResult.rows[0]["razred"];
     } else if (role !== 'admin') {
-      const userResult = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
+      const userResult = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikid = $1`, [googleId]);
       userRazred = userResult.rows[0]["razred"].split(",");
     } else if (role === 'admin') {
       const userResult = await client.query("SELECT razrednik FROM DJELATNIK WHERE razrednik != 'NONE'");

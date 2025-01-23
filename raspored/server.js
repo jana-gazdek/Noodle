@@ -85,7 +85,55 @@ app.post('/schedule-data-prof', async (req, res) => {
         console.error("Error generating schedule:", err);
         res.status(500).json({ error: "Internal server error" });
     }
-});
+}); 
+
+app.post('/update-schedule-data'), async (req, res) => {
+    const { dan, vrijeme, razred, imePredmet, labos } = req.body;
+    try {
+        await client.query(`UPDATE raspored SET labos = $1, imePredmet = $2 WHERE dan = $3 AND vrijeme = $4 AND razred = $5`, [labos, imePredmet, dan, vrijeme, razred]);
+        res.json({ message: 'Termin ažuriran.' });
+    } catch (err) {
+        console.error("Greška pri ažuriranju termina:", err);
+        res.status(500).json({ error: "Greška pri ažuriranju termina" });
+    }
+}
+
+app.post('/free-profs'), async (req, res) => {
+    const { dan, vrijeme, razred } = req.body;
+    try {
+        const slobodni = await client.query(`
+            SELECT DISTINCT
+            d.djelatnikID, k.ime || ' ' || k.prezime AS Profesor, 
+            p.imePredmet, d.razred
+            FROM korisnik k 
+            NATURAL JOIN djelatnik d 
+            NATURAL JOIN predaje pr 
+            NATURAL JOIN predmet p 
+            JOIN raspored r 
+            ON r.imePredmet = p.imePredmet
+            WHERE r.razred = $1 AND d.djelatnikID NOT IN (
+            SELECT DISTINCT
+            d1.djelatnikID 
+            FROM korisnik k1 
+            NATURAL JOIN djelatnik d1 
+            NATURAL JOIN predaje pr1 
+            NATURAL JOIN predmet p1 
+            JOIN raspored r1
+            ON r1.imePredmet = p1.imePredmet
+            WHERE dan = $2 AND vrijeme = $3
+            )
+            AND (
+            (r.imepredmet != 'Sat razrednika' AND d.razred LIKE '%' || r.razred || '%') 
+            OR 
+            (r.imepredmet = 'Sat razrednika' AND d.razrednik LIKE '%' || r.razred || '%'))
+            order by d.djelatnikID`, [razred, dan, vrijeme]);
+        const slobodniProf = slobodni.rows;
+        res.json(slobodniProf);
+    } catch (err) {
+        console.error("Greška pri dohvaćivanju slobodnih profesora:", err);
+        res.status(500).json({ error: "Greška pri dohvaćivanju slobodnih profesora" });
+    }
+}
 
 app.listen(3006, () => {
     console.log("Server running on http://localhost:3006");

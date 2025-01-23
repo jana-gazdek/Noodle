@@ -8,6 +8,7 @@ import Pocetna from "./components/pocetna";
 import Login from "./components/login";
 import InfoForm from "./components/infoform";
 import Adminmenu from "./components/admin_menu";
+import Satnicarmenu from "./components/satnicar_menu";
 import Requests from "./components/requests";
 import Profile from "./components/profiles";
 import Repository from "./components/repository";
@@ -16,6 +17,8 @@ import Prostorije from "./components/prostorije";
 import Predmet from "./components/predmet";
 import Izostanci from "./components/izostanci";
 import IzostanciAdmin from "./components/izostanci_admin";
+import Obavijesti from "./components/obavijesti";
+import Zasebnaobavijest from "./components/zasebnaobavijest";
 import Unauthorized from "./components/unauthorized";
 import axios from "axios";
 import "./styles/App.css";
@@ -71,6 +74,15 @@ function App() {
       element:
         isAuthenticated && user.role === "admin" ? (
           <Adminmenu />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "/info/satnicar-menu",
+      element:
+        isAuthenticated && user.role === "satničar" ? (
+          <Satnicarmenu />
         ) : (
           <Unauthorized />
         ),
@@ -149,6 +161,24 @@ function App() {
           ) : (
             <Unauthorized />
           )
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "/auth/obavijesti",
+      element:
+        isAuthenticated && user.role !== "unverified" && user.role !== "pending" ? (
+          <Obavijesti />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "auth/obavijesti/:linktekst",
+      element:
+      isAuthenticated && user.role !== "unverified" && user.role !== "pending" ? (
+          <Zasebnaobavijest />
         ) : (
           <Unauthorized />
         ),

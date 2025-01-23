@@ -16,7 +16,7 @@ function Predmet() {
 
   const [predmeti, setPredmeti] = useState([]);
   const [sviPredmeti, setsviPredmeti] = useState([]);
-  const [error, setError] = useState([]);
+  const [error, setError] = useState();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,11 +24,11 @@ function Predmet() {
       .post("http://localhost:3000/info/pretrazi-predmete-profesora", { OIB: id }, { withCredentials: true })
       .then((response) => {
         setDjelatnik({
-          djelatnikID: response?.data?.djelatnik?.djelatnikid || "",
-          mobBroj: response?.data?.djelatnik?.mobbroj || "",
-          OIB: response?.data?.djelatnik?.oib || "",
-          razred: response?.data?.djelatnik?.razred || "",
-          razrednik: response?.data?.djelatnik?.razrednik || null,
+          djelatnikID: response?.data?.djelatnik.djelatnikid || "",
+          mobBroj: response?.data?.djelatnik.mobbroj || "",
+          OIB: response?.data?.djelatnik.oib || "",
+          razred: response?.data?.djelatnik.razred || "",
+          razrednik: response?.data?.djelatnik.razrednik || null,
         });
         setPredmeti(response?.data?.predmeti || []);
       })
@@ -77,7 +77,7 @@ function Predmet() {
       });
   };
 
-  if (error)
+  if (error === "Korisnik nije pronađen.")
     return (
       <div>
         <h2>{error}</h2>
@@ -116,7 +116,7 @@ function Predmet() {
                   Nazad
             </button>
           </div>
-        </form>
+          </form>
         </div>
       </>
     ) : null
