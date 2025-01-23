@@ -12,7 +12,7 @@ load_dotenv()
 
 DB_PARAMS = {
     'host': os.getenv("DB_HOST"),
-    'port': int(os.getenv("DB_PORT", 5432)),
+    'port': int(os.getenv("DB_PORT")),
     'dbname': os.getenv("DB_NAME"),
     'user': os.getenv("DB_USER"),
     'password':os.getenv("DB_PASSWORD"),
@@ -312,4 +312,4 @@ def run_script():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=10000, debug=True)

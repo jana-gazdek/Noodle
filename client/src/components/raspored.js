@@ -67,7 +67,7 @@ const Raspored = () => {
 
   const fetchSchedule = async (razred) => {
     try {
-      const response = await axios.post('http://localhost:3006/schedule-data', {razred}, { withCredentials: true });
+      const response = await axios.post('https://noodle-raspored.onrender.com/schedule-data', {razred}, { withCredentials: true });
       setSchedule(response.data.original_tjedan);
     } catch (error) {
       console.error("Error fetching raspored:", error.message);
@@ -76,7 +76,7 @@ const Raspored = () => {
 
   const fetchScheduleProf = async (googleId) => {
     try {
-      const response = await axios.post('http://localhost:3006/schedule-data-prof', {googleId}, { withCredentials: true });
+      const response = await axios.post('https://noodle-raspored.onrender.com/schedule-data-prof', {googleId}, { withCredentials: true });
       setSchedule(response.data.original_tjedan);
     } catch (error) {
       console.error("Error fetching raspored:", error.message);
@@ -85,7 +85,7 @@ const Raspored = () => {
 
   const fetchScheduleRazrednik = async (razred) => {
     try {
-      const response = await axios.post('http://localhost:3006/schedule-data', {razred}, { withCredentials: true });
+      const response = await axios.post('https://noodle-raspored.onrender.com/schedule-data', {razred}, { withCredentials: true });
       setScheduleR(response.data.original_tjedan);
     } catch (error) {
       console.error("Error fetching raspored:", error.message);
@@ -94,7 +94,7 @@ const Raspored = () => {
 
   const runPythonScript = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/run-script"); // Ensure Flask server runs on port 5000
+      const response = await axios.post("https://noodle-raspored.onrender.com/run-script"); // Ensure Flask server runs on port 5000
       setScriptMessage(response.data.message);
     } catch (error) {
       setScriptMessage("Error running script.");
