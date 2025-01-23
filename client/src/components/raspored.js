@@ -12,7 +12,7 @@ const Raspored = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/auth/pocetna", { withCredentials: true })
+      .get("https://noodle-x652.onrender.com/auth/pocetna", { withCredentials: true })
       .then((response) => {
         setUser(response.data.user);
       })
@@ -49,7 +49,7 @@ const Raspored = () => {
 
   const fetchRazred = async (googleId, role) => {
     try {
-      const response = await axios.post("http://localhost:3000/info/getRazred", {googleId, role});
+      const response = await axios.post("https://noodle-x652.onrender.com/info/getRazred", {googleId, role});
       setRazred(response.data.userRazred);
     } catch (error) {
       console.error("Error fetching razred:", error.message);
@@ -58,7 +58,7 @@ const Raspored = () => {
 
   const fetchRazrednik = async (googleId) => {
     try {
-      const response = await axios.post("http://localhost:3000/info/getRazrednik", {googleId});
+      const response = await axios.post("https://noodle-x652.onrender.com/info/getRazrednik", {googleId});
       setRazrednik(response.data.userRazrednik);
     } catch (error) {
       console.error("Error fetching razrednik:", error.message);
