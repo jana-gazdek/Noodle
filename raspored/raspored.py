@@ -6,6 +6,7 @@ from collections import Counter
 import copy
 import psycopg2
 import os
+import traceback
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -306,9 +307,12 @@ def home():
 @app.route('/run-script', methods=['POST'])
 def run_script():
     try:
+        print("Received request for /run-script")
         main()
         return jsonify({'status': 'success', 'message': 'Script executed successfully'})
     except Exception as e:
+        print("ERROR:", str(e))
+        traceback.print_exc() 
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 import os
