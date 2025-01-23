@@ -8,6 +8,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
+app.set('trust proxy', 1);
 app.use(express.json());
 
 const client = require('../server/connection.js');
