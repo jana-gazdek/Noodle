@@ -16,7 +16,7 @@ const Obavijesti = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/auth/pocetna", { withCredentials: true })
+      .get("https://noodle-x652.onrender.com/auth/pocetna", { withCredentials: true })
       .then((response) => {
         setUser(response.data.user);
       })
@@ -42,7 +42,7 @@ const Obavijesti = () => {
   
   const fetchRazred = async (googleId, role) => {
     try {
-      const response = await axios.post("http://localhost:3000/info/getRazred", {googleId, role});
+      const response = await axios.post("https://noodle-x652.onrender.com/info/getRazred", {googleId, role});
       setRazred(response.data.userRazred);
     } catch (error) {
       console.error("Error fetching razred:", error.message);
@@ -52,7 +52,7 @@ const Obavijesti = () => {
   const fetchObavijesti = async () => {
     try {
       const razredi = razred.join(',');
-      const response = await axios.post("http://localhost:3000/notification/ispis-obavijesti-razred", {razredi}, { withCredentials: true });
+      const response = await axios.post("https://noodle-x652.onrender.com/notification/ispis-obavijesti-razred", {razredi}, { withCredentials: true });
       setObavijestiList(response.data.obavijesti);
     } catch (error) {
       console.error("Error fetching razred:", error.message);
@@ -61,7 +61,7 @@ const Obavijesti = () => {
 
   const fetchObavijestiAdmin = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/notification/ispis-obavijesti");
+      const response = await axios.get("https://noodle-x652.onrender.com/notification/ispis-obavijesti");
       setObavijestiListAdmin(response.data.obavijesti);
       console.log(obavijestiListAdmin)
     } catch (error) {
@@ -99,7 +99,7 @@ const Obavijesti = () => {
     };
   
     try {
-      const response = await axios.post("http://localhost:3000/notification/slanje-obavijesti", obavijest, { withCredentials: true });
+      const response = await axios.post("https://noodle-x652.onrender.com/notification/slanje-obavijesti", obavijest, { withCredentials: true });
       const message = response.data.message;
   
       if (message === "Obavijest successfully sent") {
@@ -145,7 +145,7 @@ const Obavijesti = () => {
   const handleDelete = async (linkTekst, event) => {
     event.preventDefault()
     try {
-      const response = await axios.post('http://localhost:3000/notification/brisanje-obavijesti', {linkTekst: linkTekst}, { withCredentials: true });
+      const response = await axios.post('https://noodle-x652.onrender.com/notification/brisanje-obavijesti', {linkTekst: linkTekst}, { withCredentials: true });
       const message = response.data.message;
       const error2 = response.data.error;
       if (message === 'Obavijest i povezan link uspješno obrisani') {
