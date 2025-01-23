@@ -7,7 +7,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 1rem 2rem;
-    background-color: #6a4dad;
+    background-color: #8860d0;
     color: #fff;
     position: sticky;
     top: 0;
@@ -20,6 +20,13 @@
     align-items: center;
   }
 
+<<<<<<< Updated upstream
+=======
+  .logo img {
+    width: 60px;
+  }
+  
+>>>>>>> Stashed changes
   .navigation {
     display: flex;
     justify-content: space-evenly; 
@@ -55,7 +62,7 @@
   }
   
   .logout-button {
-    background-color: #8860d0;
+    background-color: #6a4dad;
     color: #fff;
     border: none;
     padding: 0.5rem 1rem;

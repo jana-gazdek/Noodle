@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "../styles/izostanci.css";
 import dayjs from "dayjs";
 import axios from 'axios';
+import Header from "./header";
+
 
 const Izostanci = () => {
   const [user, setUser] = useState(null);
@@ -101,6 +103,7 @@ const Izostanci = () => {
   
   return (
     <div className="izostanak-container">
+      <Header /> {/* Dodan Header */}
       <h1 className = "izostanak-naslov">Upravljanje Izostancima</h1>
       <form className="izostanci-infoform" onSubmit={handleSubmit}>
         <h2>Dodavanje/Uređivanje Izostanka</h2>
