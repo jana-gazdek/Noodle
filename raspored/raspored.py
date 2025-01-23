@@ -136,7 +136,7 @@ def main():
     #print(dostupne_prostorije)
 
     for ID in profesori:
-        if run_query("SELECT status FROM djelatnik WHERE djelatnikID = %s", (ID[0],))[0][0] == "profesor":
+        if run_query("SELECT status FROM djelatnik WHERE djelatnikID = %s", (ID[0],))[0][0] != "admin":
             temp_dict = {}
             predaje = run_query("SELECT razred FROM djelatnik WHERE djelatnikID = %s", (ID[0],))[0][0].split(",")
             temp_list = run_query("SELECT imepredmet FROM djelatnik NATURAL JOIN predaje NATURAL JOIN predmet WHERE djelatnikID = %s", (ID[0],))

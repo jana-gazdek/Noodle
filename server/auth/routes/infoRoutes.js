@@ -664,6 +664,27 @@ router.post('/getRazredUcenici', async (req, res) => {
   res.status(500).send("Error fetching učenici list");
 }});
 
+router.get("/getRazredSatnicarMenu", async (req, res) => {
+  let userRazred = [];
+  let userResult = [];
+  
+  try {
+    userResult = await client.query(`SELECT razrednik FROM DJELATNIK WHERE razrednik != 'NONE' ORDER BY razrednik`);
+    for (let num = 0; num < userResult.rowCount; num++){
+      userRazred.push(userResult.rows[num]["razrednik"]);
+    }
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).send("Greska");
+    }
+
+    res.status(200).json({userRazred});
+  } catch (error) {
+    console.error("Error fetching svi razredi:", error.message);
+    res.status(500).send("Error retrieving svi razredi");
+  }
+});
+
 router.post("/getRazred", async (req, res) => {
   const { googleId, role } = req.body;
   let userRazred = [];

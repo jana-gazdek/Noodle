@@ -87,6 +87,20 @@ app.post('/schedule-data-prof', async (req, res) => {
     }
 }); 
 
+app.post('/schedule-data-prof-oib', async (req, res) => {
+    const {OIB} = req.body;
+    try {
+        const gId = await client.query(`SELECT d.djelatnikid FROM korisnik k NATURAL JOIN djelatnik d WHERE d.oib = $1`, [OIB])
+        const googleId = (gId.rows[0])["djelatnikid"]
+        console.log(googleId)
+        const tjedan = await generateScheduleProf(googleId);
+        res.json({ original_tjedan: tjedan });
+    } catch (err) {
+        console.error("Error generating schedule:", err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}); 
+
 app.post('/update-schedule-data'), async (req, res) => {
     const { dan, vrijeme, razred, imePredmet, labos } = req.body;
     try {

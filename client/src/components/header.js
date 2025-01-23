@@ -33,7 +33,7 @@ function Header({ user = {}, handleLogout }) {
     <header className="main-header">
       <div className="logo">
         <a href="/">
-          <img src="/images/logo.jpeg" alt="Logo" />
+          <img src="/logo.jpeg" alt="Logo" />
         </a>
       </div>
 
