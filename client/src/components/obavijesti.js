@@ -11,6 +11,7 @@ const Obavijesti = () => {
   const [tekst, setTekst] = useState("");
   const [obavijestiList, setObavijestiList] = useState([]);
   const [obavijestiListAdmin, setObavijestiListAdmin] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   let expanded = false;
   const navigate = useNavigate();
 
@@ -22,6 +23,9 @@ const Obavijesti = () => {
       })
       .catch(() => {
         window.location.href = "/login";
+      })
+      .finally(() => {
+        setIsLoading(false); 
       });
   }, []);
 
@@ -113,7 +117,6 @@ const Obavijesti = () => {
   
         setNaslov("");
         setTekst("");
-        setSelectedRazredList([]);
       }
     } catch (error) {
       alert("Greška pri upisu obavijesti.");
@@ -149,6 +152,7 @@ const Obavijesti = () => {
       const message = response.data.message;
       const error2 = response.data.error;
       if (message === 'Obavijest i povezan link uspješno obrisani') {
+        fetchObavijestiAdmin();
         alert('Obavijest uspješno obrisana.');
       } else if (error2 === 'Obavijest nije pronađena') {
         alert('Obavijest ne postoji.');
@@ -163,6 +167,10 @@ const Obavijesti = () => {
 
     navigate(`/auth/obavijesti/${linktekst}`);
   };
+
+  if (isLoading) {
+    return <p>Učitavanje...</p>;
+  }
 
   return (
     <div className="obavijesti-infoform">
