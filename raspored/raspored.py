@@ -7,11 +7,14 @@ import copy
 import psycopg2
 
 DB_PARAMS = {
-    'host': 'localhost',
-    'port': 5433,
-    'database': 'Noodle',
-    'user': 'postgres',
-    'password': 'noodle'
+    'host': process.env.DB_HOST,
+    'port': parseInt(process.env.DB_PORT, 10),
+    'database': process.env.DB_NAME,
+    'user': process.env.DB_USER,
+    'password': process.env.DB_PASSWORD
+    'ssl': {
+    rejectUnauthorized: false
+    }
 }
 
 def run_query(query, params=None):
