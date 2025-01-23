@@ -27,21 +27,6 @@
     color: white;
   }
   
-  button {
-    background-color: white;
-    color: #8a6fd3;
-    border: none;
-    padding: 10px 15px;
-    margin: 0 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  button:hover {
-    background-color: #c1c8e4;
-  }
-  
   .pocetna-sredina {
     display: flex;
     justify-content: space-between;

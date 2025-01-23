@@ -46,26 +46,28 @@ const Map = () => {
   return (
     <div>
       <Header />
-      <h1>Karta</h1>
       <form className="route-form" onSubmit={handleFormSubmit}>
-        <label id="start-city">
-          Početak:
-          <input
-            type="text"
-            value={startCity}
-            onChange={(e) => setStartCity(e.target.value)}
-            required
-          />
-        </label>
-        <label id="end-city">
-          Kraj:
-          <input
-            type="text"
-            value={endCity}
-            onChange={(e) => setEndCity(e.target.value)}
-            required
-          />
-        </label>
+        <div className="route-form-gornji">
+          <label id="start-city">
+            Početak:
+            <input
+              type="text"
+              value={startCity}
+              onChange={(e) => setStartCity(e.target.value)}
+              required
+            />
+          </label>
+          <label className="crtica"> - </label>
+          <label id="end-city">
+            Kraj:
+            <input
+              type="text"
+              value={endCity}
+              onChange={(e) => setEndCity(e.target.value)}
+              required
+            />
+          </label>
+        </div>
         <button type="submit">Pronađi rutu</button>
       </form>
 

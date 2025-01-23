@@ -38,13 +38,13 @@ function Header({ user = {}, handleLogout }) {
       </div>
 
       <nav className="navigation">
-        <button onClick={handleMapButtonClick}>Karta</button>
-        <button onClick={handleRepositoryButtonClick}>Repozitorij</button>
-        <button onClick={handleIzostanakButtonClick}>Izostanci</button>
-        <button onClick={handleObavijestiButtonClick}>Obavijesti</button>
-        <button onClick={handleSatnicarButtonClick}>Satničar</button>
+        <button className="navigation-button" onClick={handleMapButtonClick}>Karta</button>
+        <button className="navigation-button" onClick={handleRepositoryButtonClick}>Repozitorij</button>
+        <button className="navigation-button" onClick={handleIzostanakButtonClick}>Izostanci</button>
+        <button className="navigation-button" onClick={handleObavijestiButtonClick}>Obavijesti</button>
+        <button className="navigation-button" onClick={handleSatnicarButtonClick}>Satničar</button>
         {user.role === "admin" && (
-          <button onClick={handleAdminButtonClick}>Admin</button>
+          <button className="navigation-button" onClick={handleAdminButtonClick}>Admin</button>
         )}
       </nav>
       <div className="user-info">
