@@ -190,7 +190,7 @@ router.post('/change-info-request', async(req, res) => {
     //   return res.status(404).json({error: 'User not found in User collection'});
     // }
 
-    res.json({ message: 'User information updated successfully', updatedRequest, updatedUser });
+    res.json({ message: 'User information updated successfully', updatedRequest });
   } catch(err){
     console.error('Error updating user info:', err);
     res.status(500).json({ error: 'Failed to update user information' });
@@ -673,7 +673,7 @@ router.post("/getRazred", async (req, res) => {
     if (role === "učenik"){
       userResult = await client.query(`SELECT razred FROM UČENIK WHERE UČENIK.učenikId = $1`, [googleId]);
       userRazred = userResult.rows[0]["razred"];
-    } else if (role === "profesor") {
+    } else if (role === "profesor" || role === "satničar") {
       userResult = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
       userRazred = userResult.rows[0]["razred"].split(",");
     } else if (role === 'admin') {
