@@ -96,6 +96,7 @@ const Raspored = () => {
     try {
       const response = await axios.post("https://noodle-generate-raspored.onrender.com/run-script");
       setScriptMessage(response.data.message);
+      console.log("Izgeneriran raspored.");
     } catch (error) {
       setScriptMessage("Error running script.");
     }
