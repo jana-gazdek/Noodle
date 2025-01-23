@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 const cors = require('cors');
 app.use(cors({
-    origin: 'http://localhost:3001', 
+    origin: 'https://noodle-frontend.onrender.com', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
