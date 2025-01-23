@@ -25,6 +25,7 @@ Flask==3.1.0
 Flask-Cors==5.0.0
 fonttools==4.47.0
 greenlet==3.0.1
+gunicorn
 idna==3.6
 importlib-metadata==7.0.1
 importlib-resources==6.1.1
