@@ -55,12 +55,15 @@
   
   .raspored {
     flex: 2;
-    background-color: #8860D0; 
+    background-color: #8860D0;
     padding: 15px;
     border-radius: 10px;
     margin-right: 10px;
-    height: 60vh;
-  }
+    display: inline-block; 
+    max-height: fit-content; 
+    width: 100%; 
+}
+
   
   .desno {
     flex: 1;
@@ -83,3 +86,11 @@
   .ne-radi {
     color:black
   }
+
+  .weather-container {
+    margin-bottom: 1rem;
+}
+
+.chat-container {
+    margin-top: 1rem; 
+}

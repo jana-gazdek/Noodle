@@ -3,6 +3,8 @@ import { MapContainer, TileLayer, Polyline, useMap } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import "../styles/map.css";
+import "../styles/header.css"; // Import header stilova
+import Header from "../components/header"; // Import Header komponente
 
 const Map = () => {
   const [startCity, setStartCity] = useState("");
@@ -43,9 +45,10 @@ const Map = () => {
 
   return (
     <div>
+      <Header />
       <h1>Karta</h1>
       <form className="route-form" onSubmit={handleFormSubmit}>
-        <label>
+        <label id="start-city">
           Početak:
           <input
             type="text"
@@ -54,7 +57,7 @@ const Map = () => {
             required
           />
         </label>
-        <label>
+        <label id="end-city">
           Kraj:
           <input
             type="text"
@@ -64,9 +67,6 @@ const Map = () => {
           />
         </label>
         <button type="submit">Pronađi rutu</button>
-        <button className="back-button" onClick={handleBackButtonClick}>
-          Nazad
-        </button>
       </form>
 
       <MapContainer center={[0, 0]} zoom={2} className="map-container">
@@ -77,7 +77,6 @@ const Map = () => {
         {route && <RoutePolyline route={route} />}
       </MapContainer>
     </div>
-    
   );
 };
 

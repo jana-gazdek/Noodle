@@ -5,6 +5,8 @@ import Chat from "./chat.js";
 import Raspored from "./raspored.js";
 import "../styles/pocetna/pocetna.css";
 import "../styles/pocetna/weather.css";
+import Header from "./header.js";
+
 
 function Pocetna({handleLogout}) {
   const [user, setUser] = useState(null);
@@ -24,26 +26,6 @@ function Pocetna({handleLogout}) {
       });
   }, []);
 
-  const handleAdminButtonClick = () => {
-    navigate("/info/admin-menu");
-  };
-
-  const handleRepositoryButtonClick = () => {
-    navigate("/auth/repository");
-  };
-
-  const handleMapButtonClick = () => {
-    navigate("/auth/map");
-  };
-  
-  const handleLogoutButtonClick = () => {
-    window.location.href = "http://localhost:3000/auth/logout";
-  };
-
-  const handleIzostanakButtonClick = () => {
-    navigate("/auth/izostanci");
-  };
-
   return (
     <div className="pocetna-container">
       {user &&
@@ -62,53 +44,13 @@ function Pocetna({handleLogout}) {
           </div>
         ) : (
           <>
-            <div className = "pocetna-heder">
-              <div className="user-container">
-                <h1>
-                  Bok, {user.name} {user.surname}!
-                </h1>
-              </div>
-              <button
-                className="map-gumb"
-                onClick={handleMapButtonClick}>MAP
-              </button>
-              <button
-                className="repository-gumb"
-                onClick={handleRepositoryButtonClick}>REPOZITORIJ
-              </button>
-              <button
-                className="logout-gumb"
-                onClick={handleLogoutButtonClick}>LOGOUT
-              </button>
-              {user.role !== "učenik" ? (
-                <div>
-                  <div>
-                    <button
-                      className="izostanak-gumb"
-                      onClick={handleIzostanakButtonClick}
-                    >
-                      IZOSTANCI
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div></div>
-              )}
-              {user.role === "admin" ? (
-                <div>
-                  <div>
-                    <button
-                      className="admin-gumb"
-                      onClick={handleAdminButtonClick}
-                    >
-                      ADMIN GUMB
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div></div>
-              )}
-            </div>
+            <Header
+              user={user}
+              handleLogout={() => {
+                window.location.href = "http://localhost:3000/auth/logout";
+              }}
+            />
+
 
             <div className = "pocetna-sredina">
               <div className = "raspored">
