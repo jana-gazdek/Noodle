@@ -48,6 +48,10 @@ function Pocetna({handleLogout}) {
     navigate("/auth/obavijesti");
   };
 
+  const handleSatnicarButtonClick = () => {
+    navigate("/info/satnicar-menu");
+  };
+
   return (
     <div className="pocetna-container">
       {user &&
@@ -74,7 +78,7 @@ function Pocetna({handleLogout}) {
               </div>
               <button
                 className="map-gumb"
-                onClick={handleMapButtonClick}>MAP
+                onClick={handleMapButtonClick}>KARTA
               </button>
               <button
                 className="repository-gumb"
@@ -83,6 +87,10 @@ function Pocetna({handleLogout}) {
               <button
                 className="obavijesti-gumb"
                 onClick={handleObavijestiButtonClick}>OBAVIJESTI
+              </button>
+              <button
+                className="satnicar-gumb"
+                onClick={handleSatnicarButtonClick}>SATNIČAR
               </button>
               <button
                 className="logout-gumb"

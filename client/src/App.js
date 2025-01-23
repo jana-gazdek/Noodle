@@ -8,6 +8,7 @@ import Pocetna from "./components/pocetna";
 import Login from "./components/login";
 import InfoForm from "./components/infoform";
 import Adminmenu from "./components/admin_menu";
+import Satnicarmenu from "./components/satnicar_menu";
 import Requests from "./components/requests";
 import Profile from "./components/profiles";
 import Repository from "./components/repository";
@@ -73,6 +74,15 @@ function App() {
       element:
         isAuthenticated && user.role === "admin" ? (
           <Adminmenu />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "/info/satnicar-menu",
+      element:
+        isAuthenticated && user.role === "satničar" ? (
+          <Satnicarmenu />
         ) : (
           <Unauthorized />
         ),
