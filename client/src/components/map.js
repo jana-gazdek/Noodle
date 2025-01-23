@@ -1,20 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Polyline, useMap } from "react-leaflet";
-import { useNavigate } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import "../styles/map.css";
 import "../styles/header.css"; // Import header stilova
 import Header from "../components/header"; // Import Header komponente
+import axios from "axios";
 
 const Map = () => {
   const [startCity, setStartCity] = useState("");
   const [endCity, setEndCity] = useState("");
   const [route, setRoute] = useState(null);
-  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
 
-  const handleBackButtonClick = () => {
-    navigate("/auth/pocetna");
-  };
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/auth/pocetna", { withCredentials: true })
+      .then((response) => {
+        setUser(response.data.user);
+      })
+      .catch(() => {
+        window.location.href = "/login";
+      })
+      .finally(() => {
+      });
+  }, []);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -45,7 +54,14 @@ const Map = () => {
 
   return (
     <div>
-      <Header />
+      {(user) && (
+        <Header
+        user={user}
+        handleLogout={() => {
+        window.location.href = "http://localhost:3000/auth/logout";
+        }}
+        />
+      )}
       <form className="route-form" onSubmit={handleFormSubmit}>
         <div className="route-form-gornji">
           <label id="start-city">
