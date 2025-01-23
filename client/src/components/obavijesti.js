@@ -51,7 +51,7 @@ const Obavijesti = () => {
   
   const fetchObavijesti = async () => {
     try {
-      const razredi = razred.join(',');
+      const razredi = Array.isArray(razred) ? razred.join(',') : razred;
       const response = await axios.post("https://noodle-x652.onrender.com/notification/ispis-obavijesti-razred", {razredi}, { withCredentials: true });
       setObavijestiList(response.data.obavijesti);
     } catch (error) {
