@@ -7,6 +7,7 @@ import copy
 import psycopg2
 import os
 import traceback
+import time
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -306,16 +307,18 @@ def home():
 
 @app.route('/run-script', methods=['POST'])
 def run_script():
+    start_time = time.time()
     try:
-        print("Received request for /run-script")
+        print("Starting script execution...")
         main()
-        return jsonify({'status': 'success', 'message': 'Script executed successfully'})
+        response = {'status': 'success', 'message': 'Script executed successfully'}
     except Exception as e:
+        response = {'status': 'error', 'message': str(e)}
         print("ERROR:", str(e))
-        traceback.print_exc() 
-        return jsonify({'status': 'error', 'message': str(e)}), 500
-
-import os
+    finally:
+        execution_time = time.time() - start_time
+        print(f"Script execution time: {execution_time:.2f} seconds")
+    return jsonify(response)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
