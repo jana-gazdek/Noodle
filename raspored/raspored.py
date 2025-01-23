@@ -5,16 +5,18 @@ CORS(app)
 from collections import Counter
 import copy
 import psycopg2
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 DB_PARAMS = {
-    'host': process.env.DB_HOST,
-    'port': parseInt(process.env.DB_PORT, 10),
-    'database': process.env.DB_NAME,
-    'user': process.env.DB_USER,
-    'password': process.env.DB_PASSWORD
-    'ssl': {
-    rejectUnauthorized: false
-    }
+    'host': os.getenv("DB_HOST"),
+    'port': int(os.getenv("DB_PORT", 5432)),
+    'dbname': os.getenv("DB_NAME"),
+    'user': os.getenv("DB_USER"),
+    'password':os.getenv("DB_PASSWORD"),
+    'sslmode': "require"
 }
 
 def run_query(query, params=None):
