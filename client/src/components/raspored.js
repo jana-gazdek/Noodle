@@ -9,6 +9,7 @@ const Raspored = () => {
   const [razred, setRazred] = useState("");
   const [razrednik, setRazrednik] = useState("");
   const [scriptMessage, setScriptMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     axios
@@ -94,11 +95,14 @@ const Raspored = () => {
 
   const runPythonScript = async () => {
     try {
+      setLoading(true);
       const response = await axios.post("https://noodle-generate-raspored.onrender.com/run-script");
+      setLoading(false);
       setScriptMessage(response.data.message);
       console.log("Izgeneriran raspored.");
     } catch (error) {
       setScriptMessage("Error running script.");
+      setLoading(false);
     }
   };
 
@@ -143,6 +147,7 @@ const Raspored = () => {
           Run Python Script
         </button>
         {scriptMessage && <p>{scriptMessage}</p>}
+        {loading && <div className="spinner"></div>}{" "}
       </div>
       </>
       <>
