@@ -30,15 +30,6 @@ html, body{
   padding-top: 3vh;
 }
 
-<<<<<<< Updated upstream
-  div {
-    width: 100%;
-    }
-
-  html {
-    overflow: hidden;
-  }
-=======
 .route-form-gornji{
   display: flex;
   flex-direction: row;
@@ -87,6 +78,5 @@ html, body{
 .route-form button:hover {
   background-color: #5e3fbf;
 }
->>>>>>> Stashed changes
   
   

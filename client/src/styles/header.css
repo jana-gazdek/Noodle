@@ -1,17 +1,8 @@
 .main-header {
     display: flex;
     align-items: center;
-<<<<<<< Updated upstream
-    width: 100%;
-    max-width: 100vw;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 1rem 2rem;
-    background-color: #8860d0;
-=======
     justify-content: space-around;
     background-color: #8860D0;
->>>>>>> Stashed changes
     color: #fff;
     width: 100%;
     position: fixed;
@@ -34,13 +25,6 @@
     width: 100%;
   }
 
-<<<<<<< Updated upstream
-=======
-  .logo img {
-    width: 60px;
-  }
-  
->>>>>>> Stashed changes
   .navigation {
     display: flex;
     justify-content: space-evenly; 
@@ -79,11 +63,7 @@
   }
   
   .logout-button {
-<<<<<<< Updated upstream
-    background-color: #6a4dad;
-=======
     background-color: #5a3a96;
->>>>>>> Stashed changes
     color: #fff;
     border: none;
     border-radius: 5px;
