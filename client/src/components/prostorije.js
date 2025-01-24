@@ -57,7 +57,13 @@ const Prostorije = () => {
           type="number"
           placeholder="Kapacitet"
           value={kapacitet}
-          onChange={(e) => setKapacitet(e.target.value)}
+          onChange={(e) => {
+            const value = parseInt(e.target.value, 10);
+            if (value >= 0 || e.target.value === "") {
+              setKapacitet(e.target.value);
+            }
+          }}
+          min="0"
           required
         />
         <input

@@ -36,7 +36,14 @@ function InfoForm({ user }) {
 
     return (
     <div className ="menu-container">
-      <Header user={user} />
+      {(user) && (
+        <Header
+        user={user}
+        handleLogout={() => {
+        window.location.href = "http://localhost:3000/auth/logout";
+        }}
+        />
+      )}
         <h1>Admin izbornik</h1>
       <button className="req-button" onClick={handleRequestButtonClick}>
             Zahtjevi
