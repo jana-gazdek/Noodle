@@ -140,7 +140,7 @@ const Izostanci = () => {
                   value={odabranRazred}
                   onChange={(e) => setOdabranRazred(e.target.value)}
               >
-                  <option value="">🔽 Odaberi razred</option>
+                   <option value=""><span>&#9660;</span> Odaberi razred</option>
                   {razredList?.map((a) => (
                   <option key={a} value={a}>
                       {a}
@@ -152,9 +152,9 @@ const Izostanci = () => {
               {učeniciList?.map((a) => (
                 <div className="izostanci-li" key={a.učenikid} id = {a.učenikid}>
                   <div className = "izostanci-podatci">
-                    <p>{a.ime} {a.prezime}</p>
-                    <p>Oib: {a.oib}</p>
-                    <button type="button" onClick={() => handleClick(a.učenikid)}>Odaberi</button>
+                    <p>Ime i prezime:  {a.ime} {a.prezime}</p>
+                    <p>Oib:  {a.oib}</p>
+                    <button className="izostanci-button-odaberi" type="button" onClick={() => handleClick(a.učenikid)}>Odaberi</button>
                   </div>
                   {a.učenikid === odabranUčenikID ? (
                   <div className="izostanci-inputi">
