@@ -23,7 +23,7 @@ function Rasporedsatnicar({ schedule = []}) {
   return (
     <>
       <div className="satnicar-schedule-container">
-        <h2 id="schedule-title">Odabran Raspored</h2>
+        <h2 id="satnicar-schedule-title">Odabran Raspored</h2>
         <table className="schedule-table">
           <thead>
             <tr>
@@ -51,7 +51,7 @@ function Rasporedsatnicar({ schedule = []}) {
       <>
       <div style={{ textAlign: "center", marginTop: "20px" }}>
         <div>
-            <button onClick={runPythonScript} className="btn">
+            <button onClick={runPythonScript}>
             Generiraj novi raspored
             </button>
             {scriptMessage && <p>{scriptMessage}</p>}
