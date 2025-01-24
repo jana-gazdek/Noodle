@@ -52,7 +52,7 @@ function Rasporedsatnicar({ schedule = []}) {
       <>
       <div style={{ textAlign: "center", marginTop: "20px" }}>
         <div>
-            <button onClick={runPythonScript}>
+            <button className="satnica-gumb-generiraj" onClick={runPythonScript}>
             Generiraj novi raspored
             </button>
             {scriptMessage && <p>{scriptMessage}</p>}
