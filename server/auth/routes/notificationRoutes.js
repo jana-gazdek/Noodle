@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const client = require('../../connection.js');
-const nodemailer = require('nodemailer');
+const mail = require('../utils/emailNotificationSchedule.js');
 
 router.post('/slanje-obavijesti', async (req, res) => {
   const { tekst, naslov, linkTekst, autor, razred, datumObjave } = req.body;
@@ -29,7 +29,9 @@ router.post('/slanje-obavijesti', async (req, res) => {
     const valuesObavijest = [tekst, naslov, linkTekst];
     await client.query(insertQueryObavijest, valuesObavijest);
 
-    res.status(201).json({ message: 'Obavijest successfully sent' });
+    //mail.sendEmailNotificationArrived()
+
+    res.status(201).json({ message: 'Obavijest uspješno poslana' });
   } catch (error) {
     console.error('Greška pri slanju obavijesti:', error);
 
