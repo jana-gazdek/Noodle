@@ -39,33 +39,6 @@ def run_query(query, params=None):
         print(f"Error: {e}")
     return None
 
-def enter_query(query, params=None):
-    """Function to execute a SQL query."""
-    try:
-        conn = psycopg2.connect(**DB_PARAMS)
-        cursor = conn.cursor()
-
-        cursor.execute(query, params)
-        
-        if query.strip().lower().startswith("select"):
-            results = cursor.fetchall()
-            return None
-        else:
-            conn.commit()
-
-        cursor.close()
-        conn.close()
-    except psycopg2.Error as e:
-        print(f"Error: {e}")
-    return None
-
-def check_and_signal(data):
-    if all(not value for value in data.values()):
-        return False
-    else:
-        return True
-
-
 def lista_predmeta(predmet_data, razred):
     subjects_list = []
     predmeti_s_lab = []
@@ -77,39 +50,6 @@ def lista_predmeta(predmet_data, razred):
             predmeti_s_lab.append(predmet['imepredmet'])
 
     return subjects_list, predmeti_s_lab
-
-
-def get_brojlab_by_imepredmet(imepredmet, predmet_data):
-    for predmet in predmet_data:
-        if predmet['imepredmet'] == imepredmet:
-            return predmet['brojlab']
-    return None
-
-def ispravi_vjezbe(tjedan, predmeti_s_lab):
-    for imepredmet in predmeti_s_lab:
-        for dan in tjedan:
-            if dan.count(imepredmet) == 1:
-                index = dan.index(imepredmet)
-                dan[index] = dan[index] + " - vježbe"
-                break
-
-def transform_tjedan(tjedan):
-    new_tjedan = []
-    new_dan = []
-    print(tjedan)
-
-    for dan in tjedan:
-        n = len(dan)
-        if dan[n-2] == dan[n-3]:
-            shift = 3
-        else:
-            shift = 2
-        new_dan = dan[-shift:] + dan[:-shift]
-        new_tjedan.append(new_dan)
-
-    print(new_tjedan)
-    return new_tjedan
-
 
 def main():
     query_string = "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, labos, školaid, dan, vrijeme) VALUES "
@@ -130,16 +70,13 @@ def main():
         predmet_data.append(temp_dict)
 
     razredi = run_query("SELECT DISTINCT razred, smjer FROM uČenik")
-    #print(razredi)
     oznake = run_query("SELECT DISTINCT oznaka FROM prostorija")
-    #print(oznake)
     dostupne_prostorije = []
     profesori = run_query("SELECT * FROM djelatnik")
     dostupni_profesori = []
 
     for o in oznake:
         dostupne_prostorije.append(o[0])
-    #print(dostupne_prostorije)
 
     svi_profesori_i_njihovi_predmeti = run_query("SELECT * FROM djelatnik NATURAL JOIN predaje NATURAL JOIN predmet")
     for profesor in profesori:
@@ -156,8 +93,6 @@ def main():
                 else:
                     temp_dict[l] = predaje
             dostupni_profesori.append(temp_dict)
-
-    #print(dostupni_profesori)
 
     razredi_PREDMETI = {}
     razredi_PREDMETI_LAB = {}
@@ -179,12 +114,7 @@ def main():
             least_frequently_used[razred[0]][LFU_predmet] = 1
 
     razredi = sorted(razredi, key = lambda x:int(x[0][0]))
-    
-    #print(least_frequently_used)
-    #print(razredi_PREDMETI)
-
     temrin_ID = 0
-
     dostupni_profesori_BACKUP = copy.deepcopy(dostupni_profesori)
     dostupne_prostorije_BACKUP = dostupne_prostorije
 
@@ -200,7 +130,6 @@ def main():
             dostupni_profesori = copy.deepcopy(dostupni_profesori_BACKUP)
             dostupne_prostorije = list(dostupne_prostorije_BACKUP)
             for razred in razredi:
-
                 dijeli_profesora = {}                                   
                 for predaje in dostupni_profesori_BACKUP:     
                     for key in predaje:                           
@@ -211,7 +140,6 @@ def main():
                                     temp_n += 1
                             dijeli_profesora[key] = temp_n
 
-                #print(dijeli_profesora)
                 temrin_ID += 1
                 PROVJERA_2_PREDMETA_U_DANU = []
                 for predmeti_razred in predmeti_u_danu:
@@ -225,18 +153,15 @@ def main():
                         blok_sat_fix = 1000
                     counter[LFU_key] = counter[LFU_key] * least_frequently_used[razred[0]][LFU_key] * blok_sat_fix
                 counter = dict(sorted(counter.items(), key=lambda item: (item[1], dijeli_profesora[item[0]]), reverse = True))
-                #print(counter)
                 predmeti_REZERVA = []
                 predaje_REZERVA = []
                 for predmet in counter:
                     for predaje in dostupni_profesori:
                         for key in predaje:
                             if razred[0] in predaje.get(predmet, "Nema") and flag == True and key in razredi_PREDMETI[razred[0]] and PROVJERA_2_PREDMETA_U_DANU.count(key) < 2:
-                                if key in PROVJERA_2_PREDMETA_U_DANU and counter[key] <= 5 - i and key != razredi_prethodni_predmet[razred[0]]:         #upitno je li counter[key] <= 5 uopće potrebno
+                                if key in PROVJERA_2_PREDMETA_U_DANU and counter[key] <= 5 - i and key != razredi_prethodni_predmet[razred[0]]:
                                     predmeti_REZERVA.append(key)
                                     predaje_REZERVA.append(copy.deepcopy(predaje))
-                                    #print("REZERVA NA ČEKANJU: " + razred[0] + ", predmet: " + key)
-                                    #print(predmeti_REZERVA)
                                 else:
                                     dostupni_profesori.remove(predaje)
                                     razredi_PREDMETI[razred[0]].remove(key)
@@ -251,7 +176,6 @@ def main():
                                     oznaka = "DVORANA" if key == "TZK" else dostupne_prostorije.pop()
                                     query_string += f"({temrin_ID}, '{razred[0]}', '{oznaka}', '{key}', 'ne', '1', {i}, '{time_str}'), "
                 if flag == True and len(predmeti_REZERVA) != 0:
-                    #print("REZERVA UMETNUTA")
                     dostupni_profesori.remove(predaje_REZERVA[0]) 
                     razredi_PREDMETI[razred[0]].remove(predmeti_REZERVA[0])             
                     time_str = f"{vrijeme_h:02}:{vrijeme_min:02}"
@@ -267,18 +191,15 @@ def main():
                     time_str = f"{vrijeme_h:02}:{vrijeme_min:02}"
                     oznaka = "/"
                     query_string += f"({temrin_ID}, '{razred[0]}', '{oznaka}', 'PRAZAN_SAT', 'ne', '1', {i}, '{time_str}'), "
-                #print(str(temrin_ID) + " " + razred[0])
                 if vrijeme_h == 13:
                     for LFU_predmet in least_frequently_used[razred[0]]:
                         if LFU_predmet not in PROVJERA_2_PREDMETA_U_DANU:
                             least_frequently_used[razred[0]][LFU_predmet] += 1
-                    #print(PROVJERA_2_PREDMETA_U_DANU)
             x = vrijeme_min + 50
             vrijeme_h = vrijeme_h + x//60
             vrijeme_min = x % 60
     query_string = query_string.rstrip(", ") + ";"
     run_query(query_string)
-    #print(razredi_PREDMETI)
 
 @app.after_request
 def add_cors_headers(response):
