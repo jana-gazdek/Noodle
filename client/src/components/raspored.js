@@ -129,7 +129,8 @@ const Raspored = () => {
                 <td>{timeSlots2[rowIndex]}</td>
                 {schedule.map((dan, colIndex) => {
                   const satAtTime = dan.find(sat => sat.vrijeme === time);
-                  return <td key={colIndex}>{satAtTime ? satAtTime.text : ""}</td>;
+                  const vjezba = satAtTime && satAtTime.labos === "da" ? " (Vježbe)" : "";
+                  return <td key={colIndex}>{satAtTime ? satAtTime.text + vjezba : ""}</td>;
                 })}
               </tr>
             ))}
@@ -157,7 +158,8 @@ const Raspored = () => {
                     <td>{timeSlots2[rowIndex]}</td>
                     {scheduleR.map((dan, colIndex) => {
                       const satAtTime = dan.find(sat => sat.vrijeme === time);
-                      return <td key={colIndex}>{satAtTime ? satAtTime.text : ""}</td>;
+                      const vjezba = satAtTime && satAtTime.labos === "da" ? " (Vježbe)" : "";
+                      return <td key={colIndex}>{satAtTime ? satAtTime.text + vjezba : ""}</td>;
                     })}
                   </tr>
                 ))}

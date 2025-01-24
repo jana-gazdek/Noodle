@@ -56,7 +56,6 @@ const Satnicarmenu = () => {
   const fetchRasporedProfesor = async (id) => {
     try {
       const response = await axios.post('http://localhost:3006/schedule-data-prof-oib', {OIB : id}, { withCredentials: true });
-      console.log(response)
       setSchedule(response.data.original_tjedan);
     } catch (error) {
       console.error("Error fetching raspored:", error.message);
@@ -204,7 +203,7 @@ const Satnicarmenu = () => {
                     value={odabranPredmet}
                     onChange={(e) => setOdabranPredmet(e.target.value)}
                   >
-                    <option value="ne">Odaberi slobodnog profesora</option>
+                    <option value="">Odaberi slobodnog profesora</option>
                     {slobodniProfesori?.map((a) => (
                     <option key={a.djelatnikid} value={a.imepredmet}>
                         {a.profesor}
