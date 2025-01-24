@@ -6,12 +6,14 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
+    overflow-y: scroll !important;
   }
 
 
 .menu-container {
     display: flex;
     flex-direction: column;
+    min-width: 200px;
     width: 40vh;
     height: auto;
     padding: 2rem;

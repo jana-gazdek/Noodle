@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/admin_menu.css";
+import Header from "./header";
+
 
 function InfoForm({ user }) {
     const [oib, setOib] = useState("");
@@ -34,6 +36,7 @@ function InfoForm({ user }) {
 
     return (
     <div className ="menu-container">
+      <Header user={user} />
         <h1>Admin izbornik</h1>
       <button className="req-button" onClick={handleRequestButtonClick}>
             Zahtjevi
