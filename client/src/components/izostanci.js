@@ -8,6 +8,7 @@ import Header from "./header";
 const Izostanci = () => {
   const [user, setUser] = useState(null);
   const [razredList, setRazredList] = useState([]);
+  const [razrednik, setRazrednik] = useState([]);
   const [učeniciList, setUčeniciList] = useState([]);
   const [odabranUčenikID, setOdabranUčenikID] = useState('');
   const [odabranUčenikIzostanciList, setOdabranUčenikIzostanciList] = useState([]);
@@ -44,6 +45,16 @@ const Izostanci = () => {
     }
   };
 
+  const fetchRazrednik = async (googleId) => {
+    try {
+      const response = await axios.post("http://localhost:3000/info/getRazrednik", {googleId});
+      setRazrednik(response.data.userRazrednik);
+    } catch (error) {
+      console.error("Error fetching razred:", error.message);
+    }
+  };
+
+
   const fetchUčenici = async () => {
     try {
       const response = await axios.post("http://localhost:3000/info/getRazredUcenici", {razred : odabranRazred});
@@ -56,6 +67,7 @@ const Izostanci = () => {
   useEffect(() => {
     if (user){
       fetchRazred(user.googleId, user.role);
+      fetchRazrednik(user.googleId);
     }
   }, [user]);
 
@@ -162,8 +174,8 @@ const Izostanci = () => {
                             setIzostanakStatus(e.target.value)
                           }>
                             <option value="">Odaberi status</option>
-                            <option value="Opravdan">Opravdan.</option>
-                            <option value="Neopravdan">Neopravdan.</option>
+                            {razrednik === odabranRazred && <option value="Opravdan">Opravdan.</option>}
+                            {razrednik === odabranRazred && <option value="Neopravdan">Neopravdan.</option>}
                             <option value="Na čekanju">Na čekanju.</option>
                     </select>{""}
                     <input
