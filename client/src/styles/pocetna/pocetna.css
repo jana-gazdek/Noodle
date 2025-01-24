@@ -96,6 +96,10 @@ html {
 }
 
 @media (max-width: 768px) {
+  .pocetna-container {
+    overflow-y: scroll;
+  }
+
   .pocetna-sredina {
     flex-direction: column;
     height: 100%;
