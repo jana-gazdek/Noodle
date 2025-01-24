@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Polyline, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "../styles/map.css";
-import "../styles/header.css"; // Import header stilova
-import Header from "../components/header"; // Import Header komponente
+import "../styles/header.css";
+import Header from "../components/header";
 import axios from "axios";
 
 const Map = () => {
