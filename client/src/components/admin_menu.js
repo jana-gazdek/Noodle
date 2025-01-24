@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/admin_menu.css";
-import Header from "./header";
+import "../styles/header.css";
+import Header from "../components/header";
 
 
 function InfoForm({ user }) {
