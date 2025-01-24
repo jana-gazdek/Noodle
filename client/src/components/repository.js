@@ -11,7 +11,7 @@ const Repository = () => {
   const [loading, setLoading] = useState(false);
   const [razredList, setRazredList] = useState([]);
   const [selectedRazredList, setSelectedRazredList] = useState([]);
-  let expanded = false;
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     axios
@@ -122,16 +122,15 @@ const Repository = () => {
     }
   };
 
-  function showCheckboxes(expanded) {
+  function showCheckboxes() {
     var checkboxes = document.getElementById("checkboxes");
     if (!expanded) {
       checkboxes.style.display = "block";
-      expanded = true;
+      setExpanded(true)
     } else {
       checkboxes.style.display = "none";
-      expanded = false;
+      setExpanded(false);
     }
-    return expanded;
   }
 
   const handleChange = (event) => {
@@ -164,7 +163,7 @@ const Repository = () => {
           <div>
             <form>
               <div className="multiselect">
-                <div className="selectBox" onClick={() => expanded = showCheckboxes(expanded)}>
+                <div className="selectBox" onClick={() => showCheckboxes()}>
                   <select>
                     <option>Odaberi razrede: </option>
                   </select>

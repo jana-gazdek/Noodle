@@ -42,7 +42,9 @@ function Header({ user = {}, handleLogout }) {
         <button className="navigation-button" onClick={handleRepositoryButtonClick}>Repozitorij</button>
         <button className="navigation-button" onClick={handleIzostanakButtonClick}>Izostanci</button>
         <button className="navigation-button" onClick={handleObavijestiButtonClick}>Obavijesti</button>
-        <button className="navigation-button" onClick={handleSatnicarButtonClick}>Satničar</button>
+        {user.role === "satničar" && (
+          <button className="navigation-button" onClick={handleSatnicarButtonClick}>Satničar</button>
+        )}
         {user.role === "admin" && (
           <button className="navigation-button" onClick={handleAdminButtonClick}>Admin</button>
         )}
