@@ -67,7 +67,6 @@ const Map = () => {
           <label id="start-city">
             Početak:
             <input
-              className="input-field"
               type="text"
               value={startCity}
               onChange={(e) => setStartCity(e.target.value)}
