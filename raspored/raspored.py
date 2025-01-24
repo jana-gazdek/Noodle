@@ -118,7 +118,7 @@ def main():
     params = ('12345678901',)
     predmet_list = run_query(query, params)
     predmet_data = []
-
+    
     for predmet in predmet_list:
         temp_dict = {}
         temp_dict['imepredmet'] = predmet[1]
@@ -129,7 +129,7 @@ def main():
 
         predmet_data.append(temp_dict)
 
-    razredi = run_query("SELECT DISTINCT razred,smjer FROM uČenik")
+    razredi = run_query("SELECT DISTINCT razred, smjer FROM uČenik")
     #print(razredi)
     oznake = run_query("SELECT DISTINCT oznaka FROM prostorija")
     #print(oznake)
@@ -163,7 +163,7 @@ def main():
     razredi_prethodni_predmet = {}
     for razred in razredi:
         razredi_RASPORED_DAN = {}
-        predmeti, labovi = lista_predmeta(predmet_data, razred[0])
+        predmeti, labovi = lista_predmeta(predmet_data, razred)
         razredi_RASPORED_DAN[razred[0]] = []
         predviden_broj_predmeta_po_razredu.append({razred[0]:dict(sorted(Counter(predmeti).items(), key=lambda item: item[1]))})
         razredi_RASPORED_TJEDAN.append(razredi_RASPORED_DAN)
@@ -261,7 +261,7 @@ def main():
                     query_string += f"({temrin_ID}, '{razred[0]}', '{oznaka}', '{key}', 'ne', '1', {i}, '{time_str}'), "
                 elif flag == True:
                     time_str = f"{vrijeme_h:02}:{vrijeme_min:02}"
-                    oznaka = "DVORANA" if key == "TZK" else dostupne_prostorije.pop()
+                    oznaka = "/"
                     query_string += f"({temrin_ID}, '{razred[0]}', '{oznaka}', 'PRAZAN_SAT', 'ne', '1', {i}, '{time_str}'), "
                 #print(str(temrin_ID) + " " + razred[0])
                 if vrijeme_h == 13:
