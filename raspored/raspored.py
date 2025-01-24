@@ -1,12 +1,11 @@
 from flask import Flask, render_template, send_from_directory, jsonify, request
 from flask_cors import CORS
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "https://noodle-frontend.onrender.com"}})
+CORS(app)
 from collections import Counter
 import copy
 import psycopg2
 import os
-import time
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -275,24 +274,24 @@ def main():
     run_query(query_string)
     #print(razredi_PREDMETI)
 
+@app.after_request
+def add_cors_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    return response
+
 @app.route('/')
 def home():
     return send_from_directory('.', 'index.html')
 
 @app.route('/run-script', methods=['POST'])
 def run_script():
-    start_time = time.time()
     try:
-        print("Starting script execution...")
         main()
-        response = {'status': 'success', 'message': 'Script executed successfully'}
+        return jsonify({'status': 'success', 'message': 'Raspored uspješno generiran. Osvježite stranicu.'})
     except Exception as e:
-        response = {'status': 'error', 'message': str(e)}
-        print("ERROR:", str(e))
-    finally:
-        execution_time = time.time() - start_time
-        print(f"Script execution time: {execution_time:.2f} seconds")
-    return jsonify(response)
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
