@@ -1,11 +1,15 @@
-.form{
+.repozitori-form{
   display: flex;
+  flex-direction: column;
   width: fit-content;
   height: 80%;
   justify-content: flex-start;
   gap: 2vh;
   overflow-y: scroll;
   margin-top: 10vh;
+  background-color: white;
+  padding: 5vh;
+  margin-bottom: 3vh;
 }
 
 .upload-gumb-i-spiner{

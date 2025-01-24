@@ -155,7 +155,7 @@ const Repository = () => {
         selectedPage = "Repozitorij"
         />
       )}
-    <div className="form">
+    <div className="repozitori-form">
       <h1>Repozitorij</h1>
 
       {user && user.role !== "učenik" && user.role !== "admin"? (

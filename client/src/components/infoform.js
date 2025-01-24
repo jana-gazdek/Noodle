@@ -64,7 +64,7 @@ function InfoForm({ user }) {
   };
 
   return (
-    <div className="form">
+    <div className="infoform-container">
       <h1>Unesite podatke: </h1>
       <form className="infoform" onSubmit={handleSubmit}>
         <input
