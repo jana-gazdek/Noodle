@@ -36,21 +36,24 @@
 
 @media (max-width: 768px) {
     .weather-container {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         width: 30vw;
-        font-size: 0.8vh;
+        font-size: 1.5vh;
     }
 
     .weather-city h2{
-        font-size: 2vw !important;
+        font-size: 4vw !important;
     }
 
     .weather-temp h2{
-        font-size: 2vw !important;
+        font-size: 4vw !important;
     }
 
     .weather-icon img{
-        height: 50%;
-        width: 50%;
+        height: 70%;
+        width: 70%;
     }
     
 }

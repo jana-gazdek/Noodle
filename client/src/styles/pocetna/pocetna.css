@@ -96,10 +96,6 @@ html {
 }
 
 @media (max-width: 768px) {
-  .pocetna-container {
-    overflow-y: scroll;
-  }
-
   .pocetna-sredina {
     flex-direction: column;
     height: 100%;
@@ -108,11 +104,11 @@ html {
   .raspored{
     height: 8vh !important;
     width: 92.5vw;
-    margin-top: 8vh;
+    margin-top: 5vh;
   }
 
   .desno {
-    height: 30vh;
+    height: 100%;
     flex-direction: row-reverse;
     gap: 5vw;
     margin-bottom: 4vh;
@@ -122,5 +118,9 @@ html {
     margin: 0;
     height: 50%;
     width: 10%;
+  }
+
+  .chat-container {
+    height: 100%;
   }
 }
