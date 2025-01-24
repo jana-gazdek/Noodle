@@ -91,6 +91,14 @@ const Izostanci = () => {
     }
   };
 
+  const handleAutoFill = (dan, sat, status, opis) => {
+    const localDate = dayjs(dan).format("YYYY-MM-DD");
+    setIzostanakDatum(localDate);
+    setIzostanakSat(sat);
+    setIzostanakStatus(status);
+    setIzostanakOpis(opis);
+  };
+
   const handleOdabir = async (id) => {
     try {
       const response = await axios.post('http://localhost:3000/info/ucenik-izostanci', {učenikID : id}, { withCredentials: true });
@@ -103,7 +111,6 @@ const Izostanci = () => {
   const handleClick = (id) => {
     setOdabranUčenikID(id);
     handleOdabir(id)
-    console.log("Selected učenik ID:", id);
   };
 
   function getDateEdit(dateObject) {
@@ -196,6 +203,7 @@ const Izostanci = () => {
                           <div key={a} className = "izostanci-opisi">
                             <p>{getDateEdit(a.izostanakDatum)}, {a.izostanakSat} sat: {a.izostanakStatus}</p>
                             <p>Opis: {a.izostanakOpis}</p>
+                            <button type = "button" onClick={() => handleAutoFill(a.izostanakDatum, a.izostanakSat, a.izostanakStatus, a.izostanakOpis)}>Promjeni</button>
                             <hr></hr>
                           </div>
                           ))}

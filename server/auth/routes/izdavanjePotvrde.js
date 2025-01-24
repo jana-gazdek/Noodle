@@ -9,7 +9,11 @@ const client = require('../../connection.js');
 const fs = require('fs');
 
 router.post('/izdavanje-potvrde', async (req, res) => {
-  const { OIB } = req.body;
+  const { googleId } = req.body;
+  
+  const ojib = await client.query(`SELECT OIB FROM UČENIK WHERE učenikId = $1`, [googleId]);
+  console.log(ojib)
+  const OIB = (ojib.rows[0])["oib"]
   if (!OIB) {
     return res.status(400).json({ error: 'Potreban je OIB korisnika' });
   }
