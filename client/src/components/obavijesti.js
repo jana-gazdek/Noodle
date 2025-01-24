@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/obavijesti.css";
 import axios from "axios";
+import Header from "./header.js";
 
 const Obavijesti = () => {
   const [user, setUser] = useState(null);
@@ -174,6 +175,14 @@ const Obavijesti = () => {
 
   return (
     <div className="obavijesti-infoform">
+      {(user) && (
+        <Header
+        user={user}
+        handleLogout={() => {
+        window.location.href = "http://localhost:3000/auth/logout";
+        }}
+        />
+      )}
       <div className = "slanje">
         {(user?.role !== "učenik" && user?.role !== "admin") ? (
             <>

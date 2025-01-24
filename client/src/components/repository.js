@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/repository.css";
 import "../styles/multiselect.css";
 import axios from "axios";
+import Header from "./header.js";
 
 const Repository = () => {
   const [files, setFiles] = useState([]);
@@ -144,6 +145,15 @@ const Repository = () => {
   };
 
   return (
+    <>
+    {(user) && (
+        <Header
+        user={user}
+        handleLogout={() => {
+        window.location.href = "http://localhost:3000/auth/logout";
+        }}
+        />
+      )}
     <div className="form">
       <h1>Repozitorij</h1>
 
@@ -222,6 +232,7 @@ const Repository = () => {
         )}
       </div>
     </div>
+  </>
   );
 };
 

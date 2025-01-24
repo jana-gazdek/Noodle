@@ -40,6 +40,9 @@
     .schedule-table th, .schedule-table td {
       padding: 5px;
     }
+
+    .schedule-container {
+      overflow: scroll;
+    }
   }
-  
   
