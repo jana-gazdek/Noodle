@@ -10,14 +10,50 @@
     gap: 0.2vw;
     justify-content: center;
     box-shadow: 5px 5px 2px rgba(0, 0, 0, 0.2);
-    width: 380px;
     align-items: center;
+    width: 20vw;
+    font-size: 1.5vh;
   }
+
 
 .weather-city {
     padding-left: 0.2vw;
 }
 
+.weather-city h2{
+    font-size: 3.5vh !important;
+    color: black;
+}
+
 .weather-temp {
     padding-right: 0.2vw;
+}
+
+.weather-temp h2{
+    font-size: 3.5vh !important;
+    color: black;
+}
+
+@media (max-width: 768px) {
+    .weather-container {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 30vw;
+        font-size: 1.5vh;
+    }
+
+    .weather-city h2{
+        font-size: 4vw !important;
+    }
+
+    .weather-temp h2{
+        font-size: 4vw !important;
+    }
+
+    .weather-icon img{
+        height: 70%;
+        width: 70%;
+    }
+    
 }

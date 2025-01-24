@@ -19,10 +19,10 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-const credentials = JSON.parse(process.env.GOOGLE_DRIVE_CREDENTIALS);
-credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
+const serviceAccountKey = require("../../objavaMaterijala/service-account-key.json");
+
 const driveAuth = new google.auth.GoogleAuth({
-  credentials,
+  keyFile: "../objavaMaterijala/service-account-key.json",
   scopes: ["https://www.googleapis.com/auth/drive"],
 });
 
@@ -664,6 +664,27 @@ router.post('/getRazredUcenici', async (req, res) => {
   res.status(500).send("Error fetching učenici list");
 }});
 
+router.get("/getRazredSatnicarMenu", async (req, res) => {
+  let userRazred = [];
+  let userResult = [];
+  
+  try {
+    userResult = await client.query(`SELECT razrednik FROM DJELATNIK WHERE razrednik != 'NONE' ORDER BY razrednik`);
+    for (let num = 0; num < userResult.rowCount; num++){
+      userRazred.push(userResult.rows[num]["razrednik"]);
+    }
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).send("Greska");
+    }
+
+    res.status(200).json({userRazred});
+  } catch (error) {
+    console.error("Error fetching svi razredi:", error.message);
+    res.status(500).send("Error retrieving svi razredi");
+  }
+});
+
 router.post("/getRazred", async (req, res) => {
   const { googleId, role } = req.body;
   let userRazred = [];
@@ -673,7 +694,7 @@ router.post("/getRazred", async (req, res) => {
     if (role === "učenik"){
       userResult = await client.query(`SELECT razred FROM UČENIK WHERE UČENIK.učenikId = $1`, [googleId]);
       userRazred = userResult.rows[0]["razred"];
-    } else if (role === "profesor") {
+    } else if (role === "profesor" || role === "satničar") {
       userResult = await client.query(`SELECT razred FROM DJELATNIK WHERE djelatnik.djelatnikId = $1`, [googleId]);
       userRazred = userResult.rows[0]["razred"].split(",");
     } else if (role === 'admin') {

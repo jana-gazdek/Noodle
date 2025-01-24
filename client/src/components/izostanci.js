@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import "../styles/izostanci.css";
 import dayjs from "dayjs";
 import axios from 'axios';
+import Header from "./header";
 
 const Izostanci = () => {
   const [user, setUser] = useState(null);
   const [razredList, setRazredList] = useState([]);
+  const [razrednik, setRazrednik] = useState([]);
   const [učeniciList, setUčeniciList] = useState([]);
   const [odabranUčenikID, setOdabranUčenikID] = useState('');
   const [odabranUčenikIzostanciList, setOdabranUčenikIzostanciList] = useState([]);
@@ -19,7 +21,7 @@ const Izostanci = () => {
 
   useEffect(() => {
     axios
-      .get("https://noodle-x652.onrender.com/auth/pocetna", { withCredentials: true })
+      .get("http://localhost:3000/auth/pocetna", { withCredentials: true })
       .then((response) => {
         setUser(response.data.user);
       })
@@ -36,16 +38,26 @@ const Izostanci = () => {
 
   const fetchRazred = async (googleId, role) => {
     try {
-      const response = await axios.post("https://noodle-x652.onrender.com/info/getRazred", {googleId, role});
+      const response = await axios.post("http://localhost:3000/info/getRazred", {googleId, role});
       setRazredList(response.data.userRazred);
     } catch (error) {
       console.error("Error fetching razred:", error.message);
     }
   };
 
+  const fetchRazrednik = async (googleId) => {
+    try {
+      const response = await axios.post("http://localhost:3000/info/getRazrednik", {googleId});
+      setRazrednik(response.data.userRazrednik);
+    } catch (error) {
+      console.error("Error fetching razred:", error.message);
+    }
+  };
+
+
   const fetchUčenici = async () => {
     try {
-      const response = await axios.post("https://noodle-x652.onrender.com/info/getRazredUcenici", {razred : odabranRazred});
+      const response = await axios.post("http://localhost:3000/info/getRazredUcenici", {razred : odabranRazred});
       setUčeniciList(response.data);
     } catch (error) {
       console.error("Error fetching razred učenici:", error.message);
@@ -55,6 +67,7 @@ const Izostanci = () => {
   useEffect(() => {
     if (user){
       fetchRazred(user.googleId, user.role);
+      fetchRazrednik(user.googleId);
     }
   }, [user]);
 
@@ -64,7 +77,7 @@ const Izostanci = () => {
     const izostanak = { učenikID : odabranUčenikID, izostanakDatum : izostanakDatum, izostanakSat, izostanakStatus, izostanakOpis };
 
     try {
-      const response = await axios.post('https://noodle-x652.onrender.com/info/upis-izostanka', izostanak, { withCredentials: true });
+      const response = await axios.post('http://localhost:3000/info/upis-izostanka', izostanak, { withCredentials: true });
       const message = response.data.message;
       if (message === 'Izostanak uspješno dodan.') {
         alert('Izostanak je uspješno dodan u bazu podataka.');
@@ -78,9 +91,17 @@ const Izostanci = () => {
     }
   };
 
+  const handleAutoFill = (dan, sat, status, opis) => {
+    const localDate = dayjs(dan).format("YYYY-MM-DD");
+    setIzostanakDatum(localDate);
+    setIzostanakSat(sat);
+    setIzostanakStatus(status);
+    setIzostanakOpis(opis);
+  };
+
   const handleOdabir = async (id) => {
     try {
-      const response = await axios.post('https://noodle-x652.onrender.com/info/ucenik-izostanci', {učenikID : id}, { withCredentials: true });
+      const response = await axios.post('http://localhost:3000/info/ucenik-izostanci', {učenikID : id}, { withCredentials: true });
       setOdabranUčenikIzostanciList(response.data);
     } catch (error) {
       console.error("Error fetching učenik izostanci:", error.message);
@@ -90,7 +111,6 @@ const Izostanci = () => {
   const handleClick = (id) => {
     setOdabranUčenikID(id);
     handleOdabir(id)
-    console.log("Selected učenik ID:", id);
   };
 
   function getDateEdit(dateObject) {
@@ -101,6 +121,15 @@ const Izostanci = () => {
   
   return (
     <div className="izostanak-container">
+      {(user) && (
+        <Header
+        user={user}
+        handleLogout={() => {
+        window.location.href = "http://localhost:3000/auth/logout";
+        }}
+        selectedPage = "Izostanci"
+        />
+      )}
       <h1 className = "izostanak-naslov">Upravljanje Izostancima</h1>
       <form className="izostanci-infoform" onSubmit={handleSubmit}>
         <h2>Dodavanje/Uređivanje Izostanka</h2>
@@ -111,7 +140,7 @@ const Izostanci = () => {
                   value={odabranRazred}
                   onChange={(e) => setOdabranRazred(e.target.value)}
               >
-                  <option value="nista">Odaberi</option>
+                  <option value="">🔽 Odaberi razred</option>
                   {razredList?.map((a) => (
                   <option key={a} value={a}>
                       {a}
@@ -152,8 +181,8 @@ const Izostanci = () => {
                             setIzostanakStatus(e.target.value)
                           }>
                             <option value="">Odaberi status</option>
-                            <option value="Opravdan">Opravdan.</option>
-                            <option value="Neopravdan">Neopravdan.</option>
+                            {razrednik === odabranRazred && <option value="Opravdan">Opravdan.</option>}
+                            {razrednik === odabranRazred && <option value="Neopravdan">Neopravdan.</option>}
                             <option value="Na čekanju">Na čekanju.</option>
                     </select>{""}
                     <input
@@ -174,6 +203,7 @@ const Izostanci = () => {
                           <div key={a} className = "izostanci-opisi">
                             <p>{getDateEdit(a.izostanakDatum)}, {a.izostanakSat} sat: {a.izostanakStatus}</p>
                             <p>Opis: {a.izostanakOpis}</p>
+                            <button type = "button" onClick={() => handleAutoFill(a.izostanakDatum, a.izostanakSat, a.izostanakStatus, a.izostanakOpis)}>Promjeni</button>
                             <hr></hr>
                           </div>
                           ))}

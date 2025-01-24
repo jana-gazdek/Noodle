@@ -21,7 +21,6 @@ function Profile() {
     smjer: "",
     djelatnikID: "",
     mobBroj: "",
-    škGod: "",
     razrednik: null,
     id: "",
     role: ""
@@ -31,7 +30,7 @@ function Profile() {
 
   useEffect(() => {
     axios
-      .post("https://noodle-x652.onrender.com/info/get-user-info", { OIB: id }, { withCredentials: true })
+      .post("http://localhost:3000/info/get-user-info", { OIB: id }, { withCredentials: true })
       .then((response) => {
         setUser({
           OIB: response?.data?.oib || "",
@@ -43,7 +42,7 @@ function Profile() {
           spol: response?.data?.spol || "",
           učenikID: response?.data?.učenikid || "",
           djelatnikID: response?.data?.djelatnikid || "",
-          mobBroj: response?.data?.mobBroj || "",
+          mobBroj: response?.data?.mobbroj || "",
           razred: response?.data?.razred || "",
           razrednik: response?.data?.razrednik || null,
           škGod: response?.data?.škgod || "",
@@ -68,7 +67,7 @@ function Profile() {
         ? {_id : user.id, OIB: user.OIB, ime: user.name, prezime : user.surname, datumRod : user.dateOfBirth, adresa : user.address, email : user.email, spol : user.spol, role : user.role, učenikid : user.učenikID, razred : user.razred, škgod : user.škGod, smjer : user.smjer}
         : {_id : user.id, OIB: user.OIB, ime: user.name, prezime : user.surname, datumRod : user.dateOfBirth, adresa : user.address, email : user.email, spol : user.spol, role : user.role, djelatnikid : user.djelatnikID, mobbroj : user.mobBroj, razred : user.razred, razrednik : user.razrednik}
     axios
-      .post("https://noodle-x652.onrender.com/info/update-user-info", podatci, { withCredentials: true })
+      .post("http://localhost:3000/info/update-user-info", podatci, { withCredentials: true })
       .then(() => {
         alert("Profil uspješno uređen.");
       })

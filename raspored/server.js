@@ -88,7 +88,21 @@ app.post('/schedule-data-prof', async (req, res) => {
     }
 }); 
 
-app.post('/update-schedule-data'), async (req, res) => {
+app.post('/schedule-data-prof-oib', async (req, res) => {
+    const {OIB} = req.body;
+    try {
+        const gId = await client.query(`SELECT d.djelatnikid FROM korisnik k NATURAL JOIN djelatnik d WHERE d.oib = $1`, [OIB])
+        const googleId = (gId.rows[0])["djelatnikid"]
+        console.log(googleId)
+        const tjedan = await generateScheduleProf(googleId);
+        res.json({ original_tjedan: tjedan });
+    } catch (err) {
+        console.error("Error generating schedule:", err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}); 
+
+app.post('/update-schedule-data', async (req, res) => {
     const { dan, vrijeme, razred, imePredmet, labos } = req.body;
     try {
         await client.query(`UPDATE raspored SET labos = $1, imePredmet = $2 WHERE dan = $3 AND vrijeme = $4 AND razred = $5`, [labos, imePredmet, dan, vrijeme, razred]);
@@ -97,9 +111,9 @@ app.post('/update-schedule-data'), async (req, res) => {
         console.error("Greška pri ažuriranju termina:", err);
         res.status(500).json({ error: "Greška pri ažuriranju termina" });
     }
-}
+});
 
-app.post('/free-profs'), async (req, res) => {
+app.post('/free-profs', async (req, res) => {
     const { dan, vrijeme, razred } = req.body;
     try {
         const slobodni = await client.query(`
@@ -134,7 +148,7 @@ app.post('/free-profs'), async (req, res) => {
         console.error("Greška pri dohvaćivanju slobodnih profesora:", err);
         res.status(500).json({ error: "Greška pri dohvaćivanju slobodnih profesora" });
     }
-}
+});
 
 app.listen(3006, () => {
     console.log("Server running on http://localhost:3006");

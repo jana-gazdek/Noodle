@@ -8,10 +8,10 @@ body {
   height: 100vh;
 }
 
-.form {
+.infoform-container{
   display: flex;
   flex-direction: column;
-  width: 40vh;
+  width: 30vw;
   height: auto;
   padding: 2rem;
   background-color: #ffffff;
@@ -20,6 +20,7 @@ body {
   justify-content: center;
   align-items: center;
   box-shadow: 5px 5px 2px rgba(0, 0, 0, 0.2);
+  gap: 1vh;
 }
 
 .form h1 {
@@ -34,7 +35,7 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 1rem;
+  gap: 2rem;
   justify-content: space-between;
   align-items: center;
 }
@@ -62,7 +63,7 @@ body {
 }
 
 .infoform select {
-  width: 98%;
+  width: 100%;
   height: 3rem;
   border-radius: 25px;
   border: none;
@@ -74,3 +75,10 @@ body {
 .infoform button:hover {
   background-color: #5e3fbf;
 }
+
+@media (max-width: 768px) {
+  .infoform-container{
+    width: 60vw;
+  }
+}
+

@@ -151,15 +151,6 @@ const Raspored = () => {
         </table>
       </div>
       <>
-      <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <button onClick={runPythonScript} className="btn">
-          Run Python Script
-        </button>
-        {scriptMessage && <p>{scriptMessage}</p>}
-        {loading && <div className="spinner"></div>}{" "}
-      </div>
-      </>
-      <>
         {((user?.role === "profesor" || user?.role === "satničar") && razrednik !== "NONE") ?
           (<div className="schedule-container">
             <h2 id="schedule-title">Raspored za {razrednik} razred</h2>

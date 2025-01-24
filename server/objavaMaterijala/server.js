@@ -12,11 +12,11 @@ app.use(cors());
 
 app.set('trust proxy', 1);
 
-const credentials = JSON.parse(process.env.GOOGLE_DRIVE_CREDENTIALS);
-credentials.private_key = credentials.private_key.replace(/\\n/g, '\n');
+const serviceAccountKey = require("./service-account-key.json");
+
 const driveAuth = new google.auth.GoogleAuth({
-  credentials,
-  scopes: ["https://www.googleapis.com/auth/drive"],
+  keyFile: "./service-account-key.json",
+  scopes: ["https://www.googleapis.com/auth/drive.file"],
 });
 
 const drive = google.drive({ version: "v3", auth: driveAuth });

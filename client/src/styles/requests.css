@@ -18,15 +18,17 @@ body {
 
 .req-button {
     background-color: #8860D0;
-    color: #D9D9D9;
+    color: #ffffff;
     border: none;
     border-radius: 25px;
     padding: 1vh;
-    width: 8vh;
+    min-width: 80px;
+    min-height: 20px;
+    width: 10vh;
     font-size: 1rem;
     cursor: pointer;
     margin-top: 1vh;
-    margin-bottom: 1vh;
+    margin-bottom: 5vh;
     text-align: center;
     transition: background-color 0.3s ease;
   }
@@ -37,11 +39,13 @@ body {
   
 .back-button {
     background-color: #8860D0;
-    color: #D9D9D9;
+    color: #ffffff;
     border: none;
     border-radius: 25px;
     padding: 1vh;
-    width: 8vh;
+    min-width: 80px;
+    min-height: 20px;
+    width: 9vh;
     font-size: 1rem;
     cursor: pointer;
     text-align: center;
@@ -92,7 +96,7 @@ body {
   }
 
   .nema {
-    margin-top: 3vh;
+    margin-top: 6vh;
   }
 
   
@@ -144,5 +148,5 @@ body {
   }
   
   .ugaseno::placeholder {
-    color: #888; /* Dim the placeholder text as well */
+    color: #888; 
   }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/repository.css";
 import "../styles/multiselect.css";
 import axios from "axios";
+import Header from "./header.js";
 
 const Repository = () => {
   const [files, setFiles] = useState([]);
@@ -11,11 +12,11 @@ const Repository = () => {
   const [loading, setLoading] = useState(false);
   const [razredList, setRazredList] = useState([]);
   const [selectedRazredList, setSelectedRazredList] = useState([]);
-  let expanded = false;
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     axios
-      .get("https://noodle-x652.onrender.com/auth/pocetna", { withCredentials: true })
+      .get("http://localhost:3000/auth/pocetna", { withCredentials: true })
       .then((response) => {
         setUser(response.data.user);
       })
@@ -35,7 +36,7 @@ const Repository = () => {
 
   const fetchRazred = async (googleId, role) => {
     try {
-      const response = await axios.post("https://noodle-x652.onrender.com/info/getRazred", {googleId, role});
+      const response = await axios.post("http://localhost:3000/info/getRazred", {googleId, role});
       setRazredList(response.data.userRazred);
     } catch (error) {
       console.error("Error fetching razred:", error.message);
@@ -44,7 +45,7 @@ const Repository = () => {
 
   const fetchFiles = async (googleId, role) => {
     try {
-      const response = await axios.post("https://noodle-repo.onrender.com/files", { googleId, role });
+      const response = await axios.post("http://localhost:3003/files", { googleId, role });
 
       setFiles(response.data);
     } catch (error) {
@@ -72,7 +73,7 @@ const Repository = () => {
     setLoading(true);
 
     try {
-      await axios.post("https://noodle-repo.onrender.com/upload", formData, {
+      await axios.post("http://localhost:3003/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -89,7 +90,7 @@ const Repository = () => {
 
   const handleDownload = async (id) => {
     try {
-      const response = await axios.get(`https://noodle-repo.onrender.com/download/${id}`, {
+      const response = await axios.get(`http://localhost:3003/download/${id}`, {
         responseType: "blob",
       });
 
@@ -113,7 +114,7 @@ const Repository = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://noodle-repo.onrender.com/delete/${id}`);
+      await axios.delete(`http://localhost:3003/delete/${id}`);
       setMessage("File deleted successfully!");
       fetchFiles(user.googleId, user.role);
     } catch (error) {
@@ -122,16 +123,15 @@ const Repository = () => {
     }
   };
 
-  function showCheckboxes(expanded) {
+  function showCheckboxes() {
     var checkboxes = document.getElementById("checkboxes");
     if (!expanded) {
       checkboxes.style.display = "block";
-      expanded = true;
+      setExpanded(true)
     } else {
       checkboxes.style.display = "none";
-      expanded = false;
+      setExpanded(false);
     }
-    return expanded;
   }
 
   const handleChange = (event) => {
@@ -145,30 +145,42 @@ const Repository = () => {
   };
 
   return (
-    <div className="form">
+    <>
+    {(user) && (
+        <Header
+        user={user}
+        handleLogout={() => {
+        window.location.href = "http://localhost:3000/auth/logout";
+        }}
+        selectedPage = "Repozitorij"
+        />
+      )}
+    <div className="repozitori-form">
       <h1>Repozitorij</h1>
 
       {user && user.role !== "učenik" && user.role !== "admin"? (
         <>
           <div className="upload-section">
-            <input type="file" onChange={handleFileChange} />
-            <button
-              className="upload-button"
-              onClick={handleUpload}
-              disabled={loading}
-            >
-              {loading ? "Uploading..." : "Upload"}
-            </button>
-            {loading && <div className="spinner"></div>}{" "}
+            <input className="choose-file-gumb" type="file" onChange={handleFileChange} />
+            <div className="upload-gumb-i-spiner">
+              <button
+                className="upload-button"
+                onClick={handleUpload}
+                disabled={loading}
+              >
+                {loading ? "Uploading..." : "Upload"}
+              </button>
+              {loading && <div className="spinner"></div>}{" "}
+            </div>
           </div>
-          <div>
+          <div className="odabir-razreda-container">
             <form>
               <div className="multiselect">
-                <div className="selectBox" onClick={() => expanded = showCheckboxes(expanded)}>
+                <div className="selectBox" onClick={() => showCheckboxes()}>
                   <select>
                     <option>Odaberi razrede: </option>
                   </select>
-                  <div className="overSelect"></div>
+                  <div className="overSelect">Odaberi razrede:<span>&#9660;</span></div>
                 </div>
                 <div id="checkboxes">
                   {razredList.map((razred) => (
@@ -223,6 +235,7 @@ const Repository = () => {
         )}
       </div>
     </div>
+  </>
   );
 };
 

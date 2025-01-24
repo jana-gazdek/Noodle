@@ -1,18 +1,35 @@
+.repozitori-form{
+  display: flex;
+  flex-direction: column;
+  width: 40vw;
+  height: 80%;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2vh;
+  overflow-y: scroll;
+  margin-top: 10vh;
+  background-color: white;
+  padding: 5vh;
+  margin-bottom: 3vh;
+  overflow-x: hidden;
+}
+
+.upload-gumb-i-spiner{
+  display: flex;
+  flex-direction: row;
+}
+
 .upload-section {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: top;
   margin-top: 0.5vh;
   margin-bottom: 0.5vh;
+  gap: 2vw;
+  width: fit-content;
 }
 
-.upload-section input {
-  flex: 1;
-  font-family: 'Inter', 'Roboto', sans-serif;
-}
-
-.upload-section button {
-  margin-left: 10px;
+::-webkit-file-upload-button{
   padding: 8px 12px;
   background-color: #5e3fbf;
   color: white;
@@ -20,10 +37,109 @@
   border-radius: 4px;
   cursor: pointer;
   transition: 0.3s ease;
+  margin-right: 0.5vw;
+}
+
+.upload-section input {
+  display: flex;
+  font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+.upload-section button {
+  padding: 8px 12px;
+  background-color: #5e3fbf;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-right: 1vw;
+  max-height: fit-content;
 }
 
 .upload-section button:hover {
   background-color: #8860D0;
+}
+
+.odabir-razreda-container{
+  display: flex;
+  flex-direction: column;
+  padding-top: 1vh;
+}
+
+.overSelect{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  font-size: 1.5vh;
+  border: 2px solid #5e3fbf;
+  border-radius: 5px;
+  color: #333;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  gap: 0.5vw;
+}
+
+.overSelect:hover{
+  color: white;
+  background-color: #5e3fbf;
+}
+
+.selectBox{
+  margin-right: 1vw;
+}
+
+.selectBox select {
+  width: 100%;
+  padding: 0.3vw;
+  font-size: 1.5vh;
+  border: 2px solid #5e3fbf;
+  border-radius: 5px;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.selectBox select:hover {
+  border-color: #8860D0;
+}
+
+#checkboxes {
+  display: none;
+  border: 2px solid #5e3fbf;
+  border-radius: 5px;
+  background-color: white;
+  padding: 5px;
+  max-height: 200px;
+  z-index: 10;
+  width: 50%;
+  margin-right: 0.6vw;
+}
+
+#checkboxes label input{
+  accent-color: #593f8a !important;
+}
+
+#checkboxes label {
+  display: block;
+  padding: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#checkboxes label:hover {
+  background-color: #8860D0 !important;
+  color: white;
+}
+
+.multiselect{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .files-list {
@@ -33,10 +149,21 @@
   align-items: center;
 }
 
+.files-list span{
+  flex: 1;
+  max-width: 50%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-overflow: clip;
+}
+
 .files-list ul {
+  display: flex;
+  flex-direction: column-reverse;
   list-style: none;
   padding: 0;
-  width: 100%;
+  width: 40vw;
 }
 
 .files-list li {
@@ -46,26 +173,29 @@
   padding: 10px 0;
   border-bottom: 1px solid #ddd;
   width: 100%;
+  flex-wrap: wrap;
 }
 
+
 .span {
-  flex-shrink: 0;
-  width: 60%;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  flex-shrink: 1;
+  max-width: 80%;
   text-align: left;
-  gap: 0.5vh;
   padding-left: 1vh;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .btns {
   display: flex;
-  width: 40%;
+  width: 10vw;
+  gap: 0.5vw;
+  justify-content: flex-end;
 }
 
 .download-btn {
-  flex: 1;
-  width: 50%;
+  width: 100%;
   padding: 5px 10px;
   background-color: #5e3fbf;
   color: white;
@@ -77,8 +207,7 @@
 }
 
 .delete-btn {
-  flex: 1;
-  width: 50%;
+  width: 100%;
   padding: 5px 10px;
   background-color: red;
   color: white;
@@ -99,12 +228,15 @@
 
 .spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
-  width: 36px;
-  height: 36px;
+  width: 1rem;
+  height: 1rem;
   border-radius: 50%;
-  border-left-color: #09f;
+  border-left-color: #5e3fbf;
   animation: spin 1s linear infinite;
-  margin: 10px auto;
+}
+
+::-webkit-scrollbar-thumb{
+  background-color: #8860D0 !important;
 }
 
 @keyframes spin {

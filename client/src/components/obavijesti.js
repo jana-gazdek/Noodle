@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/obavijesti.css";
 import axios from "axios";
+import Header from "./header.js";
 
 const Obavijesti = () => {
   const [user, setUser] = useState(null);
@@ -11,7 +12,8 @@ const Obavijesti = () => {
   const [tekst, setTekst] = useState("");
   const [obavijestiList, setObavijestiList] = useState([]);
   const [obavijestiListAdmin, setObavijestiListAdmin] = useState([]);
-  let expanded = false;
+  const [isLoading, setIsLoading] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,6 +24,9 @@ const Obavijesti = () => {
       })
       .catch(() => {
         window.location.href = "/login";
+      })
+      .finally(() => {
+        setIsLoading(false); 
       });
   }, []);
 
@@ -113,23 +118,21 @@ const Obavijesti = () => {
   
         setNaslov("");
         setTekst("");
-        setSelectedRazredList([]);
       }
     } catch (error) {
       alert("Greška pri upisu obavijesti.");
     }
   };
 
-  function showCheckboxes(expanded) {
+  function showCheckboxes() {
     var checkboxes = document.getElementById("checkboxes");
     if (!expanded) {
       checkboxes.style.display = "block";
-      expanded = true;
+      setExpanded(true);
     } else {
       checkboxes.style.display = "none";
-      expanded = false;
+      setExpanded(false);
     }
-    return expanded;
   }
 
   const handleChange = (event) => {
@@ -149,6 +152,7 @@ const Obavijesti = () => {
       const message = response.data.message;
       const error2 = response.data.error;
       if (message === 'Obavijest i povezan link uspješno obrisani') {
+        fetchObavijestiAdmin();
         alert('Obavijest uspješno obrisana.');
       } else if (error2 === 'Obavijest nije pronađena') {
         alert('Obavijest ne postoji.');
@@ -164,8 +168,23 @@ const Obavijesti = () => {
     navigate(`/auth/obavijesti/${linktekst}`);
   };
 
+  if (isLoading) {
+    return <p>Učitavanje...</p>;
+  }
+
   return (
     <div className="obavijesti-infoform">
+      <div className = "obavijesti-header">
+        {(user) && (
+          <Header
+          user={user}
+          handleLogout={() => {
+          window.location.href = "http://localhost:3000/auth/logout";
+          }}
+          selectedPage = "Obavijesti"
+          />
+        )}
+      </div>
       <div className = "slanje">
         {(user?.role !== "učenik" && user?.role !== "admin") ? (
             <>
@@ -188,7 +207,7 @@ const Obavijesti = () => {
                         }
                     />
                     <div className="multiselect">
-                        <div className="selectBox" onClick={() => expanded = showCheckboxes(expanded)}>
+                        <div className="selectBox" onClick={() => showCheckboxes()}>
                         <select>
                             <option>Odaberi razrede: </option>
                         </select>

@@ -3,9 +3,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Chat from "./chat.js";
 import Raspored from "./raspored.js";
-import Map from "./map.js";
 import "../styles/pocetna/pocetna.css";
 import "../styles/pocetna/weather.css";
+import Header from "./header.js";
+
 
 function Pocetna({handleLogout}) {
   const [user, setUser] = useState(null);
@@ -15,7 +16,7 @@ function Pocetna({handleLogout}) {
 
   useEffect(() => {
     axios
-      .get("https://noodle-x652.onrender.com/auth/pocetna", { withCredentials: true })
+      .get("http://localhost:3000/auth/pocetna", { withCredentials: true })
       .then((response) => {
         setUser(response.data.user);
         setWeather(response.data.weather);
@@ -24,30 +25,6 @@ function Pocetna({handleLogout}) {
         window.location.href = "/login";
       });
   }, []);
-
-  const handleAdminButtonClick = () => {
-    navigate("/info/admin-menu");
-  };
-
-  const handleRepositoryButtonClick = () => {
-    navigate("/auth/repository");
-  };
-
-  const handleMapButtonClick = () => {
-    navigate("/auth/map");
-  };
-  
-  const handleLogoutButtonClick = () => {
-    window.location.href = "https://noodle-x652.onrender.com/auth/logout";
-  };
-
-  const handleIzostanakButtonClick = () => {
-    navigate("/auth/izostanci");
-  };
-
-  const handleObavijestiButtonClick = () => {
-    navigate("/auth/obavijesti");
-  };
 
   return (
     <div className="pocetna-container">
@@ -67,57 +44,13 @@ function Pocetna({handleLogout}) {
           </div>
         ) : (
           <>
-            <div className = "pocetna-heder">
-              <div className="user-container">
-                <h1>
-                  Bok, {user.name} {user.surname}!
-                </h1>
-              </div>
-              <button
-                className="map-gumb"
-                onClick={handleMapButtonClick}>MAP
-              </button>
-              <button
-                className="repository-gumb"
-                onClick={handleRepositoryButtonClick}>REPOZITORIJ
-              </button>
-              <button
-                className="obavijesti-gumb"
-                onClick={handleObavijestiButtonClick}>OBAVIJESTI
-              </button>
-              <button
-                className="logout-gumb"
-                onClick={handleLogoutButtonClick}>LOGOUT
-              </button>
-              {user.role !== "učenik" ? (
-                <div>
-                  <div>
-                    <button
-                      className="izostanak-gumb"
-                      onClick={handleIzostanakButtonClick}
-                    >
-                      IZOSTANCI
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div></div>
-              )}
-              {user.role === "admin" ? (
-                <div>
-                  <div>
-                    <button
-                      className="admin-gumb"
-                      onClick={handleAdminButtonClick}
-                    >
-                      ADMIN GUMB
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div></div>
-              )}
-            </div>
+            <Header
+              user={user}
+              handleLogout={() => {
+                window.location.href = "http://localhost:3000/auth/logout";
+              }}
+            />
+
 
             <div className = "pocetna-sredina">
               <div className = "raspored">
@@ -142,7 +75,7 @@ function Pocetna({handleLogout}) {
                     </div>
                   </div>
                 ) : (
-                  <div className="weather-container">
+                  <div className="weather-container-pocetna">
                     <p>Greška: podatci o vremenu su nedostupni.</p>
                   </div>
                 )}

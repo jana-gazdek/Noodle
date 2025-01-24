@@ -8,6 +8,7 @@ import Pocetna from "./components/pocetna";
 import Login from "./components/login";
 import InfoForm from "./components/infoform";
 import Adminmenu from "./components/admin_menu";
+import Satnicarmenu from "./components/satnicar_menu";
 import Requests from "./components/requests";
 import Profile from "./components/profiles";
 import Repository from "./components/repository";
@@ -28,7 +29,7 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("https://noodle-x652.onrender.com/auth/pocetna", { withCredentials: true })
+      .get("http://localhost:3000/auth/pocetna", { withCredentials: true })
       .then((response) => {
         setUser(response.data.user);
         if (response.status === 200) {
@@ -43,7 +44,7 @@ function App() {
   }, []);
 
   const handleGoogleLogin = () => {
-    window.location.href = "https://noodle-x652.onrender.com/auth/google";
+    window.location.href = "http://localhost:3000/auth/google";
   };
 
   if (isAuthenticated === null) {
@@ -73,6 +74,15 @@ function App() {
       element:
         isAuthenticated && user.role === "admin" ? (
           <Adminmenu />
+        ) : (
+          <Unauthorized />
+        ),
+    },
+    {
+      path: "/info/satnicar-menu",
+      element:
+        isAuthenticated && user.role === "satničar" ? (
+          <Satnicarmenu />
         ) : (
           <Unauthorized />
         ),

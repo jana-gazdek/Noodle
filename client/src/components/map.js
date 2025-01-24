@@ -1,24 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Polyline, useMap } from "react-leaflet";
-import { useNavigate } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import "../styles/map.css";
+import "../styles/header.css";
+import Header from "../components/header";
+import axios from "axios";
 
 const Map = () => {
   const [startCity, setStartCity] = useState("");
   const [endCity, setEndCity] = useState("");
   const [route, setRoute] = useState(null);
-  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
 
-  const handleBackButtonClick = () => {
-    navigate("/auth/pocetna");
-  };
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/auth/pocetna", { withCredentials: true })
+      .then((response) => {
+        setUser(response.data.user);
+      })
+      .catch(() => {
+        window.location.href = "/login";
+      })
+      .finally(() => {
+      });
+  }, []);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://noodle-map.onrender.com/route", {
+      const response = await fetch("http://localhost:3005/route", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,33 +54,41 @@ const Map = () => {
 
   return (
     <div>
-      <h1>Karta</h1>
+      {(user) && (
+        <Header
+        user={user}
+        handleLogout={() => {
+        window.location.href = "http://localhost:3000/auth/logout";
+        }}
+        selectedPage = "Karta"
+        />
+      )}
       <form className="route-form" onSubmit={handleFormSubmit}>
-        <label>
-          Početak:
-          <input
-            type="text"
-            value={startCity}
-            onChange={(e) => setStartCity(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Kraj:
-          <input
-            type="text"
-            value={endCity}
-            onChange={(e) => setEndCity(e.target.value)}
-            required
-          />
-        </label>
+        <div className="route-form-gornji">
+          <label id="start-city">
+            Početak:
+            <input
+              type="text"
+              value={startCity}
+              onChange={(e) => setStartCity(e.target.value)}
+              required
+            />
+          </label>
+          <label className="crtica"> - </label>
+          <label id="end-city">
+            Kraj:
+            <input
+              type="text"
+              value={endCity}
+              onChange={(e) => setEndCity(e.target.value)}
+              required
+            />
+          </label>
+        </div>
         <button type="submit">Pronađi rutu</button>
-        <button className="back-button" onClick={handleBackButtonClick}>
-          Nazad
-        </button>
       </form>
 
-      <MapContainer center={[0, 0]} zoom={2} className="map-container">
+      <MapContainer center={[44.8, 16]} zoom={7} className="map-container">
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; OpenStreetMap contributors"
@@ -77,7 +96,6 @@ const Map = () => {
         {route && <RoutePolyline route={route} />}
       </MapContainer>
     </div>
-    
   );
 };
 

@@ -22,7 +22,7 @@ function InfoForm({ user }) {
 
     try {
       const response = await axios.post(
-        "https://noodle-x652.onrender.com/info/submit-request",
+        "http://localhost:3000/info/submit-request",
         {
           name: formData.name,
           surname: formData.surname,
@@ -64,7 +64,7 @@ function InfoForm({ user }) {
   };
 
   return (
-    <div className="form">
+    <div className="infoform-container">
       <h1>Unesite podatke: </h1>
       <form className="infoform" onSubmit={handleSubmit}>
         <input

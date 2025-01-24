@@ -20,7 +20,7 @@ function Requests() {
 
   useEffect(() => {
     axios
-      .get("https://noodle-x652.onrender.com/info/get-requests", { withCredentials: true })
+      .get("http://localhost:3000/info/get-requests", { withCredentials: true })
       .then((response) => {
         setRequests(response.data);
       })
@@ -41,7 +41,7 @@ function Requests() {
   const handleSave = async () => {
     try {
       await axios.post(
-        "https://noodle-x652.onrender.com/info/change-info-request",
+        "http://localhost:3000/info/change-info-request",
         updatedRequest,
         { withCredentials: true }
       );
@@ -61,7 +61,7 @@ function Requests() {
 
   const handleConfirm = async (id) => {
     try {
-      await axios.post("https://noodle-x652.onrender.com/info/confirm-request", {
+      await axios.post("http://localhost:3000/info/confirm-request", {
         _id : id, 
         razredUcenika : razredUcenika, 
         smjerUcenika : smjerUcenika, 
@@ -78,7 +78,7 @@ function Requests() {
 
   const handleDeny = async (id) => {
     try {
-      await axios.post("https://noodle-x652.onrender.com/info/deny-request", { _id: id }, { withCredentials: true });
+      await axios.post("http://localhost:3000/info/deny-request", { _id: id }, { withCredentials: true });
       setRequests(removeRequestById(requests, id));
       alert("Uspjesno odbijen zahtjev.");
     } catch (error) {
