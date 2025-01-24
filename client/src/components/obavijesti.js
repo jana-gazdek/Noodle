@@ -178,11 +178,10 @@ const Obavijesti = () => {
         <Header
         user={user}
         handleLogout={() => {
-        window.location.href = "http://localhost:3000/auth/logout";
+        window.location.href = "https://noodle-x652.onrender.com/auth/logout";
         }}
         selectedPage = "Obavijesti"
         />
-          />
         )}
       <div className="obavijesti-infoform">
         <div className = "slanje">
