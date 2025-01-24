@@ -204,7 +204,7 @@ const Satnicarmenu = () => {
                     value={odabranPredmet}
                     onChange={(e) => setOdabranPredmet(e.target.value)}
                   >
-                    <option value="ne">Odaberi slobodnog profesora</option>
+                    <option value="">Odaberi slobodnog profesora</option>
                     {slobodniProfesori?.map((a) => (
                     <option key={a.djelatnikid} value={a.imepredmet}>
                         {a.profesor}
