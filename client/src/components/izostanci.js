@@ -140,7 +140,7 @@ const Izostanci = () => {
                   value={odabranRazred}
                   onChange={(e) => setOdabranRazred(e.target.value)}
               >
-                  <option value="nista">Odaberi</option>
+                  <option value="">🔽 Odaberi razred</option>
                   {razredList?.map((a) => (
                   <option key={a} value={a}>
                       {a}

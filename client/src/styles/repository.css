@@ -235,6 +235,10 @@
   animation: spin 1s linear infinite;
 }
 
+::-webkit-scrollbar-thumb{
+  background-color: #8860D0 !important;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
