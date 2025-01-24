@@ -33,7 +33,7 @@ function Header({ user = {}, handleLogout, selectedPage }) {
 
   const handleUcenikButtonClick = async (id) => {
     try {
-      const response = await axios.post('http://localhost:3000/potvrda/izdavanje-potvrde', {googleId : id}, { withCredentials: true });
+      const response = await axios.post('https://noodle-x652.onrender.com/potvrda/izdavanje-potvrde', {googleId : id}, { withCredentials: true });
       setPoruka(response.data)
       alert('Potvrda uspješno poslana.');
     } catch (error) {

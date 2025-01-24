@@ -26,7 +26,6 @@ mongoose
   .then(() => console.log("Connected to MongoDB!"))
   .catch((err) => console.error("Error connecting to MongoDB:", err));
 
-// MongoDB Schema for Chat
 const ChatSchema = new mongoose.Schema({
   username: String,
   group: String,
@@ -58,9 +57,8 @@ async function getRazred(googleId, role) {
   }
 }
 
-// API Endpoint to Fetch Group (Razred)
 app.post("/getRazred", async (req, res) => {
-  const { googleId, role } = req.body; // Retrieve data from the request body
+  const { googleId, role } = req.body;
   try {
     const razred = await getRazred(googleId, role);
     if (razred) {
@@ -73,7 +71,6 @@ app.post("/getRazred", async (req, res) => {
   }
 });
 
-// API Endpoint to Get Messages by Group from MongoDB
 app.get("/messages/:group", async (req, res) => {
   const { group } = req.params;
   try {
@@ -85,16 +82,13 @@ app.get("/messages/:group", async (req, res) => {
   }
 });
 
-// Serve the Chat Page
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// WebSocket Events
 io.on("connection", (socket) => {
   console.log("A user connected");
 
-  // Join Group Event
   socket.on("joinGroup", async (googleId, role) => {
     try {
       const group = await getRazred(googleId, role);
@@ -109,7 +103,6 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Send Message Event
   socket.on("sendMessage", async (data) => {
     const { googleId, username, message, role} = data;
     try {
@@ -126,13 +119,11 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Disconnect Event
   socket.on("disconnect", () => {
     console.log("A user disconnected");
   });
 });
 
-// Start the Server
 server.listen(3002, () => {
   console.log("Server running on http://localhost:3002");
 });

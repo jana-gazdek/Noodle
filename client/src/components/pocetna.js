@@ -16,7 +16,7 @@ function Pocetna({handleLogout}) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/auth/pocetna", { withCredentials: true })
+      .get("https://noodle-x652.onrender.com/auth/pocetna", { withCredentials: true })
       .then((response) => {
         setUser(response.data.user);
         setWeather(response.data.weather);
@@ -47,7 +47,7 @@ function Pocetna({handleLogout}) {
             <Header
               user={user}
               handleLogout={() => {
-                window.location.href = "http://localhost:3000/auth/logout";
+                window.location.href = "https://noodle-x652.onrender.com/auth/logout";
               }}
             />
 

@@ -21,7 +21,7 @@ function Predmet() {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3000/info/pretrazi-predmete-profesora", { OIB: id }, { withCredentials: true })
+      .post("https://noodle-x652.onrender.com/info/pretrazi-predmete-profesora", { OIB: id }, { withCredentials: true })
       .then((response) => {
         setDjelatnik({
           djelatnikID: response?.data?.djelatnik.djelatnikid || "",
@@ -40,7 +40,7 @@ function Predmet() {
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const response = await axios.post("http://localhost:3000/info/svi-predmeti");
+        const response = await axios.post("https://noodle-x652.onrender.com/info/svi-predmeti");
         setsviPredmeti(response.data.predmeti || []);
       } catch (err) {
         setError(err.message);
@@ -68,7 +68,7 @@ function Predmet() {
     e.preventDefault();
     const podatci = { djelatnikid: djelatnik.djelatnikID, predmeti };
     axios
-      .post("http://localhost:3000/info/update-predmete-profesora", podatci, { withCredentials: true })
+      .post("https://noodle-x652.onrender.com/info/update-predmete-profesora", podatci, { withCredentials: true })
       .then(() => {
         alert("Predmet dodan.");
       })

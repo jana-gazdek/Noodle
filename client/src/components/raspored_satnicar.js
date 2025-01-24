@@ -11,7 +11,7 @@ function Rasporedsatnicar({ schedule = []}) {
   const runPythonScript = async () => {
     try {
       setLoading(true)
-      const response = await axios.post("http://localhost:5000/run-script");
+      const response = await axios.post("https://noodle-generate-raspored.onrender.com/run-script");
       setLoading(false)
       setScriptMessage(response.data.message);
     } catch (error) {

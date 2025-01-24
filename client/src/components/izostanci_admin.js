@@ -20,7 +20,7 @@ const IzostanciAdmin = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/auth/pocetna", { withCredentials: true })
+      .get("https://noodle-x652.onrender.com/auth/pocetna", { withCredentials: true })
       .then((response) => {
         setUser(response.data.user);
       })
@@ -37,7 +37,7 @@ const IzostanciAdmin = () => {
 
   const fetchRazred = async (googleId, role) => {
     try {
-      const response = await axios.post("http://localhost:3000/info/getRazred", {googleId, role});
+      const response = await axios.post("https://noodle-x652.onrender.com/info/getRazred", {googleId, role});
       setRazredList(response.data.userRazred);
     } catch (error) {
       console.error("Error fetching razred:", error.message);
@@ -46,7 +46,7 @@ const IzostanciAdmin = () => {
 
   const fetchUčenici = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/info/getRazredUcenici", {razred : odabranRazred});
+      const response = await axios.post("https://noodle-x652.onrender.com/info/getRazredUcenici", {razred : odabranRazred});
       setUčeniciList(response.data);
     } catch (error) {
       console.error("Error fetching razred:", error.message);
@@ -61,7 +61,7 @@ const IzostanciAdmin = () => {
 
   const handleOdabir = async (id) => {
     try {
-      const response = await axios.post('http://localhost:3000/info/ucenik-izostanci', {učenikID : id}, { withCredentials: true });
+      const response = await axios.post('https://noodle-x652.onrender.com/info/ucenik-izostanci', {učenikID : id}, { withCredentials: true });
       setOdabranUčenikIzostanciList(response.data);
     } catch (error) {
       console.error("Error fetching učenik izostanci:", error.message);
@@ -73,7 +73,7 @@ const IzostanciAdmin = () => {
     const izostanak = { učenikID : odabranUčenikID, izostanakDatum : a, izostanakSat : b };
 
     try {
-      const response = await axios.post('http://localhost:3000/info/brisanje-izostanka', izostanak, { withCredentials: true });
+      const response = await axios.post('https://noodle-x652.onrender.com/info/brisanje-izostanka', izostanak, { withCredentials: true });
       const message = response.data.message;
       if (message === 'Izostanak uspješno obrisan.') {
         alert('Izostanak uspješno obrisan.');
@@ -104,7 +104,7 @@ const IzostanciAdmin = () => {
         <Header
         user={user}
         handleLogout={() => {
-        window.location.href = "http://localhost:3000/auth/logout";
+        window.location.href = "https://noodle-x652.onrender.com/auth/logout";
         }}
         selectedPage = "Izostanci"
         />

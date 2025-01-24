@@ -20,7 +20,7 @@ const Satnicarmenu = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/auth/pocetna", { withCredentials: true })
+      .get("https://noodle-x652.onrender.com/auth/pocetna", { withCredentials: true })
       .then((response) => {
         setUser(response.data.user);
       })
@@ -31,7 +31,7 @@ const Satnicarmenu = () => {
 
   const fetchRazred = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/info/getRazredSatnicarMenu");
+      const response = await axios.get("https://noodle-x652.onrender.com/info/getRazredSatnicarMenu");
       setRazredList(response.data.userRazred);
     } catch (error) {
       console.error("Error fetching razred:", error.message);
@@ -46,7 +46,7 @@ const Satnicarmenu = () => {
 
   const fetchRasporedUčenik = async (razred) => {
     try {
-      const response = await axios.post('http://localhost:3006/schedule-data', {razred}, { withCredentials: true });
+      const response = await axios.post('https://noodle-raspored.onrender.com/schedule-data', {razred}, { withCredentials: true });
       setSchedule(response.data.original_tjedan);
     } catch (error) {
       console.error("Error fetching raspored:", error.message);
@@ -55,7 +55,7 @@ const Satnicarmenu = () => {
 
   const fetchRasporedProfesor = async (id) => {
     try {
-      const response = await axios.post('http://localhost:3006/schedule-data-prof-oib', {OIB : id}, { withCredentials: true });
+      const response = await axios.post('https://noodle-raspored.onrender.com/schedule-data-prof-oib', {OIB : id}, { withCredentials: true });
       console.log(response)
       setSchedule(response.data.original_tjedan);
     } catch (error) {
@@ -82,7 +82,7 @@ const Satnicarmenu = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3006/free-profs', {dan : odabranDan, vrijeme : odabranSat, razred : odabranRazred}, { withCredentials: true });
+      const response = await axios.post('https://noodle-raspored.onrender.com/free-profs', {dan : odabranDan, vrijeme : odabranSat, razred : odabranRazred}, { withCredentials: true });
       setSlobodniProfesori(response.data);
       console.log(response)
     } catch (error) {
@@ -94,7 +94,7 @@ const Satnicarmenu = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3006/update-schedule-data', {dan : odabranDan, vrijeme : odabranSat, razred : odabranRazred, imePredmet : odabranPredmet, labos : odabranLabos}, { withCredentials: true });
+      const response = await axios.post('https://noodle-raspored.onrender.com/update-schedule-data', {dan : odabranDan, vrijeme : odabranSat, razred : odabranRazred, imePredmet : odabranPredmet, labos : odabranLabos}, { withCredentials: true });
       console.log(response)
     } catch (error) {
       alert('Greška pri dobavljanju slobodnih profesora.');
@@ -108,7 +108,7 @@ const Satnicarmenu = () => {
           <Header
               user={user}
               handleLogout={() => {
-              window.location.href = "http://localhost:3000/auth/logout";
+              window.location.href = "https://noodle-x652.onrender.com/auth/logout";
             }}
             selectedPage = "Satničar"
           />

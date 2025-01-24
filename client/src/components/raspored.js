@@ -93,28 +93,6 @@ const Raspored = () => {
     }
   };
 
-  const runPythonScript = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.post(
-        "https://noodle-generate-raspored.onrender.com/run-script",
-        {},
-        {
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-            }
-        }
-      );
-      setLoading(false);
-      setScriptMessage(response.data.message);
-      console.log("Izgeneriran raspored.");
-    } catch (error) {
-      setScriptMessage("Error running script.");
-      setLoading(false);
-    }
-  };
-
   const timeSlots = ["08:00:00", "08:50:00", "09:40:00", "10:30:00", "11:20:00", "12:10:00", "13:00:00"];
   const timeSlots2 = ["8:00", "8:50", "9:40", "10:40", "11:30", "12:20", "13:10"];
 

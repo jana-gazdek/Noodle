@@ -14,7 +14,7 @@ const Map = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/auth/pocetna", { withCredentials: true })
+      .get("https://noodle-x652.onrender.com/auth/pocetna", { withCredentials: true })
       .then((response) => {
         setUser(response.data.user);
       })
@@ -29,7 +29,7 @@ const Map = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3005/route", {
+      const response = await fetch("https://noodle-map.onrender.com/route", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -58,7 +58,7 @@ const Map = () => {
         <Header
         user={user}
         handleLogout={() => {
-        window.location.href = "http://localhost:3000/auth/logout";
+        window.location.href = "https://noodle-x652.onrender.com/auth/logout";
         }}
         selectedPage = "Karta"
         />

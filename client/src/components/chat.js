@@ -12,7 +12,7 @@ const stringToColor = (string) => {
 
 const Chat = ({ 
   user, 
-  serverUrl = "http://localhost:3002" 
+  serverUrl = "https://noodle-chat.onrender.com" 
 }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
