@@ -13,7 +13,7 @@ const Obavijesti = () => {
   const [obavijestiList, setObavijestiList] = useState([]);
   const [obavijestiListAdmin, setObavijestiListAdmin] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  let expanded = false;
+  const [expanded, setExpanded] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -124,16 +124,15 @@ const Obavijesti = () => {
     }
   };
 
-  function showCheckboxes(expanded) {
+  function showCheckboxes() {
     var checkboxes = document.getElementById("checkboxes");
     if (!expanded) {
       checkboxes.style.display = "block";
-      expanded = true;
+      setExpanded(true);
     } else {
       checkboxes.style.display = "none";
-      expanded = false;
+      setExpanded(false);
     }
-    return expanded;
   }
 
   const handleChange = (event) => {
@@ -206,7 +205,7 @@ const Obavijesti = () => {
                         }
                     />
                     <div className="multiselect">
-                        <div className="selectBox" onClick={() => expanded = showCheckboxes(expanded)}>
+                        <div className="selectBox" onClick={() => showCheckboxes()}>
                         <select>
                             <option>Odaberi razrede: </option>
                         </select>
