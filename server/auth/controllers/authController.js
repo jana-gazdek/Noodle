@@ -19,7 +19,7 @@ const logout = (req, res) => {
       }
     })
 
-    res.clearCookie('connect.sid', { httpOnly: true, secure: true, sameSite: 'None' });
+  res.clearCookie('connect.sid', { httpOnly: true, secure: true, sameSite: 'None' });
   res.clearCookie('accessToken', { httpOnly: true, sameSite: 'None', secure: true });
   res.clearCookie('refreshToken', { httpOnly: true, sameSite: 'None', secure: true });
   res.redirect('https://noodle-frontend.onrender.com/login')
