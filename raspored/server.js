@@ -25,7 +25,7 @@ async function generateSchedule(razred) {
 
         result.rows.forEach((row) => {
             //console.log("Row data:", row);
-            tjedan[row.dan - 1].push({text: `${row.imepredmet} [${row.oznaka}]`, vrijeme : row.vrijeme});
+            tjedan[row.dan - 1].push({text: `${row.imepredmet} [${row.oznaka}]`, vrijeme : row.vrijeme, labos : row.labos});
         });
 
         return tjedan;
@@ -40,7 +40,7 @@ async function generateScheduleProf(googleId) {
 
     try {
         const result = await client.query(
-            `SELECT r.terminId, r.razred, r.oznaka, r.imepredmet, r.školaid, r.dan, r.vrijeme 
+            `SELECT r.terminId, r.razred, r.oznaka, r.imepredmet, r.školaid, r.dan, r.vrijeme, r.labos 
                 FROM djelatnik d 
                 JOIN predaje p ON d.djelatnikid = p.djelatnikid 
                 JOIN predmet p2 ON p.predmetid = p2.predmetid 
@@ -56,7 +56,7 @@ async function generateScheduleProf(googleId) {
 
         result.rows.forEach((row) => {
             //console.log("Row data:", row);
-            tjedan[row.dan - 1].push({text: `${row.imepredmet} (${row.razred}) [${row.oznaka}]`, vrijeme : row.vrijeme});
+            tjedan[row.dan - 1].push({text: `${row.imepredmet} (${row.razred}) [${row.oznaka}]`, vrijeme : row.vrijeme, labos : row.labos});
         });
 
         return tjedan;
@@ -105,7 +105,12 @@ app.post('/schedule-data-prof-oib', async (req, res) => {
 app.post('/update-schedule-data', async (req, res) => {
     const { dan, vrijeme, razred, imePredmet, labos } = req.body;
     try {
-        await client.query(`UPDATE raspored SET labos = $1, imePredmet = $2 WHERE dan = $3 AND vrijeme = $4 AND razred = $5`, [labos, imePredmet, dan, vrijeme, razred]);
+        if (imePredmet === "") {
+            await client.query(`UPDATE raspored SET labos = $1 WHERE dan = $2 AND vrijeme = $3 AND razred = $4`, [labos, dan, vrijeme, razred]);
+        }
+        else {
+            await client.query(`UPDATE raspored SET labos = $1, imePredmet = $2 WHERE dan = $3 AND vrijeme = $4 AND razred = $5`, [labos, imePredmet, dan, vrijeme, razred]);
+        }
         res.json({ message: 'Termin ažuriran.' });
     } catch (err) {
         console.error("Greška pri ažuriranju termina:", err);
