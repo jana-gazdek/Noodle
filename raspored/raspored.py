@@ -141,16 +141,20 @@ def main():
         dostupne_prostorije.append(o[0])
     #print(dostupne_prostorije)
 
+    svi_profesori_i_njihovi_predmeti = run_query("SELECT * FROM djelatnik NATURAL JOIN predaje NATURAL JOIN predmet")
     for profesor in profesori:
         if profesor[4] != "admin":
             temp_dict = {}
             predaje = profesor[2].split(",")
-            temp_list = run_query("SELECT imepredmet FROM djelatnik NATURAL JOIN predaje NATURAL JOIN predmet WHERE djelatnikID = %s", (profesor[0],))
-            for l in list(set(temp_list)):
-                if(l[0] == "Sat razrednika"):
-                    temp_dict[l[0]] = [profesor[3]]
+            temp_list = []
+            for segment in svi_profesori_i_njihovi_predmeti:
+                if profesor[0] == segment[1]:
+                    temp_list.append(segment[7])
+            for l in temp_list:
+                if(l == "Sat razrednika"):
+                    temp_dict[l] = [profesor[3]]
                 else:
-                    temp_dict[l[0]] = predaje
+                    temp_dict[l] = predaje
             dostupni_profesori.append(temp_dict)
 
     #print(dostupni_profesori)
