@@ -161,24 +161,26 @@ const Repository = () => {
       {user && user.role !== "učenik" && user.role !== "admin"? (
         <>
           <div className="upload-section">
-            <input type="file" onChange={handleFileChange} />
-            <button
-              className="upload-button"
-              onClick={handleUpload}
-              disabled={loading}
-            >
-              {loading ? "Uploading..." : "Upload"}
-            </button>
-            {loading && <div className="spinner"></div>}{" "}
+            <input className="choose-file-gumb" type="file" onChange={handleFileChange} />
+            <div className="upload-gumb-i-spiner">
+              <button
+                className="upload-button"
+                onClick={handleUpload}
+                disabled={loading}
+              >
+                {loading ? "Uploading..." : "Upload"}
+              </button>
+              {loading && <div className="spinner"></div>}{" "}
+            </div>
           </div>
-          <div>
+          <div className="odabir-razreda-container">
             <form>
               <div className="multiselect">
                 <div className="selectBox" onClick={() => showCheckboxes()}>
                   <select>
                     <option>Odaberi razrede: </option>
                   </select>
-                  <div className="overSelect"></div>
+                  <div className="overSelect">Odaberi razrede:<span>&#9660;</span></div>
                 </div>
                 <div id="checkboxes">
                   {razredList.map((razred) => (
