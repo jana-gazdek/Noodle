@@ -6,7 +6,6 @@ from collections import Counter
 import copy
 import psycopg2
 import os
-import traceback
 import time
 from dotenv import load_dotenv
 
@@ -114,6 +113,7 @@ def transform_tjedan(tjedan):
 
 
 def main():
+    query_string = "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, labos, školaid, dan, vrijeme) VALUES "
     run_query("DELETE FROM raspored")
     query = "SELECT predmetid FROM predmet"
     params = ('12345678901',)
@@ -243,17 +243,8 @@ def main():
                                     least_frequently_used[razred[0]][key] = 1
                                     razredi_prethodni_predmet[razred[0]] = key
                                     PROVJERA_2_PREDMETA_U_DANU.append(key)      
-                                    enter_query(                     
-                                        "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, labos, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)",
-                                        (temrin_ID,
-                                        razred,
-                                        "DVORANA" if key == "TZK" else dostupne_prostorije.pop(),
-                                        key,
-                                        "ne",
-                                        '1',
-                                        i,
-                                        time_str)
-                                    )
+                                    oznaka = "DVORANA" if key == "TZK" else dostupne_prostorije.pop()
+                                    query_string += f"({temrin_ID}, '{razred[0]}', '{oznaka}', '{key}', 'ne', '1', {i}, '{time_str}'), "
                 if flag == True and len(predmeti_REZERVA) != 0:
                     #print("REZERVA UMETNUTA")
                     dostupni_profesori.remove(predaje_REZERVA[0]) 
@@ -265,30 +256,12 @@ def main():
                     least_frequently_used[razred[0]][key] = 1
                     PROVJERA_2_PREDMETA_U_DANU.append(key)
                     razredi_prethodni_predmet[razred[0]] = key
-                    enter_query(
-                        "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, labos, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)",
-                        (temrin_ID,
-                        razred,
-                        "DVORANA" if key == "TZK" else dostupne_prostorije.pop(),
-                        predmeti_REZERVA[0],
-                        "ne",
-                        '1',
-                        i,
-                        time_str)
-                    )
+                    oznaka = "DVORANA" if key == "TZK" else dostupne_prostorije.pop()
+                    query_string += f"({temrin_ID}, '{razred[0]}', '{oznaka}', '{key}', 'ne', '1', {i}, '{time_str}'), "
                 elif flag == True:
                     time_str = f"{vrijeme_h:02}:{vrijeme_min:02}"
-                    enter_query(
-                        "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, labos, školaid, dan, vrijeme) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)",
-                        (temrin_ID,
-                        razred,
-                        "/",
-                        "PRAZAN_SAT",
-                        "ne",
-                        '1',
-                        i,
-                        time_str)
-                    )  
+                    oznaka = "DVORANA" if key == "TZK" else dostupne_prostorije.pop()
+                    query_string += f"({temrin_ID}, '{razred[0]}', '{oznaka}', 'PRAZAN_SAT', 'ne', '1', {i}, '{time_str}'), "
                 #print(str(temrin_ID) + " " + razred[0])
                 if vrijeme_h == 13:
                     for LFU_predmet in least_frequently_used[razred[0]]:
@@ -298,7 +271,8 @@ def main():
             x = vrijeme_min + 50
             vrijeme_h = vrijeme_h + x//60
             vrijeme_min = x % 60
-    
+    query_string = query_string.rstrip(", ") + ";"
+    run_query(query_string)
     #print(razredi_PREDMETI)
 
 @app.route('/')
