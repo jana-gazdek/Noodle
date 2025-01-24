@@ -1,3 +1,22 @@
+.obavijesti-infoform{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 85%;
+}
+
+.slanje{
+    display: flex;
+    flex-direction: column;
+}
+
+.infoform{
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+    gap: 2vh;
+}
+
 .porukica {
     white-space: nowrap;
     overflow: hidden;
@@ -40,9 +59,122 @@
 }
 
 .slanje {
-    height: 30vh;
+    display: flex;
+    flex-direction: column;
+    height: 80%;
 }
 
-.obavijesti {
+.obavijesti-container {
+    display: flex;
+    flex-direction: column;
     height: 60vh;
 }
+.obavijesti{
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.multiselect-obavijesti{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+.overSelect{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-size: 1.5vh;
+    border: 2px solid #5e3fbf;
+    border-radius: 5px;
+    color: #333;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    gap: 0.5vw;
+  }
+  
+  .overSelect:hover{
+    color: white;
+    background-color: #5e3fbf;
+  }
+  
+  .selectBox{
+    margin-right: 1vw;
+  }
+  
+  .selectBox select {
+    width: 100%;
+    padding: 0.3vw;
+    font-size: 1.5vh;
+    border: 2px solid #5e3fbf;
+    border-radius: 5px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .selectBox select:hover {
+    border-color: #8860D0;
+  }
+  
+  #checkboxes-obavijesti {
+    display: none;
+    flex-direction: column;
+    border: 2px solid #5e3fbf;
+    border-radius: 5px;
+    background-color: white;
+    padding: 5px;
+    max-height: 200px;
+    z-index: 10;
+    width: 50%;
+    height: 50%;
+    margin-right: 0.6vw;
+  }
+  
+  #checkboxes-obavijesti label input{
+    accent-color: #593f8a !important;
+    width: 20%;
+  }
+  
+  #checkboxes-obavijesti label {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    cursor: pointer;
+    height: 17%;
+  }
+  
+  #checkboxes-obavijesti label:hover {
+    background-color: #8860D0 !important;
+    color: white;
+  }
+
+  .req-button{
+    width: fit-content !important;
+  }
+
+  .btn{
+    width: 100%;
+    height: 2vh;
+    width: fit-content;
+    padding: 1vh 2vw 3vh 2vw;
+    background-color: #8860D0;
+    color: #ffffff;
+    border-radius: 25px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .izostanci-li{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
