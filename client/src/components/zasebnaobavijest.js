@@ -45,7 +45,7 @@ const Zasebnaobavijest = () => {
   }
 
   return(
-    <>
+    <div className="zasebna-obavijest-container">
       <div className="zasebna-obavijest">
         <h1 className = "naslov-zasebne-obavijesti">{obavijest?.naslov}</h1>
         <p className = "tekst-zasebne-obavijesti">{obavijest?.tekst}</p>
@@ -54,7 +54,7 @@ const Zasebnaobavijest = () => {
       <button className="req-button" onClick={handleBackButtonClick}>
         Nazad
       </button>
-    </>
+    </div>
   );
 };
 
