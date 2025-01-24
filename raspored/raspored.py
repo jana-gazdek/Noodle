@@ -1,7 +1,7 @@
 from flask import Flask, render_template, send_from_directory, jsonify, request
 from flask_cors import CORS
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 from collections import Counter
 import copy
 import psycopg2
@@ -70,10 +70,10 @@ def lista_predmeta(predmet_data, razred):
     subjects_list = []
     predmeti_s_lab = []
     for predmet in predmet_data:
-        if razred[0] in predmet['godine'].split(', ') and (predmet['smjer'] == run_query("SELECT smjer FROM uČenik WHERE razred = %s", (razred,))[0][0] or predmet['smjer'] == 'uni'):
+        if razred[0][0] in predmet['godine'].split(', ') and (predmet['smjer'] == razred[1] or predmet['smjer'] == 'uni'):
             total_hours = predmet['brojsatova'] + predmet['brojlab']
             subjects_list.extend([predmet['imepredmet']] * total_hours)
-        if razred[0] in predmet['godine'].split(', ') and predmet['brojlab'] != 0 and (predmet['smjer'] == run_query("SELECT smjer FROM uČenik WHERE razred = %s", (razred,))[0][0] or predmet['smjer'] == 'uni'):
+        if razred[0][0] in predmet['godine'].split(', ') and predmet['brojlab'] != 0 and (predmet['smjer'] == razred[1] or predmet['smjer'] == 'uni'):
             predmeti_s_lab.append(predmet['imepredmet'])
 
     return subjects_list, predmeti_s_lab
@@ -116,39 +116,39 @@ def main():
     run_query("DELETE FROM raspored")
     query = "SELECT predmetid FROM predmet"
     params = ('12345678901',)
-    predmetID_list = run_query(query, params)
-    predmetID_list = [str(row[0]) for row in predmetID_list]
+    predmet_list = run_query(query, params)
     predmet_data = []
-    for ID in predmetID_list:
+
+    for predmet in predmet_list:
         temp_dict = {}
-        temp_dict['imepredmet'] = run_query("SELECT imepredmet FROM predmet WHERE predmetID = %s", (ID,))[0][0]
-        temp_dict['brojsatova'] = int(run_query("SELECT brojsatova FROM predmet WHERE predmetID = %s", (ID,))[0][0])
-        temp_dict['brojlab'] = int(run_query("SELECT brojlab FROM predmet WHERE predmetID = %s", (ID,))[0][0])
-        temp_dict['godine'] = run_query("SELECT godine FROM predmet WHERE predmetID = %s", (ID,))[0][0]
-        temp_dict['smjer'] = run_query("SELECT smjer FROM predmet WHERE predmetID = %s", (ID,))[0][0]
+        temp_dict['imepredmet'] = predmet[1]
+        temp_dict['brojsatova'] = int(predmet[2])
+        temp_dict['brojlab'] = int(predmet[3])
+        temp_dict['godine'] = predmet[4]
+        temp_dict['smjer'] = predmet[5]
 
         predmet_data.append(temp_dict)
 
-    razredi = run_query("SELECT DISTINCT razred FROM uČenik")
+    razredi = run_query("SELECT DISTINCT razred,smjer FROM uČenik")
     #print(razredi)
     oznake = run_query("SELECT DISTINCT oznaka FROM prostorija")
     #print(oznake)
     dostupne_prostorije = []
-    profesori = run_query("SELECT djelatnikID FROM djelatnik")
+    profesori = run_query("SELECT * FROM djelatnik")
     dostupni_profesori = []
 
     for o in oznake:
         dostupne_prostorije.append(o[0])
     #print(dostupne_prostorije)
 
-    for ID in profesori:
-        if run_query("SELECT status FROM djelatnik WHERE djelatnikID = %s", (ID[0],))[0][0] != "admin":
+    for profesor in profesori:
+        if profesor[4] != "admin":
             temp_dict = {}
-            predaje = run_query("SELECT razred FROM djelatnik WHERE djelatnikID = %s", (ID[0],))[0][0].split(",")
-            temp_list = run_query("SELECT imepredmet FROM djelatnik NATURAL JOIN predaje NATURAL JOIN predmet WHERE djelatnikID = %s", (ID[0],))
+            predaje = profesor[2].split(",")
+            temp_list = run_query("SELECT imepredmet FROM djelatnik NATURAL JOIN predaje NATURAL JOIN predmet WHERE djelatnikID = %s", (profesor[0],))
             for l in list(set(temp_list)):
                 if(l[0] == "Sat razrednika"):
-                    temp_dict[l[0]] = [run_query("SELECT razrednik FROM djelatnik WHERE djelatnikID = %s", (ID[0],))[0][0]]
+                    temp_dict[l[0]] = [profesor[3]]
                 else:
                     temp_dict[l[0]] = predaje
             dostupni_profesori.append(temp_dict)
@@ -173,6 +173,8 @@ def main():
         razredi_prethodni_predmet[razred[0]] = 'NONE'
         for LFU_predmet in (list(set(predmeti))):
             least_frequently_used[razred[0]][LFU_predmet] = 1
+
+    razredi = sorted(razredi, key = lambda x:int(x[0][0]))
     
     #print(least_frequently_used)
     #print(razredi_PREDMETI)
@@ -296,4 +298,3 @@ def run_script():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
     app.run(host='0.0.0.0', port=port, debug=True)
-
