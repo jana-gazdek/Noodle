@@ -114,7 +114,7 @@ def transform_tjedan(tjedan):
 def main():
     query_string = "INSERT INTO raspored (terminid, razred, oznaka, imepredmet, labos, školaid, dan, vrijeme) VALUES "
     run_query("DELETE FROM raspored")
-    query = "SELECT predmetid FROM predmet"
+    query = "SELECT * FROM predmet"
     params = ('12345678901',)
     predmet_list = run_query(query, params)
     predmet_data = []
