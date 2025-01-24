@@ -108,6 +108,7 @@ const Izostanci = () => {
         handleLogout={() => {
         window.location.href = "http://localhost:3000/auth/logout";
         }}
+        selectedPage = "Izostanci"
         />
       )}
       <h1 className = "izostanak-naslov">Upravljanje Izostancima</h1>

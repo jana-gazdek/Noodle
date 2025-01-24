@@ -56,6 +56,7 @@ function InfoForm() {
           handleLogout={() => {
             window.location.href = "http://localhost:3000/auth/logout";
           }}
+          selectedPage = "Admin"
         />
       )}
       <h1>Admin izbornik</h1>

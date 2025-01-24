@@ -60,6 +60,7 @@ const Map = () => {
         handleLogout={() => {
         window.location.href = "http://localhost:3000/auth/logout";
         }}
+        selectedPage = "Karta"
         />
       )}
       <form className="route-form" onSubmit={handleFormSubmit}>

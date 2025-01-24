@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/header.css";
 
-function Header({ user = {}, handleLogout }) {
+function Header({ user = {}, handleLogout, selectedPage }) {
   const navigate = useNavigate();
 
   const handleAdminButtonClick = () => {
@@ -38,15 +38,15 @@ function Header({ user = {}, handleLogout }) {
       </div>
 
       <nav className="navigation">
-        <button className="navigation-button" onClick={handleMapButtonClick}>Karta</button>
-        <button className="navigation-button" onClick={handleRepositoryButtonClick}>Repozitorij</button>
-        <button className="navigation-button" onClick={handleIzostanakButtonClick}>Izostanci</button>
-        <button className="navigation-button" onClick={handleObavijestiButtonClick}>Obavijesti</button>
+        <button className="navigation-button" onClick={handleMapButtonClick} style={{ textDecoration: selectedPage === "Karta" ? "underline" : "none" }}>Karta</button>
+        <button className="navigation-button" onClick={handleRepositoryButtonClick } style={{ textDecoration: selectedPage === "Repozitorij" ? "underline" : "none" }}>Repozitorij</button>
+        <button className="navigation-button" onClick={handleIzostanakButtonClick} style={{ textDecoration: selectedPage === "Izostanci" ? "underline" : "none" }}>Izostanci</button>
+        <button className="navigation-button" onClick={handleObavijestiButtonClick} style={{ textDecoration: selectedPage === "Obavijesti" ? "underline" : "none" }}>Obavijesti</button>
         {user.role === "satničar" && (
-          <button className="navigation-button" onClick={handleSatnicarButtonClick}>Satničar</button>
+          <button className="navigation-button" onClick={handleSatnicarButtonClick} style={{ textDecoration: selectedPage === "Satničar" ? "underline" : "none" }}>Satničar</button>
         )}
         {user.role === "admin" && (
-          <button className="navigation-button" onClick={handleAdminButtonClick}>Admin</button>
+          <button className="navigation-button" onClick={handleAdminButtonClick} style={{ textDecoration: selectedPage === "Admin" ? "underline" : "none" }}>Admin</button>
         )}
       </nav>
       <div className="user-info">

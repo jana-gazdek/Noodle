@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/izostanci.css";
 import dayjs from "dayjs";
 import axios from 'axios';
+import Header from "./header";
 
 const IzostanciAdmin = () => {
   const [user, setUser] = useState(null);
@@ -99,6 +100,15 @@ const IzostanciAdmin = () => {
   
   return (
     <div className="izostanak-container">
+      {(user) && (
+        <Header
+        user={user}
+        handleLogout={() => {
+        window.location.href = "http://localhost:3000/auth/logout";
+        }}
+        selectedPage = "Izostanci"
+        />
+      )}
       <h1 className = "izostanak-naslov">Upravljanje Izostancima</h1>
       <form className="izostanci-infoform">
         <h2>Dodavanje/Uređivanje Izostanka</h2>

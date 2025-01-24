@@ -152,6 +152,7 @@ const Repository = () => {
         handleLogout={() => {
         window.location.href = "http://localhost:3000/auth/logout";
         }}
+        selectedPage = "Repozitorij"
         />
       )}
     <div className="form">

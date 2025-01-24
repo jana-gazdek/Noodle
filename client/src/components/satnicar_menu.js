@@ -110,6 +110,7 @@ const Satnicarmenu = () => {
               handleLogout={() => {
               window.location.href = "http://localhost:3000/auth/logout";
             }}
+            selectedPage = "Satničar"
           />
         </div>
         <div className = "satnicar-body">

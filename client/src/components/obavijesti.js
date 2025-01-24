@@ -181,6 +181,7 @@ const Obavijesti = () => {
         handleLogout={() => {
         window.location.href = "http://localhost:3000/auth/logout";
         }}
+        selectedPage = "Obavijesti"
         />
       )}
       <div className = "slanje">
