@@ -20,6 +20,8 @@ const port = 3000;
 
 app.use(express.json());
 
+app.set('trust proxy', 1);
+
 app.use(cors({ origin: 'https://noodle-frontend.onrender.com', credentials: true }));
 app.use(cookieParser());
 
