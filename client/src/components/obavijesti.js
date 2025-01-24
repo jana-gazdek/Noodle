@@ -125,9 +125,9 @@ const Obavijesti = () => {
   };
 
   function showCheckboxes() {
-    var checkboxes = document.getElementById("checkboxes");
+    var checkboxes = document.getElementById("checkboxes-obavijesti");
     if (!expanded) {
-      checkboxes.style.display = "block";
+      checkboxes.style.display = "flex";
       setExpanded(true);
     } else {
       checkboxes.style.display = "none";
@@ -173,109 +173,112 @@ const Obavijesti = () => {
   }
 
   return (
-    <div className="obavijesti-infoform">
-      <div className = "obavijesti-header">
-        {(user) && (
-          <Header
-          user={user}
-          handleLogout={() => {
-          window.location.href = "https://noodle-x652.onrender.com/auth/logout";
-          }}
-          selectedPage = "Obavijesti"
+    <>
+      {(user) && (
+        <Header
+        user={user}
+        handleLogout={() => {
+        window.location.href = "http://localhost:3000/auth/logout";
+        }}
+        selectedPage = "Obavijesti"
+        />
           />
         )}
-      </div>
-      <div className = "slanje">
-        {(user?.role !== "učenik" && user?.role !== "admin") ? (
-            <>
-                <h1 className = "izostanak-naslov">Slanje obavijesti</h1>
-                <form className="infoform" onSubmit={handleSubmit}>
-                    <input
-                        name="naslov"
-                        value={naslov || ""}
-                        placeholder="Unesite naslov obavijesti"
-                        onChange={(e) =>
-                        setNaslov(e.target.value)
-                        }
-                    />
-                    <input
-                        name="tekst"
-                        value={tekst || ""}
-                        placeholder="Unesite tekst obavijesti"
-                        onChange={(e) =>
-                        setTekst(e.target.value)
-                        }
-                    />
-                    <div className="multiselect">
-                        <div className="selectBox" onClick={() => showCheckboxes()}>
-                        <select>
-                            <option>Odaberi razrede: </option>
-                        </select>
-                        <div className="overSelect"></div>
-                        </div>
-                        <div id="checkboxes">
-                        {razred.map((raz) => (
-                            <label key={raz} htmlFor={raz}>
-                            <input 
-                                type="checkbox" 
-                                id={raz} 
-                                value={raz}
-                                onChange={handleChange}
-                            /> {raz}
-                            </label>
-                        ))}
-                        </div>
-                    </div>
-                    <button type = "submit" className="req-button" onClick={handleSubmit}>
-                      Pošalji obavijesti
-                    </button>
+      <div className="obavijesti-infoform">
+        <div className = "slanje">
+          {(user?.role !== "učenik" && user?.role !== "admin") ? (
+              <>
+                  <h1 className = "izostanak-naslov">Slanje obavijesti</h1>
+                  <form className="infoform" onSubmit={handleSubmit}>
+                      <input
+                          name="naslov"
+                          value={naslov || ""}
+                          placeholder="Unesite naslov obavijesti"
+                          onChange={(e) =>
+                          setNaslov(e.target.value)
+                          }
+                      />
+                      <input
+                          name="tekst"
+                          value={tekst || ""}
+                          placeholder="Unesite tekst obavijesti"
+                          onChange={(e) =>
+                          setTekst(e.target.value)
+                          }
+                      />
+                      <div className="multiselect-obavijesti">
+                          <div className="selectBox" onClick={() => showCheckboxes()}>
+                            <select>
+                              <option>Odaberi razrede: </option>
+                            </select>
+                            <div className="overSelect">Odaberi razrede:<span>&#9660;</span></div>
+                          </div>
+                          <div id="checkboxes-obavijesti">
+                            {razred.map((raz) => (
+                                <label key={raz} htmlFor={raz}>
+                                <input 
+                                    type="checkbox" 
+                                    id={raz} 
+                                    value={raz}
+                                    onChange={handleChange}
+                                /> {raz}
+                                </label>
+                            ))}
+                          </div>
+                      </div>
+                      <button type = "submit" className="req-button" onClick={handleSubmit}>
+                        Pošalji obavijesti
+                      </button>
 
-                </form>
-            </>
-            ) : (
-            <>
-            </>    
-        )}
+                  </form>
+              </>
+              ) : (
+              <>
+              </>    
+          )}
+        </div>
+        <div className = "obavijesti-container">
+          <h1>OBAVIJESTI</h1>
+          <div className="obavijesti">
+            {(user?.role === "admin") ? (
+                <>
+                    {obavijestiListAdmin.map((a) => (
+                        <div key={a.linktekst} className = "izostanci-li">
+                            <p>{`${a.naslov}, ${a.autor} (${a.brojpregleda}, ${a.razred}):`}</p>
+                            <p className = "porukica">{a.tekst}</p>
+                            <button onClick={() => handleZasebno(a.linktekst)} className="btn">
+                                Prikaži obavijest
+                            </button>  
+                            <button type="button" className="req-button" onClick={(e) => handleDelete(a.linktekst, e)}>Obriši obavijest</button>
+                        </div>
+                    ))}
+                </>
+                ) : (
+                <>
+                    {obavijestiList.map((a) => (
+                        <div key={a.linktekst} className = "izostanci-li">
+                            <>
+                                {(user?.role !== "učenik") ? (
+                                    <p>{`${a.naslov}, ${a.autor} (${a.brojpregleda}, ${a.razred}):`}</p>
+                                ) : (
+                                    <p>{`${a.naslov}, ${a.autor} (${a.brojpregleda}):`}</p>
+                                )}
+                            </>
+                            <p className = "porukica">{a.tekst}</p> 
+                            <button onClick={() => handleZasebno(a.linktekst)} className="btn">
+                                Prikaži obavijest
+                            </button> 
+                        </div>
+                    ))}
+                </>
+            )}
+          </div>
+              
+              
+          
+          </div>
       </div>
-      <div className = "obavijesti">
-        <h1>OBAVIJESTI</h1>
-        {(user?.role === "admin") ? (
-            <>
-                {obavijestiListAdmin.map((a) => (
-                    <div key={a.linktekst} className = "izostanci-li">
-                        <p>{`${a.naslov}, ${a.autor} (${a.brojpregleda}, ${a.razred}):`}</p>
-                        <p className = "porukica">{a.tekst}</p>
-                        <button onClick={() => handleZasebno(a.linktekst)} className="btn">
-                            Prikaži obavijest
-                        </button>  
-                        <button type="button" className="req-button" onClick={(e) => handleDelete(a.linktekst, e)}>Obriši obavijest</button>
-                    </div>
-                ))}
-            </>
-            ) : (
-            <>
-                {obavijestiList.map((a) => (
-                    <div key={a.linktekst} className = "izostanci-li">
-                        <>
-                            {(user?.role !== "učenik") ? (
-                                <p>{`${a.naslov}, ${a.autor} (${a.brojpregleda}, ${a.razred}):`}</p>
-                            ) : (
-                                <p>{`${a.naslov}, ${a.autor} (${a.brojpregleda}):`}</p>
-                            )}
-                        </>
-                        <p className = "porukica">{a.tekst}</p> 
-                        <button onClick={() => handleZasebno(a.linktekst)} className="btn">
-                            Prikaži obavijest
-                        </button> 
-                    </div>
-                ))}
-            </>
-        )}
-            
-            
-        
-      </div>
-    </div>
+    </>
   );
 };
 
