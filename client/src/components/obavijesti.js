@@ -174,15 +174,17 @@ const Obavijesti = () => {
 
   return (
     <div className="obavijesti-infoform">
-      {(user) && (
-        <Header
-        user={user}
-        handleLogout={() => {
-        window.location.href = "http://localhost:3000/auth/logout";
-        }}
-        selectedPage = "Obavijesti"
-        />
-      )}
+      <div className = "obavijesti-header">
+        {(user) && (
+          <Header
+          user={user}
+          handleLogout={() => {
+          window.location.href = "http://localhost:3000/auth/logout";
+          }}
+          selectedPage = "Obavijesti"
+          />
+        )}
+      </div>
       <div className = "slanje">
         {(user?.role !== "učenik" && user?.role !== "admin") ? (
             <>
