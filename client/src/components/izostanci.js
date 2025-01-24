@@ -5,7 +5,6 @@ import dayjs from "dayjs";
 import axios from 'axios';
 import Header from "./header";
 
-
 const Izostanci = () => {
   const [user, setUser] = useState(null);
   const [razredList, setRazredList] = useState([]);
@@ -103,7 +102,14 @@ const Izostanci = () => {
   
   return (
     <div className="izostanak-container">
-      <Header /> {/* Dodan Header */}
+      {(user) && (
+        <Header
+        user={user}
+        handleLogout={() => {
+        window.location.href = "http://localhost:3000/auth/logout";
+        }}
+        />
+      )}
       <h1 className = "izostanak-naslov">Upravljanje Izostancima</h1>
       <form className="izostanci-infoform" onSubmit={handleSubmit}>
         <h2>Dodavanje/Uređivanje Izostanka</h2>
