@@ -9,20 +9,18 @@ body {
     overflow-y: scroll !important;
   }
 
-
 .menu-container {
     display: flex;
     flex-direction: column;
     min-width: 200px;
-    width: 40vh;
-    height: auto;
+    width: 50vw;
+    height: 70vh;
     padding: 2rem;
     background-color: #ffffff;
-    position: relative;
-    margin: auto;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     box-shadow: 5px 5px 2px rgba(0, 0, 0, 0.2);
+    margin-top: 6vh;
 }
 
 .menu-input {
@@ -33,4 +31,83 @@ body {
   background-color: #D9D9D9;
   padding: 0 1rem;
   font-size: 1rem;
+}
+
+.admin-izbornik-header{
+}
+
+.admin-izbornik-gumbi{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+  gap: 4vw;
+}
+
+.crta {
+  border: 1px solid black;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.gornji-dio-admin{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10vw;
+}
+
+.srednji-dio-admin{
+  text-align: left;
+  width: 100%;
+  font-size: 3vh;
+  font-weight: bold;
+  margin-bottom: 2vh;
+}
+
+.search-label {
+  display: flex;
+  align-items: center;
+  gap: 1vw;
+  font-size: 3vh;
+  font-weight: bold;
+}
+
+.search-icon {
+  font-size: 3vh;
+  color: #8860D0;
+}
+
+.donji-dio-admin{
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 5vh;
+}
+
+.donji-dio-admin-pretraživanje{
+  display: flex;
+  flex-direction: row;
+  gap: 7vw;
+}
+
+.req-button-admin{
+  height: 4vh;
+  width: 9vw;
+  background-color: #8860D0;
+  color: #ffffff;
+  border: none;
+  border-radius: 25px;
+  min-width: 80px;
+  min-height: 20px;
+  font-size: 2vh;
+  cursor: pointer;
+  margin-top: 1vh;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.req-button-admin:hover {
+  background-color: #5e3fbf;
 }

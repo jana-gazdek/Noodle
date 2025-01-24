@@ -4,6 +4,7 @@ import "../styles/admin_menu.css";
 import "../styles/header.css";
 import Header from "../components/header";
 import axios from "axios";
+import { AiOutlineSearch } from "react-icons/ai";
 
 function InfoForm() {
   const [oib, setOib] = useState("");
@@ -59,39 +60,56 @@ function InfoForm() {
           selectedPage = "Admin"
         />
       )}
-      <h1>Admin izbornik</h1>
-      <button className="req-button" onClick={handleRequestButtonClick}>
-        Zahtjevi
-      </button>
-      <form onSubmit={handleSearchSubmit}>
-        <input
-          type="text"
-          className="menu-input"
-          placeholder="Upiši OIB korisnika"
-          value={oib}
-          onChange={(e) => setOib(e.target.value)}
-          required
-        />
-        <button className="req-button" type="submit">
-          Pretraži
-        </button>
-      </form>
-      <button className="req-button" onClick={handleProstorijeButtonClick}>
-        Prostorije
-      </button>
-      <form onSubmit={handlePredmetSearch}>
-        <input
-          type="text"
-          className="menu-input"
-          placeholder="Upiši OIB profesora"
-          value={oib_predmet}
-          onChange={(e) => setOibPredmet(e.target.value)}
-          required
-        />
-        <button className="req-button" type="submit">
-          Pretraži
-        </button>
-      </form>
+      <div className="admin-izbornik-header">
+        <h1>Admin izbornik</h1>
+        <hr className="crta"/>
+      </div>
+      <div className="admin-izbornik-gumbi">
+        <div className="gornji-dio-admin">
+          <button className="req-button-admin" onClick={handleRequestButtonClick}>
+            Zahtjevi
+          </button>
+          <button className="req-button-admin" onClick={handleProstorijeButtonClick}>
+            Prostorije
+          </button>
+        </div>
+        <div className="donji-dio-admin">
+        <div className="srednji-dio-admin">
+          <label className="search-label">
+            <AiOutlineSearch className="search-icon" /> Pretraživanje
+          </label>
+          <hr className="crta"/>
+        </div>
+          <div className="donji-dio-admin-pretraživanje">
+            <form onSubmit={handleSearchSubmit}>
+              <input
+                type="text"
+                className="menu-input"
+                placeholder="Upiši OIB korisnika"
+                value={oib}
+                onChange={(e) => setOib(e.target.value)}
+                required
+              />
+              <button className="req-button" type="submit">
+                Pretraži
+              </button>
+            </form>
+            <form onSubmit={handlePredmetSearch}>
+              <input
+                type="text"
+                className="menu-input"
+                placeholder="Upiši OIB profesora"
+                value={oib_predmet}
+                onChange={(e) => setOibPredmet(e.target.value)}
+                required
+              />
+              <button className="req-button" type="submit">
+                Pretraži
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
       <button className="back-button" onClick={handleBackButtonClick}>
         Nazad
       </button>

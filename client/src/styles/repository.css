@@ -1,15 +1,17 @@
 .repozitori-form{
   display: flex;
   flex-direction: column;
-  width: fit-content;
+  width: 40vw;
   height: 80%;
   justify-content: flex-start;
+  align-items: center;
   gap: 2vh;
   overflow-y: scroll;
   margin-top: 10vh;
   background-color: white;
   padding: 5vh;
   margin-bottom: 3vh;
+  overflow-x: hidden;
 }
 
 .upload-gumb-i-spiner{
@@ -149,15 +151,19 @@
 
 .files-list span{
   flex: 1;
-  width: fit-content;
+  max-width: 50%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-overflow: clip;
 }
 
 .files-list ul {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   list-style: none;
   padding: 0;
-  width: fit-content;
+  width: 40vw;
 }
 
 .files-list li {
@@ -167,27 +173,29 @@
   padding: 10px 0;
   border-bottom: 1px solid #ddd;
   width: 100%;
-  gap: 5vw;
+  flex-wrap: wrap;
 }
 
+
 .span {
-  flex-shrink: 0;
-  width: 60%;
-  text-overflow: ellipsis;
+  flex-shrink: 1;
+  max-width: 80%;
   text-align: left;
-  gap: 0.5vh;
   padding-left: 1vh;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .btns {
   display: flex;
-  width: 40%;
-  gap: 0.7vw;
+  width: 10vw;
+  gap: 0.5vw;
+  justify-content: flex-end;
 }
 
 .download-btn {
-  flex: 1;
-  width: 50%;
+  width: 100%;
   padding: 5px 10px;
   background-color: #5e3fbf;
   color: white;
@@ -199,8 +207,7 @@
 }
 
 .delete-btn {
-  flex: 1;
-  width: 50%;
+  width: 100%;
   padding: 5px 10px;
   background-color: red;
   color: white;
