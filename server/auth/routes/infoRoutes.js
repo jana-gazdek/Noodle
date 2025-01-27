@@ -65,10 +65,10 @@ const getSchoolName = async (schoolID) => {
 // })
 
 router.post('/submit-request', async (req, res) => {
-  console.log('Request received at backend:', req.body);
+  console.log('Zahtjev primljen na backendu:', req.body);
 
   if (!req.body || !req.body.googleId) {
-    return res.status(401).json({ error: 'User is not authenticated' });
+    return res.status(401).json({ error: 'Korisnik nije autentificiran' });
   }
 
   const {
@@ -87,10 +87,10 @@ router.post('/submit-request', async (req, res) => {
 
   const hashedPass = await hash.hashPassword(pass);
 
-  //console.log(hashedPass)
+  let newRequest;
 
   try {
-    const newRequest = new Request({
+    newRequest = new Request({
       _id: req.body.googleId,
       name,
       surname,
@@ -114,21 +114,40 @@ router.post('/submit-request', async (req, res) => {
 
     const valuesGost = [newRequest._id, newRequest.OIB];
 
+    await client.query('BEGIN');
     await client.query(insertQueryKorisnik, valuesKorisnik);
-
     await client.query(insertQueryGost, valuesGost);
 
     await newRequest.save();
 
     await User.findOneAndUpdate({ googleId: req.body.googleId }, { role: 'pending' }, {new: true});
 
+    await client.query('COMMIT');
+
     res.json({
-      message: 'Data saved successfully',
+      message: 'Podaci uspješno spremljeni',
       savedData: newRequest
     });
   } catch (err) {
-    console.error('Error saving request:', err.message);
-    res.status(500).json({ error: 'Failed to save data' });
+    console.error('Greška pri spremanju zahtjeva:', err.message);
+
+    try {
+      await client.query('ROLLBACK');
+    } catch (rollbackErr) {
+      console.error('Greška pri poništavanju transakcije:', rollbackErr.message);
+    }
+
+    if (err.code === '23505') {
+      await User.findOneAndUpdate({ googleId: req.body.googleId }, { role: 'unverified' }, {new: true});
+
+      if (newRequest && newRequest.isNew === false) {
+        await Request.findByIdAndDelete(newRequest._id);
+      }
+
+      return res.status(400).json({ error: 'Pogreška dupliciranog ključa. Zahtjev nije spremljen.' });
+    }
+
+    res.status(500).json({ error: 'Greška pri spremanju podataka' });
   }
 });
 
