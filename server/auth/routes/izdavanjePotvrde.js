@@ -10,15 +10,17 @@ const fs = require('fs');
 
 router.post('/izdavanje-potvrde', async (req, res) => {
   const { googleId } = req.body;
-  
-  const ojib = await client.query(`SELECT OIB FROM UČENIK WHERE učenikId = $1`, [googleId]);
-  console.log(ojib)
-  const OIB = (ojib.rows[0])["oib"]
-  if (!OIB) {
-    return res.status(400).json({ error: 'Potreban je OIB korisnika' });
-  }
-
   try {
+    const ojib = await client.query(`SELECT OIB FROM UČENIK WHERE učenikId = $1`, [googleId]);
+    if(!ojib.rows.length){
+      return res.status(404).json({ error: 'OIB nije pronađen za dani učenikId' });
+    }
+    const OIB = (ojib.rows[0])["oib"]
+    if (!OIB) {
+      return res.status(400).json({ error: 'Potreban je OIB korisnika' });
+    }
+
+  
     const student = await ConfirmedUser.findOne({ OIB });
     if (!student) {
       return res.status(404).json({ error: 'Učenik nije pronađen' });
