@@ -132,7 +132,7 @@ function InfoForm({ user }) {
           name="primarySchool"
           value={formData.primarySchool}
           onChange={handleChange}
-          placeholder="Osnovna škola"
+          placeholder="ID škole"
           required
         />
         <button className="Predaj_zahtjev">Predaj zahtjev</button>

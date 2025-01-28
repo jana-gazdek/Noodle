@@ -210,7 +210,11 @@ const Repository = () => {
           <ul>
             {files.map((file) => (
               <li key={file.id}>
-                <span className="span">{file.name}</span>
+                {user && user.role !== "učenik" ? (
+                    <span className="span">{file.name} ({file.brojPregleda})</span>
+                  ) : (
+                    <span className="span">{file.name}</span>
+                  )}
                 <div className="btns">
                   <button
                     className="download-btn"

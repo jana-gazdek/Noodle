@@ -11,6 +11,7 @@
     gap: 0;
     height: 7%;
     font-size: 5vh !important;
+    z-index: 5000;
 }
   
   .logo {

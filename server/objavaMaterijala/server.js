@@ -116,21 +116,23 @@ app.post("/files", async (req, res) => {
         userRazred.push(userResult.rows[num]["razrednik"]);
       }
     }
-    const prikaz = await client.query(`SELECT REGEXP_REPLACE(linktekst, '^.*file/d/([^/]+)/.*$', '\\1') AS ids, razred FROM LINK`);
+    const prikaz = await client.query(`SELECT REGEXP_REPLACE(linktekst, '^.*file/d/([^/]+)/.*$', '\\1') AS ids, razred, brojPregleda FROM LINK`);
 
     const filteredLinks = prikaz.rows.filter(row => {
       const linkRazred = row["razred"].split(",");
       return linkRazred.some(raz => userRazred.includes(raz));
     });
 
-    const fileIds = filteredLinks.map(row => row.ids);
+    const fileIds = filteredLinks.map(row => ({id: row.ids, brojPregleda: row.brojPregleda}));
 
     if (fileIds.length === 0) {
       console.error("No file IDs found.");
       res.status(404).send("No files found");
       return;
     }
-    const filesDetails = await Promise.all(fileIds.map(id => getFileDetails(drive, id)));
+    const filesDetails = await Promise.all(fileIds.map(({ id, brojPregleda }) => 
+      getFileDetails(drive, id).then(file => file ? { ...file, brojPregleda } : null)
+    ));
     const validFiles = filesDetails.filter(file => file !== null);
 
     res.status(200).json(validFiles);

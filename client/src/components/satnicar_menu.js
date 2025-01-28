@@ -16,6 +16,7 @@ const Satnicarmenu = () => {
   const [slobodniProfesori, setSlobodniProfesori] = useState([]);
   const [odabranPredmet, setOdabranPredmet] = useState("");
   const [odabranLabos, setOdabranLabos] = useState("");
+  const [stisnutSubmit, setStisnutSubmit] = useState(false);
   
 
   useEffect(() => {
@@ -69,9 +70,11 @@ const Satnicarmenu = () => {
     try {
       if (tipR === "učenik") {
         fetchRasporedUčenik(odabranRazred);
+        setStisnutSubmit(true);
       }
       else if (tipR === "profesor") {
         fetchRasporedProfesor(oib);
+        setStisnutSubmit(true);
       }
     } catch (error) {
       alert('Greška pri dobavljanju rasporeda.');
@@ -119,10 +122,13 @@ const Satnicarmenu = () => {
               name="tip-rasporeda"
               value={tipR || ""}
               onChange={(e) =>
-                setTipR(e.target.value)
+                {
+                  setTipR(e.target.value)
+                  setStisnutSubmit(false)
+                }
               }>
-              <option value="">Odaberi učenik/profesor</option>
-              <option value="učenik">Učenik</option>
+              <option value="">Odaberi razred/profesor</option>
+              <option value="učenik">Razred</option>
               <option value="profesor">Profesor</option>
             </select>{""}
             {(tipR === "učenik") && (
@@ -155,14 +161,14 @@ const Satnicarmenu = () => {
             )}
           </div>
           <div className ="satnicar-raspored">
-            {(schedule !== "ne" && tipR !== "") && (
+            {(schedule !== "ne" && stisnutSubmit === true && tipR !== "") && (
               <Rasporedsatnicar
                 schedule = {schedule}
               />
             )}
           </div>
           <div className = "satnicar-opcije">
-            {(schedule !== "ne" && tipR === "učenik") && (
+            {(schedule !== "ne" && stisnutSubmit === true) && (
               <>
                 <h2>Promjena rasporeda:</h2>
                 <div>

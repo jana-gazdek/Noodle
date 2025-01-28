@@ -52,7 +52,9 @@ function Header({ user = {}, handleLogout, selectedPage }) {
       <nav className="navigation">
         <button className="navigation-button" onClick={handleMapButtonClick} style={{ textDecoration: selectedPage === "Karta" ? "underline" : "none" }}>Karta</button>
         <button className="navigation-button" onClick={handleRepositoryButtonClick } style={{ textDecoration: selectedPage === "Repozitorij" ? "underline" : "none" }}>Repozitorij</button>
+        {user.role !== "učenik" && (
         <button className="navigation-button" onClick={handleIzostanakButtonClick} style={{ textDecoration: selectedPage === "Izostanci" ? "underline" : "none" }}>Izostanci</button>
+        )}
         <button className="navigation-button" onClick={handleObavijestiButtonClick} style={{ textDecoration: selectedPage === "Obavijesti" ? "underline" : "none" }}>Obavijesti</button>
         {user.role === "učenik" && (
           <button className="navigation-button" onClick={() => handleUcenikButtonClick(user.googleId)}>Potvrda</button>
