@@ -60,6 +60,8 @@ router.get('/ispis-obavijesti', async (req, res) => {
         LINK link ON obavijest.linkTekst = link.linkTekst
       INNER JOIN 
         REPOZITORIJ repozitorij ON link.repID = repozitorij.repID
+      ORDER BY
+        link.datumObjave DESC
     `;
 
     const result = await client.query(query);
@@ -103,6 +105,8 @@ router.post('/ispis-obavijesti-razred', async (req, res) => {
         REPOZITORIJ repozitorij ON link.repID = repozitorij.repID
       WHERE 
         ${conditions}
+      ORDER BY
+        link.datumObjave DESC
     `;
 
     const values = razrediArray.map((razred) => `%${razred}%`);

@@ -123,15 +123,15 @@ app.post("/files", async (req, res) => {
       return linkRazred.some(raz => userRazred.includes(raz));
     });
 
-    const fileIds = filteredLinks.map(row => ({id: row.ids, brojPregleda: row.brojPregleda}));
+    const fileIds = filteredLinks.map(row => ({id: row.ids, brojpregleda: row.brojpregleda}));
 
     if (fileIds.length === 0) {
       console.error("No file IDs found.");
       res.status(404).send("No files found");
       return;
     }
-    const filesDetails = await Promise.all(fileIds.map(({ id, brojPregleda }) => 
-      getFileDetails(drive, id).then(file => file ? { ...file, brojPregleda } : null)
+    const filesDetails = await Promise.all(fileIds.map(({ id, brojpregleda }) => 
+      getFileDetails(drive, id).then(file => file ? { ...file, brojpregleda } : null)
     ));
     const validFiles = filesDetails.filter(file => file !== null);
 

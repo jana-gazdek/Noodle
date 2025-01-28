@@ -211,7 +211,7 @@ const Repository = () => {
             {files.map((file) => (
               <li key={file.id}>
                 {user && user.role !== "učenik" ? (
-                    <span className="span">{file.name} ({file.brojPregleda})</span>
+                    <span className="span">{file.name} ({file.brojpregleda})</span>
                   ) : (
                     <span className="span">{file.name}</span>
                   )}
