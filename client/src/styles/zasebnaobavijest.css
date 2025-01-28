@@ -5,7 +5,7 @@
     word-wrap: break-word;
 }
 
-.tekst-zasebne-obavijesti{
+.tekst-zasebne-obavijesti p {
     overflow-wrap: break-word;
     word-wrap: break-word;
 }
