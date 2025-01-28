@@ -89,7 +89,6 @@ const IzostanciAdmin = () => {
   const handleClick = (id) => {
     setOdabranUčenikID(id);
     handleOdabir(id)
-    console.log("Selected učenik ID:", id);
   };
 
   function getDateEdit(dateObject) {

@@ -57,7 +57,6 @@ const Satnicarmenu = () => {
   const fetchRasporedProfesor = async (id) => {
     try {
       const response = await axios.post('https://noodle-raspored.onrender.com/schedule-data-prof-oib', {OIB : id}, { withCredentials: true });
-      console.log(response)
       setSchedule(response.data.original_tjedan);
     } catch (error) {
       console.error("Error fetching raspored:", error.message);
@@ -87,7 +86,6 @@ const Satnicarmenu = () => {
     try {
       const response = await axios.post('https://noodle-raspored.onrender.com/free-profs', {dan : odabranDan, vrijeme : odabranSat, razred : odabranRazred}, { withCredentials: true });
       setSlobodniProfesori(response.data);
-      console.log(response)
     } catch (error) {
       alert('Greška pri dobavljanju slobodnih profesora.');
     }
@@ -98,7 +96,6 @@ const Satnicarmenu = () => {
 
     try {
       const response = await axios.post('https://noodle-raspored.onrender.com/update-schedule-data', {dan : odabranDan, vrijeme : odabranSat, razred : odabranRazred, imePredmet : odabranPredmet, labos : odabranLabos}, { withCredentials: true });
-      console.log(response)
     } catch (error) {
       alert('Greška pri dobavljanju slobodnih profesora.');
     }

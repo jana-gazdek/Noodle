@@ -17,7 +17,6 @@ const Zasebnaobavijest = () => {
   const fetchObavijest = async (linkTekst) => {
     try {
       const response = await axios.post("https://noodle-x652.onrender.com/notification/zasebna-obavijest", {linkTekst : linkTekst}, { withCredentials: true });
-      console.log(response)
       setObavijest(response.data.obavijest)
       setIsLoading(false);
     } catch (error) {

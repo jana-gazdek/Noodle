@@ -490,8 +490,6 @@ router.post('/update-user-info', async (req, res) => {
 router.post('/upis-prostorije', async(req, res) => {
   const { kapacitet, oznaka, tip } = req.body;
 
-  console.log(kapacitet, oznaka, tip);
-
   if (!kapacitet || !oznaka || !tip) {
     return res.status(400).json({ error: 'Sva polja moraju biti ispunjena!'});
   }

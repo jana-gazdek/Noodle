@@ -68,7 +68,6 @@ const Obavijesti = () => {
     try {
       const response = await axios.get("https://noodle-x652.onrender.com/notification/ispis-obavijesti");
       setObavijestiListAdmin(response.data.obavijesti);
-      console.log(obavijestiListAdmin)
     } catch (error) {
       console.error("Error fetching razred:", error.message);
     }

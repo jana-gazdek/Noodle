@@ -160,7 +160,7 @@
 
 .files-list ul {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   list-style: none;
   padding: 0;
   width: 40vw;
