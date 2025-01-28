@@ -118,6 +118,7 @@ app.post("/files", async (req, res) => {
     }
     const prikaz = await client.query(`SELECT REGEXP_REPLACE(linktekst, '^.*file/d/([^/]+)/.*$', '\\1') AS ids, razred, brojPregleda FROM LINK`);
 
+    console.log(prikaz.rows);
     const filteredLinks = prikaz.rows.filter(row => {
       const linkRazred = row["razred"].split(",");
       return linkRazred.some(raz => userRazred.includes(raz));
