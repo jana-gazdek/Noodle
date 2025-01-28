@@ -47,7 +47,7 @@ const Zasebnaobavijest = () => {
     <div className="zasebna-obavijest-container">
       <div className="zasebna-obavijest">
         <h1 className = "naslov-zasebne-obavijesti">{obavijest?.naslov}</h1>
-        <p className = "tekst-zasebne-obavijesti" style="word-wrap: break-word">{obavijest?.tekst}</p>
+        <p className = "tekst-zasebne-obavijesti" style={{ overflowWrap: "break-word" }}>{obavijest?.tekst}</p>
         <h2 className = "podatci-zasebne-obavijesti">{`${obavijest?.autor}, ${getDatumVrijeme(obavijest?.datumobjave)} (${obavijest?.brojpregleda})`}</h2>
       </div>
       <button className="req-button" onClick={handleBackButtonClick}>
